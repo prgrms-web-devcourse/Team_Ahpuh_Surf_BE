@@ -54,6 +54,14 @@ public class Category extends BaseEntity {
         this.colorCode = colorCode;
     }
 
+    // Note: softDelete
+    public void delete() {
+        this.setIsDeleted(true);
+//        for(Post post: posts) {
+//            post.setIsDeleted = true;
+//        }
+    }
+
     @Builder
     public Category(User user, String name, boolean isPublic, int averageScore, String colorCode) {
         this.user = user;
