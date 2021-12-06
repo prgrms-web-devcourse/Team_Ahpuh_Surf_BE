@@ -12,7 +12,7 @@ public interface CategoryService {
 
     Long updateCategory(Long categoryId, CategoryUpdateRequestDto categoryDto);
 
-    Long deleteCategory(Long categoryId);
+    void deleteCategory(Long categoryId);
 
     List<CategoryResponseDto> findAllCategoryByUser(Long userId);
 
