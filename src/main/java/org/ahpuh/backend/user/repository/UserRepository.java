@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    //    @Query("select u from User u join Permission where u.email = :email")
     Optional<User> findByEmail(String email);
 
 }
