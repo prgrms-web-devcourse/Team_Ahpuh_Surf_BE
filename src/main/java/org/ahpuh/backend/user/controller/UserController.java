@@ -1,12 +1,15 @@
 package org.ahpuh.backend.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.backend.common.response.ApiResponse;
 import org.ahpuh.backend.jwt.JwtAuthentication;
 import org.ahpuh.backend.jwt.JwtAuthenticationToken;
+import org.ahpuh.backend.user.dto.UserJoinRequestDto;
 import org.ahpuh.backend.user.dto.UserLoginRequestDto;
 import org.ahpuh.backend.user.dto.UserLoginResponseDto;
 import org.ahpuh.backend.user.entity.User;
 import org.ahpuh.backend.user.service.UserServiceImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,13 +26,22 @@ public class UserController {
 
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping(path = "/user/login")
-    public UserLoginResponseDto login(@RequestBody final UserLoginRequestDto request) {
+    @PostMapping(path = "/users/login")
+    public ResponseEntity<ApiResponse<UserLoginResponseDto>> login(
+            @RequestBody final UserLoginRequestDto request
+    ) {
         final JwtAuthenticationToken authToken = new JwtAuthenticationToken(request.getEmail(), request.getPassword());
         final Authentication resultToken = authenticationManager.authenticate(authToken);
         final JwtAuthentication authentication = (JwtAuthentication) resultToken.getPrincipal();
         final User user = (User) resultToken.getDetails();
-        return new UserLoginResponseDto(authentication.token, user.getUserId());
+        return ResponseEntity.ok(ApiResponse.ok(new UserLoginResponseDto(authentication.token, user.getUserId())));
+    }
+
+    @PostMapping(path = "/users")
+    public ResponseEntity<ApiResponse<Long>> join(
+            @RequestBody final UserJoinRequestDto request
+    ) {
+        return ResponseEntity.ok(ApiResponse.created(userService.join(request)));
     }
 
     /**

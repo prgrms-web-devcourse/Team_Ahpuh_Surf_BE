@@ -4,9 +4,12 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.backend.aop.SoftDelete;
 import org.ahpuh.backend.common.entity.BaseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -44,13 +47,16 @@ public class User extends BaseEntity {
     @Builder.Default
     private Boolean accountPublic = true;
 
+    @Column(name = "permission")
+    private String permission;
+
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 //    @Builder.Default
 //    private List<Category> categories = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "permission_id", nullable = false)
-    private Permission permission;
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Builder.Default
+//    private List<Post> posts = new ArrayList<>();
 
     @Builder
     public User(final String userName, final String email, final String password) {
@@ -64,8 +70,20 @@ public class User extends BaseEntity {
             throw new IllegalArgumentException("Bad credential");
     }
 
+    public List<GrantedAuthority> getAuthority() {
+        return List.of(new SimpleGrantedAuthority(permission));
+    }
+
+    public void setPermission(final String permission) {
+        this.permission = permission;
+    }
+
 //    public void addCategory(Category category) {
 //        categories.add(category);
+//    }
+
+//    public void addPost(Post post) {
+//        posts.add(post);
 //    }
 
 }

@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
-public class UserResponseDto {
+public class UserLoginDto {
 
     private Long userId;
 
@@ -14,14 +14,6 @@ public class UserResponseDto {
 
     private String userName;
 
-    private String profilePhotoUrl;
-
-    private String aboutMe;
-
-    private String url;
-
-    private int followerCount;
-
-    private int followingCount;
+    private String permission;
 
 }
