@@ -2,6 +2,7 @@ package org.ahpuh.backend.post.converter;
 
 import org.ahpuh.backend.category.entity.Category;
 import org.ahpuh.backend.post.dto.PostDto;
+import org.ahpuh.backend.post.dto.PostRequest;
 import org.ahpuh.backend.post.entity.Post;
 import org.springframework.stereotype.Component;
 
@@ -10,13 +11,13 @@ import java.time.LocalDate;
 @Component
 public class PostConverter {
 
-    public static Post toEntity(final Category category, final String selectedDate, final String content, final int score, final String fileUrl) {
+    public static Post toEntity(final Category category, final PostRequest request) {
         return Post.builder()
                 .category(category)
-                .selectedDate(LocalDate.parse(selectedDate)) // yyyy-mm-dd
-                .content(content)
-                .score(score)
-                .fileUrl(fileUrl)
+                .selectedDate(LocalDate.parse(request.getSelectedDate())) // yyyy-mm-dd
+                .content(request.getContent())
+                .score(request.getScore())
+                .fileUrl(request.getFileUrl())
                 .build();
     }
 
