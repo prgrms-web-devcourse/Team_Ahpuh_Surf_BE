@@ -10,12 +10,10 @@ import java.time.LocalDate;
 @Component
 public class PostConverter {
 
-    public static Post toEntity(final Category category, final String selectedDate, final String title,
-                                final String content, final int score, final String fileUrl) {
+    public static Post toEntity(final Category category, final String selectedDate, final String content, final int score, final String fileUrl) {
         return Post.builder()
                 .category(category)
                 .selectedDate(LocalDate.parse(selectedDate)) // yyyy-mm-dd
-                .title(title)
                 .content(content)
                 .score(score)
                 .fileUrl(fileUrl)
@@ -27,7 +25,6 @@ public class PostConverter {
                 .postId(post.getId())
                 .categoryId(post.getCategory().getId())
                 .selectedDate(post.getSelectedDate().toString())
-                .title(post.getTitle())
                 .content(post.getContent())
                 .score(post.getScore())
                 .fileUrl(post.getFileUrl())

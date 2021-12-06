@@ -22,21 +22,19 @@ public class PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
 
-    public PostIdResponse create(final Long categoryId, final String selectedDate, final String title,
-                                 final String content, final int score, final String fileUrl) {
+    public PostIdResponse create(final Long categoryId, final String selectedDate, final String content, final int score, final String fileUrl) {
         // TODO: 1. category aop 적용     2. category의 최근 게시글 점수 컬럼 update
         final Category category = getCategoryById(categoryId);
-        final Post post = PostConverter.toEntity(category, selectedDate, title, content, score, fileUrl);
+        final Post post = PostConverter.toEntity(category, selectedDate, content, score, fileUrl);
         final Post saved = postRepository.save(post);
 
         return new PostIdResponse(saved.getId());
     }
 
-    public PostIdResponse update(final Long postId, final Long categoryId, final String selectedDate, final String title,
-                                 final String content, final int score, final String fileUrl) {
+    public PostIdResponse update(final Long postId, final Long categoryId, final String selectedDate, final String content, final int score, final String fileUrl) {
         final Category category = getCategoryById(categoryId);
         final Post post = getPostById(postId);
-        post.editPost(category, LocalDate.parse(selectedDate), title, content, score, fileUrl);
+        post.editPost(category, LocalDate.parse(selectedDate), content, score, fileUrl);
 
         return new PostIdResponse(postId);
     }

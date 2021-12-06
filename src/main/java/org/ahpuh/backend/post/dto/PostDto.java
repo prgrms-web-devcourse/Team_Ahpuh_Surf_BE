@@ -11,7 +11,6 @@ public class PostDto {
     private Long postId;
     private Long categoryId;
     private String selectedDate;
-    private String title;
     private String content;
     private int score;
     private String fileUrl;
