@@ -38,11 +38,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Long deleteCategory(Long categoryId) {
+    public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(EntityExceptionSuppliers.CategoryNotFound);
         category.delete();
-        return category.getId();
     }
 
     @Override
