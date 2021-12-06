@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class CategoryResponseDto {
 

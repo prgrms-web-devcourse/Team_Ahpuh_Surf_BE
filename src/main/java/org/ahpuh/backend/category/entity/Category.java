@@ -1,9 +1,6 @@
 package org.ahpuh.backend.category.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.backend.aop.SoftDelete;
 import org.ahpuh.backend.common.entity.BaseEntity;
@@ -18,7 +15,7 @@ import java.util.ArrayList;
 @Table(name = "category")
 @Getter
 @SuperBuilder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SoftDelete
 public class Category extends BaseEntity {
