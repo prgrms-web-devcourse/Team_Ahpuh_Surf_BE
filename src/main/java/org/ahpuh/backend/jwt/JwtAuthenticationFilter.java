@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         /**
          * HTTP 요청 헤더에 JWT 토큰이 있는지 확인
          * JWT 토큰이 있다면, 주어진 토큰 디코딩
-         * email, roles 데이터 추출
+         * userId, email, roles 데이터 추출
          * JwtAuthenticationToken 생성해서 SecurityContext에 넣는다.
          **/
         final HttpServletRequest request = (HttpServletRequest) req;
@@ -50,12 +50,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     final Jwt.Claims claims = verify(token);
                     log.debug("Jwt parse result: {}", claims);
 
+                    final Long userId = claims.userId;
                     final String email = claims.email;
                     final List<GrantedAuthority> authorities = getAuthorities(claims);
 
-                    if (isNotEmpty(email) && authorities.size() > 0) {
+                    if (userId != null && isNotEmpty(email) && authorities.size() > 0) {
                         final JwtAuthenticationToken authentication =
-                                new JwtAuthenticationToken(new JwtAuthentication(token, email), null, authorities);
+                                new JwtAuthenticationToken(new JwtAuthentication(token, userId, email), null, authorities);
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }

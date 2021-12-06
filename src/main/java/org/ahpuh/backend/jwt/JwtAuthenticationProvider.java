@@ -43,7 +43,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             final List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getPermission()));
             final String token = getToken(user.getUserId(), user.getEmail(), authorities);
             final JwtAuthenticationToken authenticated =
-                    new JwtAuthenticationToken(new JwtAuthentication(token, user.getEmail()), null, authorities);
+                    new JwtAuthenticationToken(new JwtAuthentication(token, user.getUserId(), user.getEmail()), null, authorities);
             authenticated.setDetails(user);
             return authenticated;
         } catch (final IllegalArgumentException e) {
