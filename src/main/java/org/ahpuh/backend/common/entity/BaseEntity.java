@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class BaseEntity {
+public abstract class BaseEntity {
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
@@ -28,7 +28,8 @@ public class BaseEntity {
     private LocalDateTime modifiedAt;
 
     @Column(name = "is_deleted", columnDefinition = "boolean default false")
-    @Builder.Default private Boolean isDeleted = false;
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     public void setIsDeleted(final Boolean deleted) {
         this.isDeleted = deleted;

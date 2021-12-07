@@ -4,15 +4,11 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.backend.aop.SoftDelete;
 import org.ahpuh.backend.common.entity.BaseEntity;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -49,7 +45,16 @@ public class Category extends BaseEntity {
     // Todo: user 양방향 관계 메소드 setUser(User user) {}
     //  post 양방향 관계 메소드 addPost(Post post) {}
 
-    public void update(String name, boolean isPublic, String colorCode) {
+    @Builder
+    public Category(final String name, final boolean isPublic, final int averageScore, final String colorCode) {
+//        this.user = user;
+        this.name = name;
+        this.isPublic = isPublic;
+        this.colorCode = colorCode;
+        this.averageScore = averageScore;
+    }
+
+    public void update(final String name, final boolean isPublic, final String colorCode) {
         this.name = name;
         this.isPublic = isPublic;
         this.colorCode = colorCode;
@@ -61,14 +66,5 @@ public class Category extends BaseEntity {
 //        for(Post post: posts) {
 //            post.setIsDeleted = true;
 //        }
-    }
-
-    @Builder
-    public Category(String name, boolean isPublic, int averageScore, String colorCode) {
-//        this.user = user;
-        this.name = name;
-        this.isPublic = isPublic;
-        this.colorCode = colorCode;
-        this.averageScore = averageScore;
     }
 }

@@ -31,6 +31,10 @@ public class ApiResponse<T> {
         return new ApiResponse<>(201, data);
     }
 
+    public static <T> ApiResponse<T> noContent() {
+        return new ApiResponse<>(204, null);
+    }
+
     public static <T> ApiResponse<T> fail(final int statusCode, final T errData) {
         return new ApiResponse<>(statusCode, errData);
     }
