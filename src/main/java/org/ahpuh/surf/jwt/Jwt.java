@@ -11,15 +11,15 @@ import java.util.Date;
 @Getter
 public class Jwt {
 
-    private final String issuer; // 토큰 발급자
+    private final String issuer;
 
-    private final String clientSecret; // 토큰 키 해시 값
+    private final String clientSecret;
 
-    private final int expirySeconds; // 만료시간
+    private final int expirySeconds;
 
     private final Algorithm algorithm;
 
-    private final JWTVerifier jwtVerifier; // JWT 검증자
+    private final JWTVerifier jwtVerifier;
 
     public Jwt(final String issuer, final String clientSecret, final int expirySeconds) {
         this.issuer = issuer;
