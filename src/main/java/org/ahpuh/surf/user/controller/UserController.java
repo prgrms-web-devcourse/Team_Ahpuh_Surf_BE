@@ -2,6 +2,7 @@ package org.ahpuh.surf.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
+import org.ahpuh.surf.user.dto.UserJoinResponseDto;
 import org.ahpuh.surf.user.dto.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.UserLoginResponseDto;
 import org.ahpuh.surf.user.service.UserService;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -27,11 +30,14 @@ public class UserController {
         return ResponseEntity.ok().body(loginResponse);
     }
 
-    @PostMapping(path = "/users")
-    public ResponseEntity<ApiResponse<Long>> join(
+    @PostMapping
+    public ResponseEntity<UserLoginResponseDto> joinAndLogin(
             @RequestBody final UserJoinRequestDto request
     ) {
-        return ResponseEntity.ok(ApiResponse.created(userService.join(request)));
+        final UserJoinResponseDto joinResponse = userService.join(request);
+        final UserLoginResponseDto loginResponse = userService.authenticate(joinResponse.getEmail(), joinResponse.getPassword());
+        return ResponseEntity.created(URI.create("/api/v1/users"))
+                .body(loginResponse);
     }
 
     /**

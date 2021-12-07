@@ -1,8 +1,8 @@
 package org.ahpuh.surf.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
-import org.ahpuh.surf.user.dto.UserLoginRequestDto;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@Slf4j
 class UserControllerTest {
 
     @Autowired
@@ -37,52 +38,26 @@ class UserControllerTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("회원가입을 할 수 있다.")
+    @DisplayName("회원가입 성공 후 자동 로그인을 할 수 있다.")
     @Transactional
-    void join() throws Exception {
+    void testJoinAndLogin() throws Exception {
         final UserJoinRequestDto req = UserJoinRequestDto.builder()
                 .email("test1@naver.com")
                 .userName("최승은1")
                 .password("test111")
                 .build();
 
-        mockMvc.perform(post("/api/users")
+        mockMvc.perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andDo(print());
 
-        assertAll("userJoin",
+        assertAll("userJoinAndLogin",
                 () -> assertThat(userRepository.findAll().size(), is(1)),
                 () -> assertThat(userRepository.findAll().get(0).getEmail(), is("test1@naver.com")),
                 () -> assertThat(userRepository.findAll().get(0).getUserName(), is("최승은1"))
         );
-    }
-
-    @Test
-    @DisplayName("로그인을 할 수 있다.")
-    @Transactional
-    void login() throws Exception {
-        // Given
-        final UserJoinRequestDto joinReq = UserJoinRequestDto.builder()
-                .email("test1@naver.com")
-                .userName("최승은1")
-                .password("test111")
-                .build();
-        userController.join(joinReq);
-
-        // When
-        final UserLoginRequestDto req = UserLoginRequestDto.builder()
-                .email("test1@naver.com")
-                .password("test111")
-                .build();
-
-        // Then
-        mockMvc.perform(post("/api/users/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk())
-                .andDo(print());
     }
 
 }

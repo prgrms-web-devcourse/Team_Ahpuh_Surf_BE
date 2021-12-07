@@ -50,12 +50,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public Long join(final UserJoinRequestDto dto) {
-        checkArgument(isNotEmpty(dto.getEmail()), "email must be provided.");
-        checkArgument(isNotEmpty(dto.getUserName()), "userName must be provided.");
-        checkArgument(isNotEmpty(dto.getPassword()), "password must be provided.");
+    @Transactional
+    public UserJoinResponseDto join(final UserJoinRequestDto joinRequest) {
+        checkArgument(isNotEmpty(joinRequest.getEmail()), "email must be provided.");
+        checkArgument(isNotEmpty(joinRequest.getUserName()), "userName must be provided.");
+        checkArgument(isNotEmpty(joinRequest.getPassword()), "password must be provided.");
 
-        return userRepository.save(userConverter.toEntity(dto)).getUserId();
+        final User newUser = userRepository.save(userConverter.toEntity(joinRequest));
+        return new UserJoinResponseDto(newUser.getEmail(), joinRequest.getPassword());
     }
 
 }
