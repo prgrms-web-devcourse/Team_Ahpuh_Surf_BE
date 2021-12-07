@@ -70,10 +70,6 @@ public class User extends BaseEntity {
             throw new IllegalArgumentException("Bad credential");
     }
 
-    public List<GrantedAuthority> getAuthority() {
-        return List.of(new SimpleGrantedAuthority(permission));
-    }
-
     public void setPermission(final String permission) {
         this.permission = permission;
     }

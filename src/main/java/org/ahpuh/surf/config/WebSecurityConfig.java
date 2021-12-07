@@ -7,7 +7,6 @@ import org.ahpuh.surf.jwt.JwtAuthenticationFilter;
 import org.ahpuh.surf.jwt.JwtAuthenticationProvider;
 import org.ahpuh.surf.user.service.UserService;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -23,10 +22,9 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 
 import javax.servlet.http.HttpServletResponse;
 
-@Configuration
 @EnableWebSecurity
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtConfig jwtConfig;
