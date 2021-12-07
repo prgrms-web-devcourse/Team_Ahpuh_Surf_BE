@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class PostServiceImplTest {
 
@@ -55,18 +57,18 @@ class PostServiceImplTest {
         content = "어푸";
         score = 100;
 
-        category = Category.builder()
-                .id(categoryId).build();
-        post = Post.builder()
-                .id(postId)
-                .category(category)
-                .selectedDate(LocalDate.parse(selectedDate))
-                .content(content)
-                .score(score)
-                .build();
+//        category = Category.builder().
+//                .id(categoryId).build();
+//        post = Post.builder()
+//                .id(postId)
+//                .category(category)
+//                .selectedDate(LocalDate.parse(selectedDate))
+//                .content(content)
+//                .score(score)
+//                .build();
 
-        Mockito.lenient().when(categoryRepository.findById(categoryId))
-                .thenReturn(Optional.of(category));
+//        Mockito.lenient().when(categoryRepository.findById(categoryId))
+//                .thenReturn(Optional.of(category));
     }
 
     @Test

@@ -48,7 +48,7 @@ public class PostServiceImpl implements PostService {
 
     public void delete(final Long postId) {
         final Post post = getPostById(postId);
-        post.setIsDeleted(true);
+        post.delete();
     }
 
     private Category getCategoryById(final Long categoryId) {

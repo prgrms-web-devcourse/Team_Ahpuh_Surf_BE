@@ -17,6 +17,7 @@ import javax.persistence.*;
 public class Category extends BaseEntity {
 
     @Id
+    @Column(name = "category_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
