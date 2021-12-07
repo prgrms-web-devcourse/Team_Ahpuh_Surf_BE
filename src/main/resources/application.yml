@@ -29,4 +29,4 @@ jwt:
   header: token
   issuer: ahpuh
   client-secret: ${JWT-CLIENT-SECRET}
-  expiry-seconds: 86400
+  expiry-seconds: 2592000
