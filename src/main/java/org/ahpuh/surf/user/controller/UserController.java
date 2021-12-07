@@ -7,8 +7,7 @@ import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.UserLoginResponseDto;
-import org.ahpuh.surf.user.entity.User;
-import org.ahpuh.surf.user.service.UserServiceImpl;
+import org.ahpuh.surf.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     private final AuthenticationManager authenticationManager;
 

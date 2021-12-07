@@ -2,7 +2,7 @@ package org.ahpuh.surf.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.user.entity.User;
-import org.ahpuh.surf.user.service.UserServiceImpl;
+import org.ahpuh.surf.user.service.UserService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -21,7 +21,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final Jwt jwt;
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @Override
     public boolean supports(final Class<?> authentication) {

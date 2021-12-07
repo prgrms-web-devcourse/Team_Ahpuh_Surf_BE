@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.jwt.Jwt;
 import org.ahpuh.surf.jwt.JwtAuthenticationFilter;
 import org.ahpuh.surf.jwt.JwtAuthenticationProvider;
-import org.ahpuh.surf.user.service.UserServiceImpl;
+import org.ahpuh.surf.user.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtAuthenticationProvider jwtAuthenticationProvider(final UserServiceImpl userService, final Jwt jwt) {
+    public JwtAuthenticationProvider jwtAuthenticationProvider(final UserService userService, final Jwt jwt) {
         return new JwtAuthenticationProvider(jwt, userService);
     }
 
