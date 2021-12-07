@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 
-@RequestMapping("/posts")
+@RequestMapping("/api/v1/posts")
 @RestController
 public class PostController {
 
@@ -25,7 +25,7 @@ public class PostController {
     public ResponseEntity<ApiResponse<PostIdResponse>> createPost(@Valid @RequestBody final PostRequest request) {
         // TODO: userId
         final PostIdResponse response = postService.create(request);
-        return ResponseEntity.created(URI.create("/posts/" + response.getId()))
+        return ResponseEntity.created(URI.create("/api/v1/posts/" + response.getId()))
                 .body(ApiResponse.created(response));
     }
 
