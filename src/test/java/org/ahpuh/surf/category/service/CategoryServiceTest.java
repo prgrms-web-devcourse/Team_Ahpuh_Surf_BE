@@ -5,6 +5,7 @@ import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 class CategoryServiceTest {
@@ -48,53 +50,54 @@ class CategoryServiceTest {
     @DisplayName("카테고리를 생성할 수 있다.")
     void createCategoryTest() {
         // given
-        CategoryCreateRequestDto dto = CategoryCreateRequestDto.builder()
+        final CategoryCreateRequestDto createRequestDto = CategoryCreateRequestDto.builder()
                 .name(category.getName())
                 .colorCode(category.getColorCode())
                 .build();
 
         // when
-        categoryService.createCategory(dto);
+        categoryService.createCategory(createRequestDto);
 
         // then
-        assertThat(categoryRepository.findAll().size(), is(2));
-        assertThat(categoryRepository.findAll().get(1).getName(), is("test"));
-        assertThat(categoryRepository.findAll().get(1).isPublic(), is(true));
-        assertThat(categoryRepository.findAll().get(1).getColorCode(), is("#e7f5ff"));
-        assertThat(categoryRepository.findAll().get(1).getIsDeleted(), is(false));
+        assertAll(
+                () -> Assertions.assertThat(categoryRepository.findAll().size()).isEqualTo(2),
+                () -> Assertions.assertThat(categoryRepository.findAll().get(1).getName()).isEqualTo(createRequestDto.getName()),
+                () -> Assertions.assertThat(categoryRepository.findAll().get(1).isPublic()).isTrue(),
+                () -> Assertions.assertThat(categoryRepository.findAll().get(1).getColorCode()).isEqualTo(createRequestDto.getColorCode())
+        );
     }
 
     @Test
     @DisplayName("카테고리를 수정할 수 있다.")
     void updateCategoryTest() {
         // given
-        CategoryUpdateRequestDto dto = CategoryUpdateRequestDto.builder()
+        final CategoryUpdateRequestDto updateRequestDto = CategoryUpdateRequestDto.builder()
                 .name("update test")
                 .isPublic(false)
                 .colorCode("#d0ebff")
                 .build();
 
         // when
-        categoryService.updateCategory(category.getId(), dto);
+        categoryService.updateCategory(category.getId(), updateRequestDto);
 
         // then
-        assertThat(categoryRepository.findAll().get(0).getName(), is("update test"));
-        assertThat(categoryRepository.findAll().get(0).isPublic(), is(false));
-        assertThat(categoryRepository.findAll().get(0).getColorCode(), is("#d0ebff"));
-        assertThat(categoryRepository.findAll().get(0).getIsDeleted(), is(false));
+        assertAll(
+                () -> Assertions.assertThat(categoryRepository.findAll().get(0).getName()).isEqualTo(updateRequestDto.getName()),
+                () -> Assertions.assertThat(categoryRepository.findAll().get(0).isPublic()).isFalse(),
+                () -> Assertions.assertThat(categoryRepository.findAll().get(0).getColorCode()).isEqualTo(updateRequestDto.getColorCode())
+        );
     }
 
     @Test
     @DisplayName("카테고리를 삭제할 수 있다.")
     void deleteCategoryTest() {
         // given
-        Long id = category.getId();
+        final Long id = category.getId();
 
         // when
         categoryService.deleteCategory(id);
 
         // then
-        assertThat(categoryRepository.findAll().size(), is(1));
-        assertThat(categoryRepository.findAll().get(0).getIsDeleted(), is(true));
+        assertThat(categoryRepository.findAll().size(), is(0));
     }
 }

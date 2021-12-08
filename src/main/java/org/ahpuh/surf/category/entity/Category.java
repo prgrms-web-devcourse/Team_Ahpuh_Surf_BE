@@ -2,8 +2,8 @@ package org.ahpuh.surf.category.entity;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.ahpuh.surf.aop.SoftDelete;
 import org.ahpuh.surf.common.entity.BaseEntity;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -13,19 +13,21 @@ import javax.persistence.*;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SoftDelete
+//@SoftDelete
+@Where(clause = "is_deleted = false")
 public class Category extends BaseEntity {
 
     @Id
     @Column(name = "category_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "is_public", nullable = false)
-    private boolean isPublic;
+    @Builder.Default
+    private boolean isPublic = true;
 
     @Column(name = "color_code")
     private String colorCode;

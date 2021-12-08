@@ -9,15 +9,14 @@ import org.springframework.stereotype.Component;
 public class CategoryConverter {
 
     // Todo: user추가
-    public Category toEntity(CategoryCreateRequestDto dto) {
+    public Category toEntity(final CategoryCreateRequestDto createRequestDto) {
         return Category.builder()
-                .name(dto.getName())
-                .isPublic(dto.isPublic())
-                .colorCode(dto.getColorCode())
+                .name(createRequestDto.getName())
+                .colorCode(createRequestDto.getColorCode())
                 .build();
     }
 
-    public CategoryResponseDto toCategoryResponseDto(Category category) {
+    public CategoryResponseDto toCategoryResponseDto(final Category category) {
         return CategoryResponseDto.builder()
                 .id(category.getId())
                 .name(category.getName())
