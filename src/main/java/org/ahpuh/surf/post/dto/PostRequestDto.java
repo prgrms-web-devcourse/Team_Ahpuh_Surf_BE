@@ -2,16 +2,13 @@ package org.ahpuh.surf.post.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
-public class PostRequest {
+public class PostRequestDto {
 
     @NotNull
     private Long categoryId;
@@ -20,6 +17,7 @@ public class PostRequest {
     private String selectedDate;
 
     @NotBlank
+    @Size(max = 500)
     private String content;
 
     @Min(value = 0)

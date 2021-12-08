@@ -1,14 +1,14 @@
 package org.ahpuh.surf.post.service;
 
 import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostIdResponse;
-import org.ahpuh.surf.post.dto.PostRequest;
+import org.ahpuh.surf.post.dto.PostIdResponseDto;
+import org.ahpuh.surf.post.dto.PostRequestDto;
 
 public interface PostService {
 
-    PostIdResponse create(PostRequest request);
+    PostIdResponseDto create(PostRequestDto request);
 
-    PostIdResponse update(Long postId, PostRequest request);
+    PostIdResponseDto update(Long postId, PostRequestDto request);
 
     PostDto readOne(Long postId);
 

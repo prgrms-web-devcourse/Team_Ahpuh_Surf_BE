@@ -3,8 +3,8 @@ package org.ahpuh.surf.post.service;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostIdResponse;
-import org.ahpuh.surf.post.dto.PostRequest;
+import org.ahpuh.surf.post.dto.PostIdResponseDto;
+import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +56,6 @@ class PostServiceImplTest {
 
         category = Category.builder().build();
         post = Post.builder()
-                .id(postId)
                 .category(category)
                 .selectedDate(LocalDate.parse(selectedDate))
                 .content(content)
@@ -71,7 +70,7 @@ class PostServiceImplTest {
     @DisplayName("post 생성")
     void create() {
         // given
-        final PostRequest request = PostRequest.builder()
+        final PostRequestDto request = PostRequestDto.builder()
                 .categoryId(categoryId)
                 .selectedDate(selectedDate)
                 .content(content)
@@ -81,13 +80,12 @@ class PostServiceImplTest {
                 .thenReturn(post);
 
         // when
-        final PostIdResponse response = postService.create(request);
+        final PostIdResponseDto response = postService.create(request);
 
         // then
         assertAll(
                 () -> verify(postRepository, times(1)).save(any(Post.class)),
-                () -> assertThat(response).isNotNull(),
-                () -> assertThat(response.getId()).isEqualTo(postId)
+                () -> assertThat(response).isNotNull()
         );
     }
 
@@ -105,7 +103,6 @@ class PostServiceImplTest {
         assertAll(
                 () -> verify(postRepository, times(1)).findById(postId),
                 () -> assertThat(postDto).isNotNull(),
-                () -> assertThat(postDto.getPostId()).isEqualTo(postId),
                 () -> assertThat(postDto.getContent()).isEqualTo(content)
         );
     }
