@@ -22,15 +22,15 @@ jobs:
         with:
           java-version: '17'
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      #      - name: Cache Gradle packages
+      #        uses: actions/cache@v2
+      #        with:
+      #          path: |
+      #            ~/.gradle/caches
+      #            ~/.gradle/wrapper
+      #          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+      #          restore-keys: |
+      #            ${{ runner.os }}-gradle-
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -44,11 +44,11 @@ jobs:
         with:
           files: build/test-results/**/*.xml # Report 저장 경로
 
-      - name: Cleanup Gradle Cache
-        if: ${{ always() }}
-        run: |
-          rm -f ~/.gradle/caches/modules-2/modules-2.lock
-          rm -f ~/.gradle/caches/modules-2/gc.properties
+#      - name: Cleanup Gradle Cache
+#        if: ${{ always() }}
+#        run: |
+#          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+#          rm -f ~/.gradle/caches/modules-2/gc.properties
 
 ### Test를 통과해야만 merge 가능하게 설정 방법 ###
 # Settings -> Branches -> Add rule
