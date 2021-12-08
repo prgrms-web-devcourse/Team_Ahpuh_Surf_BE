@@ -2,9 +2,13 @@ package org.ahpuh.surf.category.service;
 
 import org.ahpuh.surf.category.converter.CategoryConverter;
 import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
+import org.ahpuh.surf.category.dto.CategoryDetailResponseDto;
+import org.ahpuh.surf.category.dto.CategoryResponseDto;
 import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
+import org.ahpuh.surf.post.entity.Post;
+import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
@@ -14,6 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -31,6 +38,9 @@ class CategoryServiceTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PostRepository postRepository;
 
     @Autowired
     CategoryConverter categoryConverter;
@@ -110,5 +120,71 @@ class CategoryServiceTest {
 
         // then
         assertThat(categoryRepository.findAll().size(), is(0));
+    }
+
+    @Test
+    @DisplayName("사용자의 모든 카테고리 정보를 조회할 수 있다.")
+    void findAllCategoryByUserTest() {
+        // given
+        final Category newCategory = Category.builder()
+                .user(user)
+                .name("test2")
+                .isPublic(true)
+                .colorCode("#e7f5df")
+                .build();
+        categoryRepository.save(newCategory);
+        final Long id = user.getUserId();
+
+        // when
+        final List<CategoryResponseDto> categories = categoryService.findAllCategoryByUser(id);
+
+        // then
+        assertAll(
+                () -> Assertions.assertThat(categories.size()).isEqualTo(2),
+                () -> Assertions.assertThat(categories.get(0).getId()).isEqualTo(category.getId()),
+                () -> Assertions.assertThat(categories.get(1).getId()).isEqualTo(newCategory.getId())
+        );
+    }
+
+    @Test
+    @DisplayName("사용자의 대시보드를 조회할 수 있다.")
+    void getCategoryDashboardTest() {
+        // given
+        final Category newCategory = Category.builder()
+                .user(user)
+                .name("test2")
+                .isPublic(true)
+                .colorCode("#e7f5df")
+                .build();
+        categoryRepository.save(newCategory);
+
+        final Post post1 = Post.builder()
+                .content("post1")
+                .selectedDate(LocalDate.now())
+                .score(88).build();
+        postRepository.save(post1);
+
+        final Post post2 = Post.builder()
+                .content("post2")
+                .selectedDate(LocalDate.now())
+                .score(43).build();
+        postRepository.save(post2);
+
+        newCategory.addPost(post1);
+        newCategory.addPost(post2);
+
+        final Long id = user.getUserId();
+
+        // when
+        final List<CategoryDetailResponseDto> categories = categoryService.getCategoryDashboard(id);
+
+        // then
+        assertAll(
+                () -> Assertions.assertThat(categories.size()).isEqualTo(2),
+                () -> Assertions.assertThat(categories.get(0).getPostCount()).isZero(),
+                () -> Assertions.assertThat(categories.get(0).getAverageScore()).isZero(),
+                () -> Assertions.assertThat(categories.get(1).getPostCount()).isEqualTo(2),
+                () -> Assertions.assertThat(categories.get(1).getAverageScore()).isEqualTo(65)
+        );
     }
 }
