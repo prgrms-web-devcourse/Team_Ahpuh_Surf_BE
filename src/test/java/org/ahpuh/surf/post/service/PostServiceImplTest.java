@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class PostServiceImplTest {
 
@@ -57,18 +56,17 @@ class PostServiceImplTest {
         content = "어푸";
         score = 100;
 
-//        category = Category.builder().
-//                .id(categoryId).build();
-//        post = Post.builder()
-//                .id(postId)
-//                .category(category)
-//                .selectedDate(LocalDate.parse(selectedDate))
-//                .content(content)
-//                .score(score)
-//                .build();
+        category = Category.builder().build();
+        post = Post.builder()
+                .id(postId)
+                .category(category)
+                .selectedDate(LocalDate.parse(selectedDate))
+                .content(content)
+                .score(score)
+                .build();
 
-//        Mockito.lenient().when(categoryRepository.findById(categoryId))
-//                .thenReturn(Optional.of(category));
+        Mockito.lenient().when(categoryRepository.findById(categoryId))
+                .thenReturn(Optional.of(category));
     }
 
     @Test
