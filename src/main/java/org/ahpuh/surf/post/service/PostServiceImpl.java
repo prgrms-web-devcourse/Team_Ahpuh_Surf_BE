@@ -3,7 +3,7 @@ package org.ahpuh.surf.post.service;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
-import org.ahpuh.surf.common.exception.NotFoundException;
+import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostIdResponse;
@@ -53,12 +53,12 @@ public class PostServiceImpl implements PostService {
 
     private Category getCategoryById(final Long categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException("category를 찾을 수 없습니다. post id: " + categoryId));
+                .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
     }
 
     private Post getPostById(final Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException("post를 찾을 수 없습니다. post id: " + postId));
+                .orElseThrow(() -> EntityExceptionHandler.PostNotFound(postId));
     }
 
 }

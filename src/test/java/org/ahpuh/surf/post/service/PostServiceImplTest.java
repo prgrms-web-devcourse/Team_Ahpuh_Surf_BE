@@ -2,7 +2,6 @@ package org.ahpuh.surf.post.service;
 
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
-import org.ahpuh.surf.common.exception.NotFoundException;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostIdResponse;
 import org.ahpuh.surf.post.dto.PostRequest;
@@ -16,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -122,8 +120,8 @@ class PostServiceImplTest {
 
         // when, then
         assertThatThrownBy(() -> postService.readOne(invalidPostId))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage("post를 찾을 수 없습니다. post id: " + invalidPostId);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Post with given id not found. Invalid id is " + invalidPostId);
     }
 
 }
