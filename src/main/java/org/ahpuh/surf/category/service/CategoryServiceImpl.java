@@ -30,8 +30,8 @@ public class CategoryServiceImpl implements CategoryService {
     public Long createCategory(final CategoryCreateRequestDto categoryDto) {
         final User user = userRepository.findById(categoryDto.getUserId())
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(categoryDto.getUserId()));
-        final Category category = categoryConverter.toEntity(categoryDto);
-        category.setUser(user);
+        final Category category = categoryConverter.toEntity(user, categoryDto);
+
         return categoryRepository.save(category).getId();
     }
 
@@ -41,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
         category.update(categoryDto.getName(), categoryDto.isPublic(), categoryDto.getColorCode());
+
         return category.getId();
     }
 
