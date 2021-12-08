@@ -5,19 +5,22 @@ import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
+import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
+@Transactional
 class CategoryServiceTest {
 
     @Autowired
@@ -27,13 +30,25 @@ class CategoryServiceTest {
     CategoryRepository categoryRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     CategoryConverter categoryConverter;
 
     Category category;
 
+    User user;
+
     @BeforeEach
     void setUp() {
+        user = User.builder()
+                .userName("suebeen")
+                .password("password")
+                .email("suebeen@gmail.com")
+                .build();
+        userRepository.save(user);
         category = Category.builder()
+                .user(user)
                 .name("test")
                 .isPublic(true)
                 .colorCode("#e7f5ff")
@@ -41,16 +56,12 @@ class CategoryServiceTest {
         categoryRepository.save(category);
     }
 
-    @AfterEach
-    void tearDown() {
-        categoryRepository.deleteAll();
-    }
-
     @Test
     @DisplayName("카테고리를 생성할 수 있다.")
     void createCategoryTest() {
         // given
         final CategoryCreateRequestDto createRequestDto = CategoryCreateRequestDto.builder()
+                .userId(user.getUserId())
                 .name(category.getName())
                 .colorCode(category.getColorCode())
                 .build();

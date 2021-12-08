@@ -8,6 +8,8 @@ import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +21,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    private final UserRepository userRepository;
+
     private final CategoryConverter categoryConverter;
 
     @Override
     @Transactional
     public Long createCategory(final CategoryCreateRequestDto categoryDto) {
-        return categoryRepository.save(categoryConverter.toEntity(categoryDto)).getId();
+        final User user = userRepository.findById(categoryDto.getUserId())
+                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(categoryDto.getUserId()));
+        final Category category = categoryConverter.toEntity(categoryDto);
+        category.setUser(user);
+        return categoryRepository.save(category).getId();
     }
 
     @Override

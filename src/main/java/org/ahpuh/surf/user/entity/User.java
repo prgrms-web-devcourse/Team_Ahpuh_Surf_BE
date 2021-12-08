@@ -3,12 +3,15 @@ package org.ahpuh.surf.user.entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.aop.SoftDelete;
+import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
+import org.ahpuh.surf.post.entity.Post;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +25,7 @@ public class User extends BaseEntity {
 
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(name = "user_name", nullable = false)
@@ -50,13 +53,13 @@ public class User extends BaseEntity {
     @Column(name = "permission")
     private String permission;
 
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @Builder.Default
-//    private List<Category> categories = new ArrayList<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Category> categories = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @Builder.Default
-//    private List<Post> posts = new ArrayList<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Post> posts = new ArrayList<>();
 
     @Builder
     public User(final String userName, final String email, final String password) {
@@ -78,12 +81,12 @@ public class User extends BaseEntity {
         this.permission = permission;
     }
 
-//    public void addCategory(Category category) {
-//        categories.add(category);
-//    }
+    public void addCategory(final Category category) {
+        categories.add(category);
+    }
 
-//    public void addPost(Post post) {
-//        posts.add(post);
-//    }
+    public void addPost(final Post post) {
+        posts.add(post);
+    }
 
 }
