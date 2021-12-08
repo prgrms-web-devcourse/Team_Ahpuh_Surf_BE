@@ -3,7 +3,7 @@ spring:
     name: surf
   datasource:
     driver-class-name: org.h2.Driver
-    url: "jdbc:h2:~/surf;MODE=MYSQL;DB_CLOSE_DELAY=-1"
+    url: "jdbc:h2:tcp://localhost/~/surf;MODE=MYSQL;DB_CLOSE_DELAY=-1"
     username: sa
     password:
     hikari:
