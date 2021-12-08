@@ -1,6 +1,15 @@
 spring:
   application:
     name: surf
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: "jdbc:h2:tcp://localhost/~/surf;MODE=MYSQL;DB_CLOSE_DELAY=-1"
+    username: sa11
+    password:
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+      pool-name: H2_DB
   h2:
     console:
       enabled: true
