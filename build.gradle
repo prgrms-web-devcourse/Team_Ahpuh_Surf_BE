@@ -40,6 +40,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 test {
