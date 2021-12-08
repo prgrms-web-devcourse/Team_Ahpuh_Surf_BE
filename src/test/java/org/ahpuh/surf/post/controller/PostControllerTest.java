@@ -82,9 +82,7 @@ class PostControllerTest {
         resultActions.andExpectAll(
                 status().isCreated(),
                 header().string(LOCATION, postUrl + "/" + postId),
-                jsonPath("statusCode").value(201),
-                jsonPath("data").isNotEmpty(),
-                jsonPath("data.id").value(postId)
+                jsonPath("id").value(postId)
         );
     }
 
@@ -112,9 +110,7 @@ class PostControllerTest {
         // then
         resultActions.andExpectAll(
                 status().isOk(),
-                jsonPath("statusCode").value(200),
-                jsonPath("data").isNotEmpty(),
-                jsonPath("data.id").value(postId)
+                jsonPath("id").value(postId)
         );
     }
 
@@ -139,10 +135,8 @@ class PostControllerTest {
         // then
         resultActions.andExpectAll(
                 status().isOk(),
-                jsonPath("statusCode").value(200),
-                jsonPath("data").isNotEmpty(),
-                jsonPath("data.postId").value(postId),
-                jsonPath("data.content").value("surf")
+                jsonPath("postId").value(postId),
+                jsonPath("content").value("surf")
         );
     }
 
@@ -157,42 +151,8 @@ class PostControllerTest {
 
         // then
         resultActions.andExpectAll(
-                status().isOk(),
-                jsonPath("statusCode").value(204),
-                jsonPath("data").isEmpty()
+                status().isNoContent()
         );
     }
-
-    @Test
-    @DisplayName("spring validation의 한글 길이를 확인한다.")
-    void validateLength() throws Exception {
-        // given
-        final PostRequestDto postRequestDto = PostRequestDto.builder()
-                .categoryId(1L)
-                .selectedDate("2021-12-06")
-                .content("ah-puh")
-                .score(50)
-                .build();
-        final String requestBody = objectMapper.writeValueAsString(postRequestDto);
-
-        given(postService.create(any(PostRequestDto.class)))
-                .willReturn(new PostIdResponseDto(postId));
-
-        // when
-        final ResultActions resultActions = mockMvc.perform(post(postUrl)
-                .content(requestBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON));
-
-        // then
-        resultActions.andExpectAll(
-                status().isCreated(),
-                header().string(LOCATION, postUrl + "/" + postId),
-                jsonPath("statusCode").value(201),
-                jsonPath("data").isNotEmpty(),
-                jsonPath("data.id").value(postId)
-        );
-    }
-
 
 }
