@@ -1,6 +1,9 @@
 package org.ahpuh.surf.category.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.post.entity.Post;
@@ -17,7 +20,6 @@ import java.util.List;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 //@SoftDelete
 @Where(clause = "is_deleted = false")
 public class Category extends BaseEntity {
@@ -38,7 +40,8 @@ public class Category extends BaseEntity {
     private String colorCode;
 
     @Column(name = "average_score")
-    private int averageScore;
+    @Builder.Default
+    private int averageScore = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
@@ -55,9 +58,7 @@ public class Category extends BaseEntity {
     public Category(final User user, final String name, final boolean isPublic, final int averageScore, final String colorCode) {
         this.user = user;
         this.name = name;
-        this.isPublic = isPublic;
         this.colorCode = colorCode;
-        this.averageScore = averageScore;
     }
 
     public void setUser(final User user) {
@@ -70,6 +71,7 @@ public class Category extends BaseEntity {
 
     public void addPost(final Post post) {
         posts.add(post);
+        this.averageScore = (this.averageScore * postCount + post.getScore()) / ++postCount;
     }
 
     public void update(final String name, final boolean isPublic, final String colorCode) {

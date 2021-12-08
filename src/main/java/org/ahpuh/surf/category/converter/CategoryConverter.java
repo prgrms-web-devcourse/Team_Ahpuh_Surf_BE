@@ -1,6 +1,7 @@
 package org.ahpuh.surf.category.converter;
 
 import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
+import org.ahpuh.surf.category.dto.CategoryDetailResponseDto;
 import org.ahpuh.surf.category.dto.CategoryResponseDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.user.entity.User;
@@ -23,6 +24,17 @@ public class CategoryConverter {
                 .name(category.getName())
                 .isPublic(category.isPublic())
                 .colorCode(category.getColorCode())
+                .build();
+    }
+
+    public CategoryDetailResponseDto toCategoryDetailResponseDto(final Category category) {
+        return CategoryDetailResponseDto.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .averageScore(category.getAverageScore())
+                .isPublic(category.isPublic())
+                .colorCode(category.getColorCode())
+                .postCount(category.getPostCount())
                 .build();
     }
 }
