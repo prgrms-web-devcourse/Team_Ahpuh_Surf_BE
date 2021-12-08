@@ -19,6 +19,5 @@ server:
 jwt:
   header: token
   issuer: ahpuh
-  # client-secret: ${JWT-CLIENT-SECRET}
-  client-secret: EENY5W0eegTf1naQB2eDeyCLl5kRS2b8xa5c4qLdS0hmVjtbvo8tOyhPMcAmtPuQ
+  client-secret: ${JWT-CLIENT-SECRET}
   expiry-seconds: 2592000
