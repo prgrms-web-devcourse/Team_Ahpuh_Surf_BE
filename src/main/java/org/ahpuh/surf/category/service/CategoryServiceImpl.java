@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(categoryDto.getUserId()));
         final Category category = categoryConverter.toEntity(user, categoryDto);
 
-        return categoryRepository.save(category).getId();
+        return categoryRepository.save(category).getCategoryId();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
         category.update(categoryDto.getName(), categoryDto.isPublic(), categoryDto.getColorCode());
 
-        return category.getId();
+        return category.getCategoryId();
     }
 
     @Override

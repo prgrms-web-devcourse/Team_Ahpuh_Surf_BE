@@ -20,7 +20,7 @@ public class CategoryConverter {
 
     public CategoryResponseDto toCategoryResponseDto(final Category category) {
         return CategoryResponseDto.builder()
-                .id(category.getId())
+                .categoryId(category.getCategoryId())
                 .name(category.getName())
                 .isPublic(category.isPublic())
                 .colorCode(category.getColorCode())
@@ -29,7 +29,7 @@ public class CategoryConverter {
 
     public CategoryDetailResponseDto toCategoryDetailResponseDto(final Category category) {
         return CategoryDetailResponseDto.builder()
-                .id(category.getId())
+                .categoryId(category.getCategoryId())
                 .name(category.getName())
                 .averageScore(category.getAverageScore())
                 .isPublic(category.isPublic())

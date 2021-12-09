@@ -99,7 +99,7 @@ class CategoryServiceTest {
                 .build();
 
         // when
-        categoryService.updateCategory(category.getId(), updateRequestDto);
+        categoryService.updateCategory(category.getCategoryId(), updateRequestDto);
 
         // then
         assertAll(
@@ -113,7 +113,7 @@ class CategoryServiceTest {
     @DisplayName("카테고리를 삭제할 수 있다.")
     void deleteCategoryTest() {
         // given
-        final Long id = category.getId();
+        final Long id = category.getCategoryId();
 
         // when
         categoryService.deleteCategory(id);
@@ -141,8 +141,8 @@ class CategoryServiceTest {
         // then
         assertAll(
                 () -> Assertions.assertThat(categories.size()).isEqualTo(2),
-                () -> Assertions.assertThat(categories.get(0).getId()).isEqualTo(category.getId()),
-                () -> Assertions.assertThat(categories.get(1).getId()).isEqualTo(newCategory.getId())
+                () -> Assertions.assertThat(categories.get(0).getCategoryId()).isEqualTo(category.getCategoryId()),
+                () -> Assertions.assertThat(categories.get(1).getCategoryId()).isEqualTo(newCategory.getCategoryId())
         );
     }
 
