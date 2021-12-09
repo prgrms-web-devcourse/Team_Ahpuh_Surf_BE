@@ -22,12 +22,14 @@ public class Claims {
 
     public Claims(final DecodedJWT decodedJWT) {
         final Claim userId = decodedJWT.getClaim("user_id");
-        if (!userId.isNull())
+        if (!userId.isNull()) {
             this.userId = userId.asLong();
+        }
 
         final Claim email = decodedJWT.getClaim("email");
-        if (!email.isNull())
+        if (!email.isNull()) {
             this.email = email.asString();
+        }
 
         final Claim roles = decodedJWT.getClaim("roles");
         if (!roles.isNull()) {
