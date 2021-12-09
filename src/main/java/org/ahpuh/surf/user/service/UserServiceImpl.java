@@ -52,9 +52,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findById(final Long userId) {
-        final User userEntity = userRepository.findById(userId)
+        final UserDto userDto = userRepository.findById(userId)
+                .map(userConverter::toUserDto)
                 .orElseThrow(() -> UserNotFound(userId));
-        return userConverter.toUserDto(userEntity);
+        return userDto;
     }
 
     @Override
