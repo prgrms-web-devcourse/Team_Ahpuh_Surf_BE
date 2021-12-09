@@ -31,7 +31,7 @@ public class UserController {
     ) {
         final UserJoinResponseDto joinResponse = userService.join(request);
         final UserLoginResponseDto loginResponse = userService.authenticate(joinResponse.getEmail(), joinResponse.getPassword());
-        return ResponseEntity.created(URI.create("/api/v1/users"))
+        return ResponseEntity.created(URI.create("/api/v1/users" + loginResponse.getUserId()))
                 .body(loginResponse);
     }
 
