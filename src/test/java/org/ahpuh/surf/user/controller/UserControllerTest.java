@@ -101,11 +101,12 @@ class UserControllerTest {
     void testUpdateUser() throws Exception {
         final User user = userRepository.findById(userId1).get();
 
+        assertThat(user.getUserName(), is(nullValue()));
         assertThat(user.getAboutMe(), is(nullValue()));
         assertThat(user.getAccountPublic(), is(true));
 
         final UserUpdateRequestDto request = UserUpdateRequestDto.builder()
-                .userName(user.getUserName())
+                .userName("수정된 name")
                 .password(user.getPassword())
                 .profilePhotoUrl(user.getProfilePhotoUrl())
                 .url("내 블로그 주소")
@@ -120,6 +121,7 @@ class UserControllerTest {
                 .andDo(print());
 
         assertAll("userUpdate",
+                () -> assertThat(user.getUserName(), is("수정된 name")),
                 () -> assertThat(user.getProfilePhotoUrl(), is(nullValue())),
                 () -> assertThat(user.getAboutMe(), is("수정된 소개글")),
                 () -> assertThat(user.getAccountPublic(), is(false))

@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class UserUpdateRequestDto {
 
-    @NotBlank(message = "userName must be provided.")
     private String userName;
 
     @NotBlank(message = "password must be provided.")
