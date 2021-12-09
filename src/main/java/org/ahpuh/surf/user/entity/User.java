@@ -27,7 +27,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "user_name")
     private String userName;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -61,8 +61,7 @@ public class User extends BaseEntity {
     private List<Post> posts = new ArrayList<>();
 
     @Builder
-    public User(final String userName, final String email, final String password) {
-        this.userName = userName;
+    public User(final String email, final String password) {
         this.email = email;
         this.password = password;
     }

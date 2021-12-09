@@ -14,9 +14,6 @@ public class UserJoinRequestDto {
     @Email(message = "email must be provided.")
     private String email;
 
-    @NotBlank(message = "userName must be provided.")
-    private String userName;
-
     @NotBlank(message = "password must be provided.")
     private String password;
 

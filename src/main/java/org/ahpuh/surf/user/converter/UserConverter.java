@@ -16,7 +16,6 @@ public class UserConverter {
     public User toEntity(final UserJoinRequestDto dto) {
         final User user = User.builder()
                 .email(dto.getEmail())
-                .userName(dto.getUserName())
                 .password(bCryptEncoder.encode(dto.getPassword()))
                 .build();
         user.setPermission("ROLE_USER");

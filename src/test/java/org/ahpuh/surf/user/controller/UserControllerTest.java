@@ -42,7 +42,6 @@ class UserControllerTest {
     void setUp() {
         final User userEntity = User.builder()
                 .email("test@naver.com")
-                .userName("test")
                 .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                 .build();
         userEntity.setPermission("ROLE_USER");
@@ -50,12 +49,11 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입 성공 후 자동 로그인을 할 수 있다.")
+    @DisplayName("회원가입을 할 수 있다.")
     @Transactional
-    void testJoinAndLogin() throws Exception {
+    void testJoin() throws Exception {
         final UserJoinRequestDto req = UserJoinRequestDto.builder()
                 .email("test1@naver.com")
-                .userName("최승은1")
                 .password("test111")
                 .build();
 
@@ -65,11 +63,9 @@ class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andDo(print());
 
-        log.info("password" + userRepository.findAll().get(0).getPassword());
-        assertAll("userJoinAndLogin",
+        assertAll("userJoin",
                 () -> assertThat(userRepository.findAll().size(), is(2)),
-                () -> assertThat(userRepository.findAll().get(1).getEmail(), is("test1@naver.com")),
-                () -> assertThat(userRepository.findAll().get(1).getUserName(), is("최승은1"))
+                () -> assertThat(userRepository.findAll().get(1).getEmail(), is("test1@naver.com"))
         );
     }
 

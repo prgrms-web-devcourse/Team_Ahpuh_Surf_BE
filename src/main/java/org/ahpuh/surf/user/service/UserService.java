@@ -1,6 +1,9 @@
 package org.ahpuh.surf.user.service;
 
-import org.ahpuh.surf.user.dto.*;
+import org.ahpuh.surf.user.dto.UserDto;
+import org.ahpuh.surf.user.dto.UserJoinRequestDto;
+import org.ahpuh.surf.user.dto.UserLoginResponseDto;
+import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
 import org.ahpuh.surf.user.entity.User;
 
 public interface UserService {
@@ -9,7 +12,7 @@ public interface UserService {
 
     User login(final String email, final String password);
 
-    UserJoinResponseDto join(final UserJoinRequestDto joinRequest);
+    Long join(final UserJoinRequestDto joinRequest);
 
     UserDto findById(Long userId);
 

@@ -26,13 +26,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserLoginResponseDto> joinAndLogin(
+    public ResponseEntity<Long> join(
             @Valid @RequestBody final UserJoinRequestDto request
     ) {
-        final UserJoinResponseDto joinResponse = userService.join(request);
-        final UserLoginResponseDto loginResponse = userService.authenticate(joinResponse.getEmail(), joinResponse.getPassword());
-        return ResponseEntity.created(URI.create("/api/v1/users" + loginResponse.getUserId()))
-                .body(loginResponse);
+        final long userId = userService.join(request);
+        return ResponseEntity.created(URI.create("/api/v1/users/" + userId))
+                .body(userId);
     }
 
     @GetMapping("/{userId}")

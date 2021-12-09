@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.user.converter.UserConverter;
-import org.ahpuh.surf.user.dto.*;
+import org.ahpuh.surf.user.dto.UserDto;
+import org.ahpuh.surf.user.dto.UserJoinRequestDto;
+import org.ahpuh.surf.user.dto.UserLoginResponseDto;
+import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,9 +48,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public UserJoinResponseDto join(final UserJoinRequestDto joinRequest) {
+    public Long join(final UserJoinRequestDto joinRequest) {
         final User newUser = userRepository.save(userConverter.toEntity(joinRequest));
-        return new UserJoinResponseDto(newUser.getEmail(), joinRequest.getPassword());
+        return newUser.getUserId();
     }
 
     @Override
