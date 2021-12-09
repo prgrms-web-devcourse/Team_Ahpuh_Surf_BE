@@ -1,6 +1,7 @@
 package org.ahpuh.surf.user.converter;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.user.dto.UserDto;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
 import org.ahpuh.surf.user.entity.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,19 @@ public class UserConverter {
                 .build();
         user.setPermission("ROLE_USER");
         return user;
+    }
+
+    public UserDto toUserDto(final User userEntity) {
+        return UserDto.builder()
+                .userId(userEntity.getUserId())
+                .email(userEntity.getEmail())
+                .userName(userEntity.getUserName())
+                .profilePhotoUrl(userEntity.getProfilePhotoUrl())
+                .aboutMe(userEntity.getAboutMe())
+                .url(userEntity.getUrl())
+//                .followerCount(userEntity.)
+//                .followingCount(userEntity.)
+                .build();
     }
 
 }

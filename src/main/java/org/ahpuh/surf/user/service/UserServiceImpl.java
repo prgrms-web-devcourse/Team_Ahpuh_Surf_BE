@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.user.converter.UserConverter;
-import org.ahpuh.surf.user.dto.UserJoinRequestDto;
-import org.ahpuh.surf.user.dto.UserJoinResponseDto;
-import org.ahpuh.surf.user.dto.UserLoginResponseDto;
+import org.ahpuh.surf.user.dto.*;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,8 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.ahpuh.surf.common.exception.EntityExceptionHandler.UserNotFound;
 
 @Service
 @RequiredArgsConstructor
@@ -41,9 +38,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public User login(final String email, final String password) {
-        checkArgument(isNotEmpty(email), "email must be provided.");
-        checkArgument(isNotEmpty(password), "password must be provided.");
-
         final User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Could not found user for " + email));
         user.checkPassword(passwordEncoder, password);
@@ -52,12 +46,30 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserJoinResponseDto join(final UserJoinRequestDto joinRequest) {
-        checkArgument(isNotEmpty(joinRequest.getEmail()), "email must be provided.");
-        checkArgument(isNotEmpty(joinRequest.getUserName()), "userName must be provided.");
-        checkArgument(isNotEmpty(joinRequest.getPassword()), "password must be provided.");
-
         final User newUser = userRepository.save(userConverter.toEntity(joinRequest));
         return new UserJoinResponseDto(newUser.getEmail(), joinRequest.getPassword());
+    }
+
+    @Override
+    public UserDto findById(final Long userId) {
+        final User userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> UserNotFound(userId));
+        return userConverter.toUserDto(userEntity);
+    }
+
+    @Override
+    public Long update(final Long userId, final UserUpdateRequestDto updateDto) {
+        final User userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> UserNotFound(userId));
+        userEntity.update(updateDto);
+        return userEntity.getUserId();
+    }
+
+    @Override
+    public void delete(final Long userId) {
+        final User userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> UserNotFound(userId));
+        userEntity.delete();
     }
 
 }

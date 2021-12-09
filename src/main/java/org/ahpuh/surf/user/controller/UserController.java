@@ -1,17 +1,12 @@
 package org.ahpuh.surf.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.ahpuh.surf.user.dto.UserJoinRequestDto;
-import org.ahpuh.surf.user.dto.UserJoinResponseDto;
-import org.ahpuh.surf.user.dto.UserLoginRequestDto;
-import org.ahpuh.surf.user.dto.UserLoginResponseDto;
+import org.ahpuh.surf.user.dto.*;
 import org.ahpuh.surf.user.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -24,7 +19,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponseDto> login(
-            @RequestBody final UserLoginRequestDto request
+            @Valid @RequestBody final UserLoginRequestDto request
     ) {
         final UserLoginResponseDto loginResponse = userService.authenticate(request.getEmail(), request.getPassword());
         return ResponseEntity.ok().body(loginResponse);
@@ -32,12 +27,37 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserLoginResponseDto> joinAndLogin(
-            @RequestBody final UserJoinRequestDto request
+            @Valid @RequestBody final UserJoinRequestDto request
     ) {
         final UserJoinResponseDto joinResponse = userService.join(request);
         final UserLoginResponseDto loginResponse = userService.authenticate(joinResponse.getEmail(), joinResponse.getPassword());
         return ResponseEntity.created(URI.create("/api/v1/users"))
                 .body(loginResponse);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> findUserInfo(
+            @PathVariable final Long userId
+    ) {
+        final UserDto response = userService.findById(userId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Long> updateUser(
+            @PathVariable final Long userId,
+            @Valid @RequestBody final UserUpdateRequestDto request
+    ) {
+        userService.update(userId, request);
+        return ResponseEntity.ok().body(userId);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(
+            @PathVariable final Long userId
+    ) {
+        userService.delete(userId);
+        return ResponseEntity.noContent().build();
     }
 
     /**
