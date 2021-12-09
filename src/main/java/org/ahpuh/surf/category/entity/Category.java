@@ -20,7 +20,6 @@ import java.util.List;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@SoftDelete
 @Where(clause = "is_deleted = false")
 public class Category extends BaseEntity {
 
