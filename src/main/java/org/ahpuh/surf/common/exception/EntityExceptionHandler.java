@@ -10,18 +10,12 @@ public class EntityExceptionHandler {
         return new IllegalArgumentException("Category with given id not found. Invalid id is " + categoryId);
     }
 
-    ;
-
     public static IllegalArgumentException UserNotFound(final Long userId) {
         return new IllegalArgumentException("User with given id not found. Invalid id is " + userId);
     }
 
-    ;
-
     public static IllegalArgumentException PostNotFound(final Long postId) {
         return new IllegalArgumentException("Post with given id not found. Invalid id is " + postId);
     }
-
-    ;
 
 }
