@@ -3,6 +3,7 @@ package org.ahpuh.surf.user.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
+import org.ahpuh.surf.user.dto.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
@@ -70,6 +71,22 @@ class UserControllerTest {
                 () -> assertThat(userRepository.findAll().get(1).getEmail(), is("test1@naver.com")),
                 () -> assertThat(userRepository.findAll().get(1).getUserName(), is("최승은1"))
         );
+    }
+
+    @Test
+    @DisplayName("로그인 할 수 있다.")
+    @Transactional
+    void testLogin() throws Exception {
+        final UserLoginRequestDto req = UserLoginRequestDto.builder()
+                .email("test@naver.com")
+                .password("testpw")
+                .build();
+
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
