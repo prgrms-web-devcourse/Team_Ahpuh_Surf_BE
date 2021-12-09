@@ -12,7 +12,6 @@ import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     public User login(final String email, final String password) {
         final User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Could not found user for " + email));
+                .orElseThrow(() -> UserNotFound(email));
         user.checkPassword(passwordEncoder, password);
         return user;
     }

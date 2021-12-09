@@ -14,6 +14,10 @@ public class EntityExceptionHandler {
         return new IllegalArgumentException("User with given id not found. Invalid id is " + userId);
     }
 
+    public static IllegalArgumentException UserNotFound(final String email) {
+        return new IllegalArgumentException("User with given email not found. Invalid email is " + email);
+    }
+
     public static IllegalArgumentException PostNotFound(final Long postId) {
         return new IllegalArgumentException("Post with given id not found. Invalid id is " + postId);
     }
