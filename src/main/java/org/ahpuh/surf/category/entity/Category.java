@@ -59,14 +59,7 @@ public class Category extends BaseEntity {
         this.user = user;
         this.name = name;
         this.colorCode = colorCode;
-    }
-
-    public void setUser(final User user) {
-        if (this.user != null) {
-            this.user.getCategories().remove(this);
-        }
-        this.user = user;
-        user.getCategories().add(this);
+        user.addCategory(this);
     }
 
     public void addPost(final Post post) {
