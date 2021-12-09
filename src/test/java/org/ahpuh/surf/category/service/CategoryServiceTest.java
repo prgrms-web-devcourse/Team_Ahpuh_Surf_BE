@@ -51,19 +51,17 @@ class CategoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = User.builder()
+        user = userRepository.save(User.builder()
                 .userName("suebeen")
                 .password("password")
                 .email("suebeen@gmail.com")
-                .build();
-        userRepository.save(user);
-        category = Category.builder()
+                .build());
+        category = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test")
                 .isPublic(true)
                 .colorCode("#e7f5ff")
-                .build();
-        categoryRepository.save(category);
+                .build());
     }
 
     @Test
@@ -126,13 +124,12 @@ class CategoryServiceTest {
     @DisplayName("사용자의 모든 카테고리 정보를 조회할 수 있다.")
     void findAllCategoryByUserTest() {
         // given
-        final Category newCategory = Category.builder()
+        final Category newCategory = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test2")
                 .isPublic(true)
                 .colorCode("#e7f5df")
-                .build();
-        categoryRepository.save(newCategory);
+                .build());
         final Long id = user.getUserId();
 
         // when
@@ -150,25 +147,22 @@ class CategoryServiceTest {
     @DisplayName("사용자의 대시보드를 조회할 수 있다.")
     void getCategoryDashboardTest() {
         // given
-        final Category newCategory = Category.builder()
+        final Category newCategory = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test2")
                 .isPublic(true)
                 .colorCode("#e7f5df")
-                .build();
-        categoryRepository.save(newCategory);
+                .build());
 
-        final Post post1 = Post.builder()
+        final Post post1 = postRepository.save(Post.builder()
                 .content("post1")
                 .selectedDate(LocalDate.now())
-                .score(88).build();
-        postRepository.save(post1);
+                .score(88).build());
 
-        final Post post2 = Post.builder()
+        final Post post2 = postRepository.save(Post.builder()
                 .content("post2")
                 .selectedDate(LocalDate.now())
-                .score(43).build();
-        postRepository.save(post2);
+                .score(43).build());
 
         newCategory.addPost(post1);
         newCategory.addPost(post2);

@@ -52,6 +52,8 @@ public class Post extends BaseEntity {
         this.content = content;
         this.score = score;
         this.fileUrl = fileUrl;
+        user.addPost(this);
+        category.addPost(this);
     }
 
     public void editPost(final Category category, final LocalDate selectedDate, final String content, final int score, final String fileUrl) {
