@@ -19,5 +19,4 @@ public interface CategoryService {
 
     List<CategoryDetailResponseDto> getCategoryDashboard(Long userId);
 
-    // Todo: 카테고리별 게시글 전체 조회
 }
