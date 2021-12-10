@@ -41,7 +41,6 @@ public class Category extends BaseEntity {
     @Column(name = "average_score")
     @Builder.Default
     private int averageScore = 0;
-
     @Column(name = "recent_score")
     @Builder.Default
     private int recentScore = 0;
@@ -58,6 +57,7 @@ public class Category extends BaseEntity {
     private int postCount;
 
     @Builder
+
     public Category(final User user, final String name, final String colorCode) {
         this.user = user;
         this.name = name;
@@ -69,7 +69,6 @@ public class Category extends BaseEntity {
         posts.add(post);
         this.recentScore = post.getScore();
         this.averageScore = updateAverageScore(post.getScore()) / (postCount+1);
-
     }
 
     public void update(final String name, final boolean isPublic, final String colorCode) {
@@ -77,7 +76,7 @@ public class Category extends BaseEntity {
         this.isPublic = isPublic;
         this.colorCode = colorCode;
     }
-
+  
     public int updateAverageScore(int score) {
         return this.averageScore * this.postCount + score;
     }
