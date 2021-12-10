@@ -1,4 +1,4 @@
-name: Ahpuh CI
+name: Ahpuh CI Build & Test
 
 on:
   push:
@@ -34,9 +34,11 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+        shell: bash
 
       - name: Build with Gradle
         run: ./gradlew clean build
+        shell: bash
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
