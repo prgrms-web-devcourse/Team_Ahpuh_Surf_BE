@@ -1,6 +1,7 @@
 package org.ahpuh.surf.category.service;
 
 import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
+import org.ahpuh.surf.category.dto.CategoryDetailResponseDto;
 import org.ahpuh.surf.category.dto.CategoryResponseDto;
 import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
 
@@ -16,9 +17,7 @@ public interface CategoryService {
 
     List<CategoryResponseDto> findAllCategoryByUser(Long userId);
 
-    // Todo: 해당 사용자의 카테고리 정보
+    List<CategoryDetailResponseDto> getCategoryDashboard(Long userId);
 
     // Todo: 카테고리별 게시글 전체 조회
-
-    // Todo: 일년치 카테고리별 게시글 점수 조회
 }

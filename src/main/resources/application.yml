@@ -16,8 +16,8 @@ spring:
       path: /h2-console
   jpa:
     database: h2
-    open-in-view: false
-    show-sql: false
+    open-in-view: true
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
       use-new-id-generator-mappings: false
@@ -28,6 +28,5 @@ server:
 jwt:
   header: token
   issuer: ahpuh
-  # client-secret: ${JWT-CLIENT-SECRET}
-  client-secret: EENY5W0eegTf1naQB2eDeyCLl5kRS2b8xa5c4qLdS0hmVjtbvo8tOyhPMcAmtPuQ
-  expiry-seconds: 86400
+  client-secret: ${JWT-CLIENT-SECRET}
+  expiry-seconds: 2592000

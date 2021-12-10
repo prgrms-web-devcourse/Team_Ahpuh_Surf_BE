@@ -1,47 +1,62 @@
 package org.ahpuh.surf.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.ahpuh.surf.common.response.ApiResponse;
-import org.ahpuh.surf.jwt.JwtAuthentication;
-import org.ahpuh.surf.jwt.JwtAuthenticationToken;
-import org.ahpuh.surf.user.dto.UserJoinRequestDto;
-import org.ahpuh.surf.user.dto.UserLoginRequestDto;
-import org.ahpuh.surf.user.dto.UserLoginResponseDto;
-import org.ahpuh.surf.user.entity.User;
-import org.ahpuh.surf.user.service.UserServiceImpl;
+import org.ahpuh.surf.user.dto.*;
+import org.ahpuh.surf.user.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    private final AuthenticationManager authenticationManager;
 
-    @PostMapping(path = "/users/login")
-    public ResponseEntity<ApiResponse<UserLoginResponseDto>> login(
-            @RequestBody final UserLoginRequestDto request
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginResponseDto> login(
+            @Valid @RequestBody final UserLoginRequestDto request
     ) {
-        final JwtAuthenticationToken authToken = new JwtAuthenticationToken(request.getEmail(), request.getPassword());
-        final Authentication resultToken = authenticationManager.authenticate(authToken);
-        final JwtAuthentication authentication = (JwtAuthentication) resultToken.getPrincipal();
-        final User user = (User) resultToken.getDetails();
-        return ResponseEntity.ok(ApiResponse.ok(new UserLoginResponseDto(authentication.token, user.getUserId())));
+        final UserLoginResponseDto loginResponse = userService.authenticate(request.getEmail(), request.getPassword());
+        return ResponseEntity.ok().body(loginResponse);
     }
 
-    @PostMapping(path = "/users")
-    public ResponseEntity<ApiResponse<Long>> join(
-            @RequestBody final UserJoinRequestDto request
+    @PostMapping
+    public ResponseEntity<Long> join(
+            @Valid @RequestBody final UserJoinRequestDto request
     ) {
-        return ResponseEntity.ok(ApiResponse.created(userService.join(request)));
+        final long userId = userService.join(request);
+        return ResponseEntity.created(URI.create("/api/v1/users/" + userId))
+                .body(userId);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> findUserInfo(
+            @PathVariable final Long userId
+    ) {
+        final UserDto response = userService.findById(userId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Long> updateUser(
+            @PathVariable final Long userId,
+            @Valid @RequestBody final UserUpdateRequestDto request
+    ) {
+        userService.update(userId, request);
+        return ResponseEntity.ok().body(userId);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(
+            @PathVariable final Long userId
+    ) {
+        userService.delete(userId);
+        return ResponseEntity.noContent().build();
     }
 
     /**

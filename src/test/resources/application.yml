@@ -7,8 +7,8 @@ spring:
       path: /h2-console
   jpa:
     database: h2
-    open-in-view: false
-    show-sql: false
+    open-in-view: true
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
       use-new-id-generator-mappings: false
