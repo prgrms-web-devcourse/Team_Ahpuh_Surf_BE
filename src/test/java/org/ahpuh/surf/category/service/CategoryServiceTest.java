@@ -52,14 +52,12 @@ class CategoryServiceTest {
     @BeforeEach
     void setUp() {
         user = userRepository.save(User.builder()
-                .userName("suebeen")
                 .password("password")
                 .email("suebeen@gmail.com")
                 .build());
         category = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test")
-                .isPublic(true)
                 .colorCode("#e7f5ff")
                 .build());
     }
@@ -127,7 +125,6 @@ class CategoryServiceTest {
         final Category newCategory = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test2")
-                .isPublic(true)
                 .colorCode("#e7f5df")
                 .build());
         final Long id = user.getUserId();
@@ -150,7 +147,6 @@ class CategoryServiceTest {
         final Category newCategory = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test2")
-                .isPublic(true)
                 .colorCode("#e7f5df")
                 .build());
 
