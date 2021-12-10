@@ -5,9 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.jwt.Jwt;
 import org.ahpuh.surf.jwt.JwtAuthenticationFilter;
 import org.ahpuh.surf.jwt.JwtAuthenticationProvider;
-import org.ahpuh.surf.user.service.UserServiceImpl;
+import org.ahpuh.surf.user.service.UserService;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -23,10 +22,9 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 
 import javax.servlet.http.HttpServletResponse;
 
-@Configuration
 @EnableWebSecurity
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtConfig jwtConfig;
@@ -65,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtAuthenticationProvider jwtAuthenticationProvider(final UserServiceImpl userService, final Jwt jwt) {
+    public JwtAuthenticationProvider jwtAuthenticationProvider(final UserService userService, final Jwt jwt) {
         return new JwtAuthenticationProvider(jwt, userService);
     }
 
@@ -83,29 +81,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/users/me").hasAnyRole("USER")
+            .authorizeRequests()
                 .anyRequest().permitAll()
                 .and()
-                .headers()
+            .headers()
                 .disable()
-                .csrf()
+            .csrf()
                 .disable()
-                .formLogin()
+            .formLogin()
                 .disable()
-                .httpBasic()
+            .httpBasic()
                 .disable()
-                .rememberMe()
+            .rememberMe()
                 .disable()
-                .logout()
+            .logout()
                 .disable()
-                .exceptionHandling()
+            .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
                 .and()
-                .sessionManagement()
+            .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
+            .addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
         ;
     }
 }
