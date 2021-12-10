@@ -2,12 +2,11 @@ package org.ahpuh.surf.user.entity;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.ahpuh.surf.aop.SoftDelete;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.post.entity.Post;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
+import org.hibernate.annotations.Where;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -20,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder
-@SoftDelete
+@Where(clause = "is_deleted = false")
 public class User extends BaseEntity {
 
     @Id
@@ -28,7 +27,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "user_name")
     private String userName;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -62,8 +61,7 @@ public class User extends BaseEntity {
     private List<Post> posts = new ArrayList<>();
 
     @Builder
-    public User(final String userName, final String email, final String password) {
-        this.userName = userName;
+    public User(final String email, final String password) {
         this.email = email;
         this.password = password;
     }
@@ -73,12 +71,17 @@ public class User extends BaseEntity {
             throw new IllegalArgumentException("Bad credential");
     }
 
-    public List<GrantedAuthority> getAuthority() {
-        return List.of(new SimpleGrantedAuthority(permission));
-    }
-
     public void setPermission(final String permission) {
         this.permission = permission;
+    }
+
+    public void update(final UserUpdateRequestDto request) {
+        this.userName = request.getUserName();
+        this.password = request.getPassword();
+        this.profilePhotoUrl = request.getProfilePhotoUrl();
+        this.url = request.getUrl();
+        this.aboutMe = request.getAboutMe();
+        this.accountPublic = request.getAccountPublic();
     }
 
     public void addCategory(final Category category) {
