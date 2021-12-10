@@ -6,14 +6,17 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class CategoryResponseDto {
+public class CategoryDetailResponseDto {
 
     private Long categoryId;
 
     private String name;
 
+    private int averageScore;
+
     private boolean isPublic;
 
     private String colorCode;
 
+    private int postCount;
 }
