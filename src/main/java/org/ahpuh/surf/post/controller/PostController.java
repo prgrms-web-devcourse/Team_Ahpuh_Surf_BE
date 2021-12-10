@@ -1,15 +1,19 @@
 package org.ahpuh.surf.post.controller;
 
 import org.ahpuh.surf.common.response.ApiResponse;
+import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostIdResponse;
 import org.ahpuh.surf.post.dto.PostRequest;
+import org.ahpuh.surf.post.dto.PostResponseDto;
 import org.ahpuh.surf.post.service.PostServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/v1/posts")
 @RestController
@@ -48,6 +52,31 @@ public class PostController {
         postService.delete(postId);
         return ResponseEntity.ok()
                 .body(ApiResponse.noContent());
+    }
+
+    @GetMapping("/month")
+    public ResponseEntity<List<PostResponseDto>> getPost(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @RequestParam final Integer year,
+            @RequestParam final Integer month
+    ) {
+        final Long userId = authentication.userId;
+        return ResponseEntity.ok().body(postService.getPost(userId, year, month));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<PostResponseDto>> getAllPost(
+            @RequestParam final Long userId
+    ) {
+        return ResponseEntity.ok().body(postService.getAllPost(userId));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PostResponseDto>> getAllPostByCategory(
+            @RequestParam final Long userId,
+            @RequestParam final Long categoryId
+    ) {
+        return ResponseEntity.ok().body(postService.getAllPostByCategory(userId, categoryId));
     }
 
 }
