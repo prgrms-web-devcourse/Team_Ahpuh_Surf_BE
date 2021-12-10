@@ -33,7 +33,7 @@ public class Category extends BaseEntity {
 
     @Column(name = "is_public", nullable = false)
     @Builder.Default
-    private boolean isPublic = true;
+    private Boolean isPublic = true;
 
     @Column(name = "color_code")
     private String colorCode;

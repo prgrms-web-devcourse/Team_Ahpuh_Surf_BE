@@ -22,7 +22,7 @@ public class CategoryConverter {
         return CategoryResponseDto.builder()
                 .categoryId(category.getCategoryId())
                 .name(category.getName())
-                .isPublic(category.isPublic())
+                .isPublic(category.getIsPublic())
                 .colorCode(category.getColorCode())
                 .recentScore(category.getRecentScore())
                 .build();
@@ -33,7 +33,7 @@ public class CategoryConverter {
                 .categoryId(category.getCategoryId())
                 .name(category.getName())
                 .averageScore(category.getAverageScore())
-                .isPublic(category.isPublic())
+                .isPublic(category.getIsPublic())
                 .colorCode(category.getColorCode())
                 .postCount(category.getPostCount())
                 .build();
