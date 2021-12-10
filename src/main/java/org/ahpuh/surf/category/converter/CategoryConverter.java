@@ -38,4 +38,15 @@ public class CategoryConverter {
                 .postCount(category.getPostCount())
                 .build();
     }
+
+    public CategoryDetailResponseDto toCategoryDetailResponseDto(final Category category) {
+        return CategoryDetailResponseDto.builder()
+                .categoryId(category.getCategoryId())
+                .name(category.getName())
+                .averageScore(category.getAverageScore())
+                .isPublic(category.isPublic())
+                .colorCode(category.getColorCode())
+                .postCount(category.getPostCount())
+                .build();
+    }
 }
