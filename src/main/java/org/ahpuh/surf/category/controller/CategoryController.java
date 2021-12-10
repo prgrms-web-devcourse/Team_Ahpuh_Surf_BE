@@ -27,7 +27,7 @@ public class CategoryController {
             @Valid @RequestBody final CategoryCreateRequestDto request
     ) {
         final Long categoryId = categoryService.createCategory(request);
-        return ResponseEntity.created(URI.create("/api/v1/categories")).body(categoryId);
+        return ResponseEntity.created(URI.create("/api/v1/categories" + categoryId)).body(categoryId);
     }
 
     @PutMapping("/{categoryId}")

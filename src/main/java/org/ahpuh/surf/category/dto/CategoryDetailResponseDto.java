@@ -14,7 +14,7 @@ public class CategoryDetailResponseDto {
 
     private int averageScore;
 
-    private boolean isPublic;
+    private Boolean isPublic;
 
     private String colorCode;
 

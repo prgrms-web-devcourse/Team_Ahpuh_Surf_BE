@@ -52,14 +52,12 @@ class CategoryServiceTest {
     @BeforeEach
     void setUp() {
         user = userRepository.save(User.builder()
-                .userName("suebeen")
                 .password("password")
                 .email("suebeen@gmail.com")
                 .build());
         category = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test")
-                .isPublic(true)
                 .colorCode("#e7f5ff")
                 .build());
     }
@@ -81,7 +79,7 @@ class CategoryServiceTest {
         assertAll(
                 () -> Assertions.assertThat(categoryRepository.findAll().size()).isEqualTo(2),
                 () -> Assertions.assertThat(categoryRepository.findAll().get(1).getName()).isEqualTo(createRequestDto.getName()),
-                () -> Assertions.assertThat(categoryRepository.findAll().get(1).isPublic()).isTrue(),
+                () -> Assertions.assertThat(categoryRepository.findAll().get(1).getIsPublic()).isTrue(),
                 () -> Assertions.assertThat(categoryRepository.findAll().get(1).getColorCode()).isEqualTo(createRequestDto.getColorCode())
         );
     }
@@ -102,7 +100,7 @@ class CategoryServiceTest {
         // then
         assertAll(
                 () -> Assertions.assertThat(categoryRepository.findAll().get(0).getName()).isEqualTo(updateRequestDto.getName()),
-                () -> Assertions.assertThat(categoryRepository.findAll().get(0).isPublic()).isFalse(),
+                () -> Assertions.assertThat(categoryRepository.findAll().get(0).getIsPublic()).isFalse(),
                 () -> Assertions.assertThat(categoryRepository.findAll().get(0).getColorCode()).isEqualTo(updateRequestDto.getColorCode())
         );
     }
@@ -127,7 +125,6 @@ class CategoryServiceTest {
         final Category newCategory = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test2")
-                .isPublic(true)
                 .colorCode("#e7f5df")
                 .build());
         final Long id = user.getUserId();
@@ -150,7 +147,6 @@ class CategoryServiceTest {
         final Category newCategory = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test2")
-                .isPublic(true)
                 .colorCode("#e7f5df")
                 .build());
 
