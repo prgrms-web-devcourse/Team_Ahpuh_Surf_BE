@@ -5,10 +5,7 @@ import org.ahpuh.surf.follow.service.FollowService;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -29,5 +26,14 @@ public class FollowController {
         return ResponseEntity.created(URI.create("/users/" + authentication.userId + "/following"))
                 .body(followId);
     }
+
+    @DeleteMapping("/follow/{followId}")
+    public ResponseEntity<Void> unfollow(
+            @PathVariable final Long followId
+    ) {
+        followService.unfollow(followId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
