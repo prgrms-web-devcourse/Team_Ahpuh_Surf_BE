@@ -30,8 +30,8 @@ public class UserConverter {
                 .profilePhotoUrl(userEntity.getProfilePhotoUrl())
                 .aboutMe(userEntity.getAboutMe())
                 .url(userEntity.getUrl())
-//                .followerCount(userEntity.)
-//                .followingCount(userEntity.)
+                .followerCount(userEntity.getFollowingUsers().size())
+                .followingCount(userEntity.getFollowedUsers().size())
                 .build();
     }
 
