@@ -41,12 +41,11 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        final User userEntity = User.builder()
-                .email("test@naver.com")
-                .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
-                .build();
-        userEntity.setPermission("ROLE_USER");
-        userId1 = userRepository.save(userEntity).getUserId();
+        userId1 = userRepository.save(User.builder()
+                        .email("test@naver.com")
+                        .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
+                        .build())
+                .getUserId();
     }
 
     @Test
