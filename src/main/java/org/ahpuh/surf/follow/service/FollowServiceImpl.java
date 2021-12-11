@@ -2,12 +2,15 @@ package org.ahpuh.surf.follow.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.follow.converter.FollowConverter;
+import org.ahpuh.surf.follow.dto.FollowUserDto;
 import org.ahpuh.surf.follow.entity.Follow;
 import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.ahpuh.surf.common.exception.EntityExceptionHandler.*;
 
@@ -50,6 +53,28 @@ public class FollowServiceImpl implements FollowService {
         }
 
         followRepository.deleteById(followId);
+    }
+
+    @Override
+    public List<FollowUserDto> findFollowingList(final Long userId) {
+        final User userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> UserNotFound(userId));
+        return userEntity.getFollowingUsers()
+                .stream()
+                .map(Follow::getUser)
+                .map(followConverter::toFollowUserDto)
+                .toList();
+    }
+
+    @Override
+    public List<FollowUserDto> findFollowList(final Long userId) {
+        final User userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> UserNotFound(userId));
+        return userEntity.getFollowedUsers()
+                .stream()
+                .map(Follow::getFollowedUser)
+                .map(followConverter::toFollowUserDto)
+                .toList();
     }
 
 }
