@@ -20,8 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,8 +34,6 @@ class FollowControllerTest {
     private ObjectMapper objectMapper;
     @Autowired
     private FollowRepository followRepository;
-    @Autowired
-    private FollowController followController;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -142,6 +139,50 @@ class FollowControllerTest {
                 () -> assertThat(userRepository.getById(userId2).getFollowingUsers().size(), is(0)),
                 () -> assertThat(followRepository.findAll().size(), is(0))
         );
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("'특정 user를 팔로잉 한 user 목록' & '특정 user가 팔로우 한 user 목록'을 조회할 수 있다.")
+    @Transactional
+    void testFindFollowListAndFollowingList() throws Exception {
+        // Given
+        mockMvc.perform(post("/api/v1/follow")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userId2))
+                        .header("token", token))
+                .andExpect(status().isCreated())
+                .andDo(print());
+
+        mockMvc.perform(post("/api/v1/follow")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userId3))
+                        .header("token", token))
+                .andExpect(status().isCreated())
+                .andDo(print());
+
+        assertAll("user1이 user2, user3을 팔로우",
+                () -> assertThat(followRepository.findAll().size(), is(2)),
+                () -> assertThat(userRepository.getById(userId1).getFollowedUsers().size(), is(2)),
+                () -> assertThat(userRepository.getById(userId1).getFollowedUsers().get(0).getFollowedUser().getUserId(), is(userId2)),
+                () -> assertThat(userRepository.getById(userId1).getFollowedUsers().get(1).getFollowedUser().getUserId(), is(userId3)),
+                () -> assertThat(userRepository.getById(userId2).getFollowingUsers().size(), is(1)),
+                () -> assertThat(userRepository.getById(userId2).getFollowingUsers().get(0).getUser().getUserId(), is(userId1)),
+                () -> assertThat(userRepository.getById(userId3).getFollowingUsers().get(0).getUser().getUserId(), is(userId1))
+        );
+
+        // When, Then
+        // user2를 팔로잉 한 사람 목록
+        mockMvc.perform(get("/api/v1/users/{userId}/following", userId2)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // user1이 팔로우 한 사람 목록
+        mockMvc.perform(get("/api/v1/users/{userId}/follow", userId1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }
