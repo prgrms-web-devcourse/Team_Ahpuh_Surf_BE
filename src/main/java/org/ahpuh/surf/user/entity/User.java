@@ -51,7 +51,8 @@ public class User extends BaseEntity {
     private Boolean accountPublic = true;
 
     @Column(name = "permission")
-    private String permission;
+    @Builder.Default
+    private String permission = "ROLE_USER";
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
