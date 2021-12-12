@@ -24,7 +24,7 @@ public class FollowController {
             @RequestBody final Long followUserId
     ) {
         final Long followId = followService.follow(authentication.userId, followUserId);
-        return ResponseEntity.created(URI.create("/users/" + authentication.userId + "/following"))
+        return ResponseEntity.created(URI.create("/api/v1/users/" + authentication.userId + "/following"))
                 .body(followId);
     }
 

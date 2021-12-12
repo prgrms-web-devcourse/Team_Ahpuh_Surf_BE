@@ -6,7 +6,14 @@ import org.ahpuh.surf.user.entity.User;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "follow")
+@Table(
+        name = "follow",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {"user_id", "follower_id"}
+                )
+        }
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
