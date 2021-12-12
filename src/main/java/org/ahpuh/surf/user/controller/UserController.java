@@ -44,7 +44,7 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping
     public ResponseEntity<Long> updateUser(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @Valid @RequestBody final UserUpdateRequestDto request
@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok().body(authentication.userId);
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     public ResponseEntity<Void> deleteUser(
             @AuthenticationPrincipal final JwtAuthentication authentication
     ) {

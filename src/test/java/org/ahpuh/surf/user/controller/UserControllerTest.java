@@ -124,7 +124,7 @@ class UserControllerTest {
                 .accountPublic(false)
                 .build();
 
-        mockMvc.perform(put("/api/v1/users/{userId}", userId1)
+        mockMvc.perform(put("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .header("token", token))
@@ -150,7 +150,7 @@ class UserControllerTest {
                 .build();
         final String token = userController.login(req).getBody().getToken();
 
-        mockMvc.perform(delete("/api/v1/users/{userId}", userId1)
+        mockMvc.perform(delete("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("token", token))
                 .andExpect(status().isNoContent())
