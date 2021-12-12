@@ -1,9 +1,11 @@
 package org.ahpuh.surf.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.user.dto.*;
 import org.ahpuh.surf.user.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,32 +44,21 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping
     public ResponseEntity<Long> updateUser(
-            @PathVariable final Long userId,
+            @AuthenticationPrincipal final JwtAuthentication authentication,
             @Valid @RequestBody final UserUpdateRequestDto request
     ) {
-        userService.update(userId, request);
-        return ResponseEntity.ok().body(userId);
+        userService.update(authentication.userId, request);
+        return ResponseEntity.ok().body(authentication.userId);
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     public ResponseEntity<Void> deleteUser(
-            @PathVariable final Long userId
+            @AuthenticationPrincipal final JwtAuthentication authentication
     ) {
-        userService.delete(userId);
+        userService.delete(authentication.userId);
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * 보호받는 엔드포인트 - ROLE_USER 또는 ROLE_ADMIN 권한 필요함
-     **/
-//    @GetMapping(path = "/user/me")
-//    public UserDto me(@AuthenticationPrincipal final JwtAuthentication authentication) {
-//        return userService.findById(authentication.username)
-//                .map(user ->
-//                        new UserDto(authentication.token, authentication.username, user.getPermission().getName())
-//                )
-//                .orElseThrow(() -> new IllegalArgumentException("Could not found user for " + authentication.username));
-//    }
 }
