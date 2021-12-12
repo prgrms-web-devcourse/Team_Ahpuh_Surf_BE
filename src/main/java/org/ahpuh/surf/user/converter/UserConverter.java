@@ -18,7 +18,6 @@ public class UserConverter {
                 .email(dto.getEmail())
                 .password(bCryptEncoder.encode(dto.getPassword()))
                 .build();
-        user.setPermission("ROLE_USER");
         return user;
     }
 

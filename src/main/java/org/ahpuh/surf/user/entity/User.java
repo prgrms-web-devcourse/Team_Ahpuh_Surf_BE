@@ -51,8 +51,9 @@ public class User extends BaseEntity {
     private Boolean accountPublic = true;
 
     @Column(name = "permission")
+    @Enumerated(value = EnumType.STRING)
     @Builder.Default
-    private String permission = "ROLE_USER";
+    private Permission permission = Permission.ROLE_USER;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -81,7 +82,7 @@ public class User extends BaseEntity {
             throw new IllegalArgumentException("Bad credential");
     }
 
-    public void setPermission(final String permission) {
+    public void setPermission(final Permission permission) {
         this.permission = permission;
     }
 
