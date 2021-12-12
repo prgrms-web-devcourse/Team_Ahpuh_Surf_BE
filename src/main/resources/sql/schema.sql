@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS follow CASCADE;
 DROP TABLE IF EXISTS posts CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
@@ -47,4 +48,13 @@ CREATE TABLE posts
     is_deleted    BOOLEAN   DEFAULT false,
     CONSTRAINT fk_user_id_for_post FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
     CONSTRAINT fk_category_id_for_post FOREIGN KEY (category_id) REFERENCES categories (category_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE follow
+(
+    follow_id    BIGINT AUTO_INCREMENT primary key,
+    user_id      BIGINT,
+    following_id BIGINT,
+    CONSTRAINT fk_user_id_for_follow FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT fk_following_id_for_follow FOREIGN KEY (following_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
