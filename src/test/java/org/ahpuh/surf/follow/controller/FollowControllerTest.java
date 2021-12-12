@@ -1,6 +1,7 @@
 package org.ahpuh.surf.follow.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.ahpuh.surf.follow.entity.Follow;
 import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.user.controller.UserController;
 import org.ahpuh.surf.user.dto.UserLoginRequestDto;
@@ -8,7 +9,6 @@ import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -72,7 +74,6 @@ class FollowControllerTest {
     }
 
     @Test
-    @Order(1)
     @DisplayName("팔로우를 할 수 있다.")
     @Transactional
     void testFollow() throws Exception {
@@ -96,18 +97,19 @@ class FollowControllerTest {
                 .andDo(print());
 
         // Then
+        final User afterFollowUser1 = userRepository.getById(userId1);
+        final User afterFollowUser2 = userRepository.getById(userId2);
         assertAll("afterFollow",
-                () -> assertThat(user1.getFollowedUsers().size(), is(1)),
-                () -> assertThat(user1.getFollowedUsers().get(0).getUser().getUserId(), is(userId1)),
-                () -> assertThat(user1.getFollowedUsers().get(0).getFollowedUser().getUserId(), is(userId2)),
-                () -> assertThat(user2.getFollowingUsers().size(), is(1)),
-                () -> assertThat(user2.getFollowingUsers().get(0).getUser().getUserId(), is(userId1)),
-                () -> assertThat(user2.getFollowingUsers().get(0).getFollowedUser().getUserId(), is(userId2))
+                () -> assertThat(afterFollowUser1.getFollowedUsers().size(), is(1)),
+                () -> assertThat(afterFollowUser1.getFollowedUsers().get(0).getUser().getUserId(), is(userId1)),
+                () -> assertThat(afterFollowUser1.getFollowedUsers().get(0).getFollowedUser().getUserId(), is(userId2)),
+                () -> assertThat(afterFollowUser2.getFollowingUsers().size(), is(1)),
+                () -> assertThat(afterFollowUser2.getFollowingUsers().get(0).getUser().getUserId(), is(userId1)),
+                () -> assertThat(afterFollowUser2.getFollowingUsers().get(0).getFollowedUser().getUserId(), is(userId2))
         );
     }
 
     @Test
-    @Order(2)
     @DisplayName("언팔로우를 할 수 있다.")
     @Transactional
     void testUnfollow() throws Exception {
@@ -119,12 +121,13 @@ class FollowControllerTest {
                 .andExpect(status().isCreated())
                 .andDo(print());
 
+        final List<Follow> follows = followRepository.findAll();
         assertAll("beforeFollow",
                 () -> assertThat(userRepository.getById(userId1).getFollowedUsers().size(), is(1)),
                 () -> assertThat(userRepository.getById(userId2).getFollowingUsers().size(), is(1)),
-                () -> assertThat(followRepository.findAll().size(), is(1))
+                () -> assertThat(follows.size(), is(1))
         );
-        final Long followid = followRepository.findAll().get(0).getFollowId();
+        final Long followid = follows.get(0).getFollowId();
 
         // When
         mockMvc.perform(delete("/api/v1/follow/{followId}", followid)
@@ -142,7 +145,6 @@ class FollowControllerTest {
     }
 
     @Test
-    @Order(3)
     @DisplayName("'특정 user를 팔로잉 한 user 목록' & '특정 user가 팔로우 한 user 목록'을 조회할 수 있다.")
     @Transactional
     void testFindFollowListAndFollowingList() throws Exception {
@@ -161,14 +163,16 @@ class FollowControllerTest {
                 .andExpect(status().isCreated())
                 .andDo(print());
 
+        final User user1 = userRepository.getById(userId1);
+        final User user2 = userRepository.getById(userId2);
         assertAll("user1이 user2, user3을 팔로우",
                 () -> assertThat(followRepository.findAll().size(), is(2)),
-                () -> assertThat(userRepository.getById(userId1).getFollowedUsers().size(), is(2)),
-                () -> assertThat(userRepository.getById(userId1).getFollowedUsers().get(0).getFollowedUser().getUserId(), is(userId2)),
-                () -> assertThat(userRepository.getById(userId1).getFollowedUsers().get(1).getFollowedUser().getUserId(), is(userId3)),
-                () -> assertThat(userRepository.getById(userId2).getFollowingUsers().size(), is(1)),
-                () -> assertThat(userRepository.getById(userId2).getFollowingUsers().get(0).getUser().getUserId(), is(userId1)),
-                () -> assertThat(userRepository.getById(userId3).getFollowingUsers().get(0).getUser().getUserId(), is(userId1))
+                () -> assertThat(user1.getFollowedUsers().size(), is(2)),
+                () -> assertThat(user1.getFollowedUsers().get(0).getFollowedUser().getUserId(), is(userId2)),
+                () -> assertThat(user1.getFollowedUsers().get(1).getFollowedUser().getUserId(), is(userId3)),
+                () -> assertThat(user2.getFollowingUsers().size(), is(1)),
+                () -> assertThat(user2.getFollowingUsers().get(0).getUser().getUserId(), is(userId1)),
+                () -> assertThat(user2.getFollowingUsers().get(0).getUser().getUserId(), is(userId1))
         );
 
         // When, Then
