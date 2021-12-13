@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users
 (
     user_id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_name         VARCHAR(20),
+    user_name         VARCHAR(20)  NOT NULL,
     email             VARCHAR(255) NOT NULL UNIQUE,
     password          VARCHAR(255) NOT NULL,
     profile_photo_url VARCHAR(255),

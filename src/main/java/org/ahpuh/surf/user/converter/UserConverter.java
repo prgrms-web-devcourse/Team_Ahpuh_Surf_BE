@@ -17,6 +17,7 @@ public class UserConverter {
         final User user = User.builder()
                 .email(dto.getEmail())
                 .password(bCryptEncoder.encode(dto.getPassword()))
+                .userName(dto.getUserName())
                 .build();
         return user;
     }

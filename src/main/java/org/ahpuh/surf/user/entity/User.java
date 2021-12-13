@@ -28,7 +28,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false)
     private String userName;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -72,9 +72,10 @@ public class User extends BaseEntity {
     private List<Follow> followers = new ArrayList<>(); // 나를 팔로우한
 
     @Builder
-    public User(final String email, final String password) {
+    public User(final String email, final String password, final String userName) {
         this.email = email;
         this.password = password;
+        this.userName = userName;
     }
 
     public void checkPassword(final PasswordEncoder passwordEncoder, final String credentials) {
