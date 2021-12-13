@@ -26,11 +26,11 @@ jwt:
 cloud:
   aws:
     credentials:
-      accessKey: ${AWS_ACCESS_KEY_ID}
-      secretKey: ${AWS_SECRET_ACCESS_KEY}
+      accessKey: mock
+      secretKey: mock
     s3:
-      bucket: ${AWS_S3_BUCKET_NAME}
+      bucket: mock
     region:
-      static: ${AWS_REGION}
+      static: ap-northeast-2
     stack:
       auto: false
