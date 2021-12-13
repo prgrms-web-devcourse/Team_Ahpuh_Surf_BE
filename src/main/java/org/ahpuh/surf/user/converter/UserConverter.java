@@ -18,7 +18,6 @@ public class UserConverter {
                 .email(dto.getEmail())
                 .password(bCryptEncoder.encode(dto.getPassword()))
                 .build();
-        user.setPermission("ROLE_USER");
         return user;
     }
 
@@ -30,8 +29,8 @@ public class UserConverter {
                 .profilePhotoUrl(userEntity.getProfilePhotoUrl())
                 .aboutMe(userEntity.getAboutMe())
                 .url(userEntity.getUrl())
-//                .followerCount(userEntity.)
-//                .followingCount(userEntity.)
+                .followerCount(userEntity.getFollowingUsers().size())
+                .followingCount(userEntity.getFollowedUsers().size())
                 .build();
     }
 

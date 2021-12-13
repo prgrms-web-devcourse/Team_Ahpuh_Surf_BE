@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Long updateCategory(final Long categoryId, final CategoryUpdateRequestDto categoryDto) {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
-        category.update(categoryDto.getName(), categoryDto.isPublic(), categoryDto.getColorCode());
+        category.update(categoryDto.getName(), categoryDto.getIsPublic(), categoryDto.getColorCode());
 
         return category.getCategoryId();
     }
@@ -61,23 +61,21 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryResponseDto> findAllCategoryByUser(final Long userId) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
-        final Optional<List<Category>> categoryList = categoryRepository.findByUser(user);
+        final List<Category> categoryList = categoryRepository.findByUser(user).orElse(Collections.emptyList());
 
-        if (categoryList.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return categoryList.get().stream().map(categoryConverter::toCategoryResponseDto).toList();
+        return categoryList.stream()
+                .map(categoryConverter::toCategoryResponseDto)
+                .toList();
     }
 
     @Override
     public List<CategoryDetailResponseDto> getCategoryDashboard(final Long userId) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
-        final Optional<List<Category>> categoryList = categoryRepository.findByUser(user);
+        final List<Category> categoryList = categoryRepository.findByUser(user).orElse(Collections.emptyList());
 
-        if (categoryList.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return categoryList.get().stream().map(categoryConverter::toCategoryDetailResponseDto).toList();
+        return categoryList.stream()
+                .map(categoryConverter::toCategoryDetailResponseDto)
+                .toList();
     }
 }

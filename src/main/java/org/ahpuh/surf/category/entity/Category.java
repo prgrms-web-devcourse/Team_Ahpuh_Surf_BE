@@ -33,7 +33,7 @@ public class Category extends BaseEntity {
 
     @Column(name = "is_public", nullable = false)
     @Builder.Default
-    private boolean isPublic = true;
+    private Boolean isPublic = true;
 
     @Column(name = "color_code")
     private String colorCode;
@@ -41,6 +41,10 @@ public class Category extends BaseEntity {
     @Column(name = "average_score")
     @Builder.Default
     private int averageScore = 0;
+
+    @Column(name = "recent_score")
+    @Builder.Default
+    private int recentScore = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
@@ -51,10 +55,11 @@ public class Category extends BaseEntity {
     private List<Post> posts = new ArrayList<>();
 
     @Formula("(select count(1) from posts where is_deleted = false)")
-    private int postCount;
+    @Builder.Default
+    private int postCount = 0;
 
     @Builder
-    public Category(final User user, final String name, final boolean isPublic, final int averageScore, final String colorCode) {
+    public Category(final User user, final String name, final String colorCode) {
         this.user = user;
         this.name = name;
         this.colorCode = colorCode;
@@ -63,13 +68,18 @@ public class Category extends BaseEntity {
 
     public void addPost(final Post post) {
         posts.add(post);
-        this.averageScore = (this.averageScore * postCount + post.getScore()) / ++postCount;
+        this.recentScore = post.getScore();
+        this.averageScore = updateAverageScore(post.getScore()) / (++postCount);
     }
 
     public void update(final String name, final boolean isPublic, final String colorCode) {
         this.name = name;
         this.isPublic = isPublic;
         this.colorCode = colorCode;
+    }
+
+    public int updateAverageScore(final int score) {
+        return this.averageScore * this.postCount + score;
     }
 
 }

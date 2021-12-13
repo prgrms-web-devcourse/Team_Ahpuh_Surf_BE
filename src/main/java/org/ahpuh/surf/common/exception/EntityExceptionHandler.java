@@ -22,4 +22,12 @@ public class EntityExceptionHandler {
         return new IllegalArgumentException("Post with given id not found. Invalid id is " + postId);
     }
 
+    public static IllegalArgumentException FollowNotFound(final Long followId) {
+        return new IllegalArgumentException("No Follow for id : " + followId);
+    }
+
+    public static IllegalArgumentException FollowingNotFound() {
+        return new IllegalArgumentException("삭제하려는 팔로우 기록이 없습니다.");
+    }
+
 }

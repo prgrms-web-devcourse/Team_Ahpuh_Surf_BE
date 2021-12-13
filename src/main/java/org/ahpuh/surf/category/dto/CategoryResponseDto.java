@@ -12,8 +12,10 @@ public class CategoryResponseDto {
 
     private String name;
 
-    private boolean isPublic;
+    private Boolean isPublic;
 
     private String colorCode;
+
+    private int recentScore;
 
 }

@@ -40,7 +40,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     private Authentication processUserAuthentication(final String principal, final String credentials) {
         try {
             final User user = userService.login(principal, credentials);
-            final List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getPermission()));
+            final List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getPermission().getRole()));
             final String token = getToken(user.getUserId(), user.getEmail(), authorities);
             final JwtAuthenticationToken authenticated =
                     new JwtAuthenticationToken(new JwtAuthentication(token, user.getUserId(), user.getEmail()), null, authorities);
