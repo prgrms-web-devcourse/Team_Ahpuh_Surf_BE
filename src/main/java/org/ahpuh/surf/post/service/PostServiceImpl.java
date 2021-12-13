@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.converter.PostConverter;
+import org.ahpuh.surf.post.dto.FollowingPostDto;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostIdResponse;
 import org.ahpuh.surf.post.dto.PostRequest;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -22,6 +25,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
+    private final LikeRepository likeRepository;
 
     public PostIdResponse create(final PostRequest request) {
         // TODO: 1. category aop 적용     2. category의 최근 게시글 점수 컬럼 update
@@ -49,6 +53,15 @@ public class PostServiceImpl implements PostService {
     public void delete(final Long postId) {
         final Post post = getPostById(postId);
         post.delete();
+    }
+
+    @Override
+    public List<FollowingPostDto> explore(final Long userId) {
+        final List<FollowingPostDto> followingPostDtos = postRepository.followingPosts(userId);
+        for (final FollowingPostDto dto : followingPostDtos) {
+            dto.likedCheck(likeRepository.findByUserIdAndPostId(userId, dto.getPostId()));
+        }
+        return followingPostDtos;
     }
 
     private Category getCategoryById(final Long categoryId) {
