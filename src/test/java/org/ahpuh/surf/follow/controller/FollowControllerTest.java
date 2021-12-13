@@ -50,16 +50,19 @@ class FollowControllerTest {
     void setUp() {
         userId1 = userRepository.save(User.builder()
                         .email("user1@naver.com")
+                        .userName("name")
                         .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                         .build())
                 .getUserId();
         userId2 = userRepository.save(User.builder()
                         .email("user2@naver.com")
+                        .userName("name")
                         .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                         .build())
                 .getUserId();
         userId3 = userRepository.save(User.builder()
                         .email("user3@naver.com")
+                        .userName("name")
                         .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                         .build())
                 .getUserId();

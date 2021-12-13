@@ -56,16 +56,19 @@ class PostRepositoryTest {
         userId1 = userController.join(UserJoinRequestDto.builder()
                         .email("test1@naver.com")
                         .password("test1")
+                        .userName("name")
                         .build())
                 .getBody();
         userId2 = userController.join(UserJoinRequestDto.builder()
                         .email("test2@naver.com")
                         .password("test2")
+                        .userName("name")
                         .build())
                 .getBody();
         userId3 = userController.join(UserJoinRequestDto.builder()
                         .email("test3@naver.com")
                         .password("test3")
+                        .userName("name")
                         .build())
                 .getBody();
 

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
-import org.ahpuh.surf.user.entity.Permission;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +43,7 @@ class UserControllerTest {
         userId1 = userRepository.save(User.builder()
                         .email("test@naver.com")
                         .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
+                        .userName("name")
                         .build())
                 .getUserId();
     }
@@ -56,6 +56,7 @@ class UserControllerTest {
         final UserJoinRequestDto req = UserJoinRequestDto.builder()
                 .email("test1@naver.com")
                 .password("test111")
+                .userName("name")
                 .build();
 
         // When
@@ -122,7 +123,6 @@ class UserControllerTest {
         final UserUpdateRequestDto request = UserUpdateRequestDto.builder()
                 .userName("수정된 name")
                 .password(user.getPassword())
-                .profilePhotoUrl(user.getProfilePhotoUrl())
                 .url("내 블로그 주소")
                 .aboutMe("수정된 소개글")
                 .accountPublic(false)

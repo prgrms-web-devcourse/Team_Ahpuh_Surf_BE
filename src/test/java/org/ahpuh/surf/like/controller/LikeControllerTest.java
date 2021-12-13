@@ -58,11 +58,13 @@ class LikeControllerTest {
         // user1, user2 회원가입 후 userId 반환
         userId1 = userController.join(UserJoinRequestDto.builder()
                         .email("test1@naver.com")
+                        .userName("name")
                         .password("test1")
                         .build())
                 .getBody();
         userId2 = userController.join(UserJoinRequestDto.builder()
                         .email("test2@naver.com")
+                        .userName("name")
                         .password("test2")
                         .build())
                 .getBody();
