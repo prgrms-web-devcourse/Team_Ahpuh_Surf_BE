@@ -6,7 +6,6 @@ import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostIdResponseDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
@@ -24,22 +23,22 @@ public class PostServiceImpl implements PostService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public PostIdResponseDto create(final PostRequestDto request) {
+    public Long create(final PostRequestDto request) {
         // TODO: 1. category aop 적용     2. category의 최근 게시글 점수 컬럼 update
         final Category category = getCategoryById(request.getCategoryId());
         final Post post = PostConverter.toEntity(category, request);
         final Post saved = postRepository.save(post);
 
-        return new PostIdResponseDto(saved.getId());
+        return saved.getPostId();
     }
 
     @Transactional
-    public PostIdResponseDto update(final Long postId, final PostRequestDto request) {
+    public Long update(final Long postId, final PostRequestDto request) {
         final Category category = getCategoryById(request.getCategoryId());
         final Post post = getPostById(postId);
         post.editPost(category, LocalDate.parse(request.getSelectedDate()), request.getContent(), request.getScore(), request.getFileUrl());
 
-        return new PostIdResponseDto(postId);
+        return postId;
     }
 
     public PostDto readOne(final Long postId) {

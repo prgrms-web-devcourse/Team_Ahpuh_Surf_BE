@@ -3,7 +3,6 @@ package org.ahpuh.surf.post.service;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostIdResponseDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
@@ -80,12 +79,11 @@ class PostServiceImplTest {
                 .thenReturn(post);
 
         // when
-        final PostIdResponseDto response = postService.create(request);
+        final Long response = postService.create(request);
 
         // then
         assertAll(
-                () -> verify(postRepository, times(1)).save(any(Post.class)),
-                () -> assertThat(response).isNotNull()
+                () -> verify(postRepository, times(1)).save(any(Post.class))
         );
     }
 

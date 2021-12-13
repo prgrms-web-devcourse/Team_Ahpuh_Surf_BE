@@ -2,7 +2,6 @@ package org.ahpuh.surf.post.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostIdResponseDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.service.PostServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +18,16 @@ public class PostController {
     private final PostServiceImpl postService;
 
     @PostMapping
-    public ResponseEntity<PostIdResponseDto> createPost(@Valid @RequestBody final PostRequestDto request) {
+    public ResponseEntity<Long> createPost(@Valid @RequestBody final PostRequestDto request) {
         // TODO: userId
-        final PostIdResponseDto response = postService.create(request);
-        return ResponseEntity.created(URI.create("/api/v1/posts/" + response.getId()))
+        final Long response = postService.create(request);
+        return ResponseEntity.created(URI.create("/api/v1/posts/" + response))
                 .body(response);
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<PostIdResponseDto> updatePost(@PathVariable final Long postId, @Valid @RequestBody final PostRequestDto request) {
-        final PostIdResponseDto response = postService.update(postId, request);
+    public ResponseEntity<Long> updatePost(@PathVariable final Long postId, @Valid @RequestBody final PostRequestDto request) {
+        final Long response = postService.update(postId, request);
         return ResponseEntity.ok()
                 .body(response);
     }

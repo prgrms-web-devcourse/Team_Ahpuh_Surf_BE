@@ -3,7 +3,6 @@ package org.ahpuh.surf.post.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.config.WebSecurityConfig;
 import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostIdResponseDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.service.PostServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,7 +69,7 @@ class PostControllerTest {
         final String requestBody = objectMapper.writeValueAsString(postRequestDto);
 
         given(postService.create(any(PostRequestDto.class)))
-                .willReturn(new PostIdResponseDto(postId));
+                .willReturn(postId);
 
         // when
         final ResultActions resultActions = mockMvc.perform(post(postUrl)
@@ -81,8 +80,7 @@ class PostControllerTest {
         // then
         resultActions.andExpectAll(
                 status().isCreated(),
-                header().string(LOCATION, postUrl + "/" + postId),
-                jsonPath("id").value(postId)
+                header().string(LOCATION, postUrl + "/" + postId)
         );
     }
 
@@ -99,7 +97,7 @@ class PostControllerTest {
         final String requestBody = objectMapper.writeValueAsString(postRequestDto);
 
         given(postService.update(anyLong(), any(PostRequestDto.class)))
-                .willReturn(new PostIdResponseDto(postId));
+                .willReturn(postId);
 
         // when
         final ResultActions resultActions = mockMvc.perform(put(postUrl + "/{postId}", postId)
@@ -109,8 +107,7 @@ class PostControllerTest {
 
         // then
         resultActions.andExpectAll(
-                status().isOk(),
-                jsonPath("id").value(postId)
+                status().isOk()
         );
     }
 
