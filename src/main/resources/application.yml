@@ -19,3 +19,14 @@ jwt:
   issuer: ahpuh
   client-secret: ${JWT_CLIENT_SECRET}
   expiry-seconds: 2592000
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: ${AWS_S3_BUCKET_NAME}
+    region:
+      static: ${AWS_REGION}
+    stack:
+      auto: false
