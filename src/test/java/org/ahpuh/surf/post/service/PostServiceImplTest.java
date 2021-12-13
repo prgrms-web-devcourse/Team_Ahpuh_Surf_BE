@@ -56,7 +56,6 @@ class PostServiceImplTest {
 
         category = Category.builder().build();
         post = Post.builder()
-                .id(postId)
                 .category(category)
                 .selectedDate(LocalDate.parse(selectedDate))
                 .content(content)
