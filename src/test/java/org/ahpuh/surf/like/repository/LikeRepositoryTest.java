@@ -102,6 +102,7 @@ class LikeRepositoryTest {
 
     @Test
     @DisplayName("FollowingPostDto의 likedCheck 메소드가 잘 동작하는지 확인")
+    @Transactional
     void testLikedCheck() {
         final FollowingPostDto dto = FollowingPostDto.builder().build();
 

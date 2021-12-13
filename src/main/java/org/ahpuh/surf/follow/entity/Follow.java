@@ -10,7 +10,7 @@ import javax.persistence.*;
         name = "follow",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        columnNames = {"user_id", "follower_id"}
+                        columnNames = {"user_id", "following_id"}
                 )
         }
 )
@@ -29,15 +29,15 @@ public class Follow {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "following_id", referencedColumnName = "user_id")
     private User followedUser;
 
     @Builder
     public Follow(final User user, final User followedUser) {
         this.user = user;
         this.followedUser = followedUser;
-        user.addFollowedUser(this);
-        followedUser.addFollowingUser(this);
+        user.addFollowing(this);
+        followedUser.addFollowers(this);
     }
 
 }

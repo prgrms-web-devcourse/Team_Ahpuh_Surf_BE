@@ -65,11 +65,11 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Follow> followedUsers = new ArrayList<>(); // 내가 팔로우한 (팔로우 당한)
+    private List<Follow> following = new ArrayList<>(); // 내가 팔로잉한
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Follow> followingUsers = new ArrayList<>(); // 나를 팔로잉한
+    private List<Follow> followers = new ArrayList<>(); // 나를 팔로우한
 
     @Builder
     public User(final String email, final String password) {
@@ -103,12 +103,12 @@ public class User extends BaseEntity {
         posts.add(post);
     }
 
-    public void addFollowedUser(final Follow followedUser) {
-        followedUsers.add(followedUser);
+    public void addFollowing(final Follow followingUser) {
+        following.add(followingUser);
     }
 
-    public void addFollowingUser(final Follow followingUser) {
-        followingUsers.add(followingUser);
+    public void addFollowers(final Follow follower) {
+        followers.add(follower);
     }
 
 }

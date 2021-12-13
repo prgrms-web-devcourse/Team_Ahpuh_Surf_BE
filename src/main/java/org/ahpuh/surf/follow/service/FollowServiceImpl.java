@@ -45,10 +45,10 @@ public class FollowServiceImpl implements FollowService {
         final User user = followEntity.getUser();
         final User followedUser = followEntity.getFollowedUser();
 
-        if (!user.getFollowedUsers().remove(followEntity)) {
+        if (!user.getFollowing().remove(followEntity)) {
             throw FollowingNotFound();
         }
-        if (!followedUser.getFollowingUsers().remove(followEntity)) {
+        if (!followedUser.getFollowers().remove(followEntity)) {
             throw FollowingNotFound();
         }
 
@@ -56,10 +56,10 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public List<FollowUserDto> findFollowingList(final Long userId) {
+    public List<FollowUserDto> findFollowerList(final Long userId) {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        return userEntity.getFollowingUsers()
+        return userEntity.getFollowers()
                 .stream()
                 .map(Follow::getUser)
                 .map(followConverter::toFollowUserDto)
@@ -67,10 +67,10 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public List<FollowUserDto> findFollowList(final Long userId) {
+    public List<FollowUserDto> findFollowingList(final Long userId) {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        return userEntity.getFollowedUsers()
+        return userEntity.getFollowing()
                 .stream()
                 .map(Follow::getFollowedUser)
                 .map(followConverter::toFollowUserDto)

@@ -26,12 +26,4 @@ public class LikeServiceImpl implements LikeService {
         likeRepository.deleteById(likeId);
     }
 
-//    TODO : PostResponseDto에 좋아요 여부(boolean) 및 likeId 추가
-//    public List<Long> userLikePostIdList(Long userId) {
-//    List<Long> userLikePostIdList = likeRepository.findAllByUserId(userId)
-//            .stream()
-//            .map(Like::getPostId)
-//            .toList();
-//    }
-
 }

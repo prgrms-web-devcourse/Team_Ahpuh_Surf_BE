@@ -10,8 +10,8 @@ public interface FollowService {
 
     void unfollow(Long followId);
 
-    List<FollowUserDto> findFollowingList(Long userId);
+    List<FollowUserDto> findFollowerList(Long userId);
 
-    List<FollowUserDto> findFollowList(Long userId);
+    List<FollowUserDto> findFollowingList(Long userId);
 
 }
