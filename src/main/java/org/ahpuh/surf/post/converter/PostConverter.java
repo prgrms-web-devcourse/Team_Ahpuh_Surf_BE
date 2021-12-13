@@ -23,7 +23,7 @@ public class PostConverter {
 
     public static PostDto toDto(final Post post) {
         return PostDto.builder()
-                .postId(post.getId())
+                .postId(post.getPostId())
                 .categoryId(post.getCategory().getCategoryId())
                 .selectedDate(post.getSelectedDate().toString())
                 .content(post.getContent())
