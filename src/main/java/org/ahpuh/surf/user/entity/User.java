@@ -87,10 +87,10 @@ public class User extends BaseEntity {
         this.permission = permission;
     }
 
-    public void update(final UserUpdateRequestDto request) {
+    public void update(final UserUpdateRequestDto request, final String profilePhotoUrl) {
         this.userName = request.getUserName();
         this.password = request.getPassword();
-        this.profilePhotoUrl = request.getProfilePhotoUrl();
+        this.profilePhotoUrl = profilePhotoUrl;
         this.url = request.getUrl();
         this.aboutMe = request.getAboutMe();
         this.accountPublic = request.getAccountPublic();
