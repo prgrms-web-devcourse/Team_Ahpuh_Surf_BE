@@ -1,6 +1,8 @@
 package org.ahpuh.surf.post.service;
 
+import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.post.dto.FollowingPostDto;
+import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 
@@ -19,5 +21,9 @@ public interface PostService {
     Long clickFavorite(final Long userId, final Long postId);
 
     List<FollowingPostDto> explore(Long userId);
+
+    List<PostCountDto> getCountsPerDayWithYear(int year);
+
+    List<CategorySimpleDto> getScoresWithCategoryByUserId(Long userId);
 
 }

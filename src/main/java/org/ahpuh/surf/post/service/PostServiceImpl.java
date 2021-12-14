@@ -1,12 +1,14 @@
 package org.ahpuh.surf.post.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.FollowingPostDto;
+import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
@@ -74,6 +76,15 @@ public class PostServiceImpl implements PostService {
             dto.likedCheck(likeRepository.findByUserIdAndPostId(userId, dto.getPostId()));
         }
         return followingPostDtos;
+    }
+
+    public List<PostCountDto> getCountsPerDayWithYear(final int year) {
+        return postRepository.findAllDateAndCountBetween(year);
+    }
+
+    public List<CategorySimpleDto> getScoresWithCategoryByUserId(final Long userId) {
+        final User user = getUserById(userId);
+        return postRepository.findAllScoreWithCategoryByUser(user);
     }
 
     private User getUserById(final Long userId) {

@@ -1,8 +1,10 @@
 package org.ahpuh.surf.post.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.post.dto.FollowingPostDto;
+import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.service.PostService;
@@ -47,6 +49,20 @@ public class PostController {
     public ResponseEntity<Void> deletePost(@PathVariable final Long postId) {
         postService.delete(postId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/posts/calendarGraph")
+    public ResponseEntity<List<PostCountDto>> getCounts(@RequestParam final int year) {
+        final List<PostCountDto> responses = postService.getCountsPerDayWithYear(year);
+        return ResponseEntity.ok()
+                .body(responses);
+    }
+
+    @GetMapping("/posts/score")
+    public ResponseEntity<List<CategorySimpleDto>> getScores(@RequestParam final Long userId) {
+        final List<CategorySimpleDto> responses = postService.getScoresWithCategoryByUserId(userId);
+        return ResponseEntity.ok()
+                .body(responses);
     }
 
     @PostMapping("/posts/{postId}/favorite")
