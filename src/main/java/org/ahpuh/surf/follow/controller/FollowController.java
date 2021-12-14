@@ -24,7 +24,7 @@ public class FollowController {
             @RequestBody final Long followUserId
     ) {
         final Long followId = followService.follow(authentication.userId, followUserId);
-        return ResponseEntity.created(URI.create("/users/" + authentication.userId + "/following"))
+        return ResponseEntity.created(URI.create("/api/v1/users/" + authentication.userId + "/following"))
                 .body(followId);
     }
 
@@ -36,19 +36,19 @@ public class FollowController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/users/{userId}/following")
+    @GetMapping("/users/{userId}/followers")
     public ResponseEntity<List<FollowUserDto>> findFollowingList(
             @PathVariable final Long userId
     ) {
-        final List<FollowUserDto> response = followService.findFollowingList(userId);
+        final List<FollowUserDto> response = followService.findFollowerList(userId);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/users/{userId}/follow")
+    @GetMapping("/users/{userId}/following")
     public ResponseEntity<List<FollowUserDto>> findFollowList(
             @PathVariable final Long userId
     ) {
-        final List<FollowUserDto> response = followService.findFollowList(userId);
+        final List<FollowUserDto> response = followService.findFollowingList(userId);
         return ResponseEntity.ok().body(response);
     }
 

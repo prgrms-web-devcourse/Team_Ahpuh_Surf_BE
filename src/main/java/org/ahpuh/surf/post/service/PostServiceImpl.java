@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.converter.PostConverter;
+import org.ahpuh.surf.post.dto.FollowingPostDto;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,6 +27,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public Long create(final Long userId, final PostRequestDto request) {
@@ -63,6 +67,15 @@ public class PostServiceImpl implements PostService {
         return post.getPostId();
     }
 
+    @Override
+    public List<FollowingPostDto> explore(final Long userId) {
+        final List<FollowingPostDto> followingPostDtos = postRepository.followingPosts(userId);
+        for (final FollowingPostDto dto : followingPostDtos) {
+            dto.likedCheck(likeRepository.findByUserIdAndPostId(userId, dto.getPostId()));
+        }
+        return followingPostDtos;
+    }
+
     private User getUserById(final Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
@@ -77,4 +90,5 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(postId)
                 .orElseThrow(() -> EntityExceptionHandler.PostNotFound(postId));
     }
+
 }

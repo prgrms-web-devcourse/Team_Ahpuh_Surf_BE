@@ -16,8 +16,6 @@ public class UserUpdateRequestDto {
     @NotBlank(message = "password must be provided.")
     private String password;
 
-    private String profilePhotoUrl;
-
     private String url;
 
     private String aboutMe;

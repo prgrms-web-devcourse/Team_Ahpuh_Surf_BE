@@ -13,7 +13,9 @@ spring:
       ddl-auto: create-drop
       use-new-id-generator-mappings: false
     properties:
-      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
 server:
   port: 8080
 jwt:
@@ -21,3 +23,14 @@ jwt:
   issuer: ahpuh
   client-secret: ${JWT_CLIENT_SECRET}
   expiry-seconds: 2592000
+cloud:
+  aws:
+    credentials:
+      accessKey: mock
+      secretKey: mock
+    s3:
+      bucket: mock
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

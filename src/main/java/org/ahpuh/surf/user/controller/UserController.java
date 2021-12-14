@@ -1,14 +1,17 @@
 package org.ahpuh.surf.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.common.s3.S3Service;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.user.dto.*;
 import org.ahpuh.surf.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 
 @RestController
@@ -18,6 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
+    private final S3Service s3Service;
 
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponseDto> login(
@@ -47,9 +51,14 @@ public class UserController {
     @PutMapping
     public ResponseEntity<Long> updateUser(
             @AuthenticationPrincipal final JwtAuthentication authentication,
-            @Valid @RequestBody final UserUpdateRequestDto request
-    ) {
-        userService.update(authentication.userId, request);
+            @Valid @RequestPart(value = "request") final UserUpdateRequestDto request,
+            @RequestPart(value = "file", required = false) final MultipartFile profilePhoto
+    ) throws IOException {
+        String profilePhotoUrl = null;
+        if (!profilePhoto.isEmpty()) {
+            profilePhotoUrl = s3Service.upload(profilePhoto);
+        }
+        userService.update(authentication.userId, request, profilePhotoUrl);
         return ResponseEntity.ok().body(authentication.userId);
     }
 

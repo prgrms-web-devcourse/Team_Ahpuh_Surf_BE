@@ -48,6 +48,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public Long join(final UserJoinRequestDto joinRequest) {
+        if (userRepository.existsByEmail(joinRequest.getEmail())) {
+            throw new IllegalArgumentException(String.format("Email is duplicated. email=%s", joinRequest.getEmail()));
+        }
         final User newUser = userRepository.save(userConverter.toEntity(joinRequest));
         return newUser.getUserId();
     }
@@ -62,10 +65,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Long update(final Long userId, final UserUpdateRequestDto updateDto) {
+    public Long update(final Long userId, final UserUpdateRequestDto updateDto, final String profilePhotoUrl) {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        userEntity.update(updateDto);
+        userEntity.update(updateDto, profilePhotoUrl);
         return userEntity.getUserId();
     }
 

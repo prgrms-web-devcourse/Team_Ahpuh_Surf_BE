@@ -60,7 +60,6 @@ class CategoryControllerTest {
         category = categoryRepository.save(Category.builder()
                 .user(user)
                 .name("test")
-                .isPublic(true)
                 .colorCode("#e7f5ff")
                 .build());
         post = postRepository.save(Post.builder()

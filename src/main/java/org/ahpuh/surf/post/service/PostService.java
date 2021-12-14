@@ -1,7 +1,10 @@
 package org.ahpuh.surf.post.service;
 
+import org.ahpuh.surf.post.dto.FollowingPostDto;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
+
+import java.util.List;
 
 public interface PostService {
 
@@ -14,5 +17,7 @@ public interface PostService {
     void delete(Long postID);
 
     Long clickFavorite(final Long userId, final Long postId);
+
+    List<FollowingPostDto> explore(Long userId);
 
 }
