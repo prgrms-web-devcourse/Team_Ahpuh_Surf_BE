@@ -48,6 +48,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public Long join(final UserJoinRequestDto joinRequest) {
+        if (userRepository.existsByEmail(joinRequest.getEmail())) {
+            throw new IllegalArgumentException(String.format("Email is duplicated. email=%s", joinRequest.getEmail()));
+        }
         final User newUser = userRepository.save(userConverter.toEntity(joinRequest));
         return newUser.getUserId();
     }

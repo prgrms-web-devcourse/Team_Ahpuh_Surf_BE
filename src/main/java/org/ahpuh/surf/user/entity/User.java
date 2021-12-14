@@ -89,11 +89,15 @@ public class User extends BaseEntity {
 
     public void update(final UserUpdateRequestDto request, final String profilePhotoUrl) {
         this.userName = request.getUserName();
-        this.password = request.getPassword();
-        this.profilePhotoUrl = profilePhotoUrl;
         this.url = request.getUrl();
         this.aboutMe = request.getAboutMe();
         this.accountPublic = request.getAccountPublic();
+        if (request.getPassword() != null) {
+            this.password = request.getPassword();
+        }
+        if (profilePhotoUrl != null) {
+            this.profilePhotoUrl = profilePhotoUrl;
+        }
     }
 
     public void addCategory(final Category category) {
