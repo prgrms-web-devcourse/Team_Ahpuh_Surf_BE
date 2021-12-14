@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
+import org.ahpuh.surf.follow.entity.Follow;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
 import org.hibernate.annotations.Where;
@@ -50,7 +51,9 @@ public class User extends BaseEntity {
     private Boolean accountPublic = true;
 
     @Column(name = "permission")
-    private String permission;
+    @Enumerated(value = EnumType.STRING)
+    @Builder.Default
+    private Permission permission = Permission.ROLE_USER;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -59,6 +62,14 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Follow> followedUsers = new ArrayList<>(); // 내가 팔로우한 (팔로우 당한)
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Follow> followingUsers = new ArrayList<>(); // 나를 팔로잉한
 
     @Builder
     public User(final String email, final String password) {
@@ -71,7 +82,7 @@ public class User extends BaseEntity {
             throw new IllegalArgumentException("Bad credential");
     }
 
-    public void setPermission(final String permission) {
+    public void setPermission(final Permission permission) {
         this.permission = permission;
     }
 
@@ -90,6 +101,14 @@ public class User extends BaseEntity {
 
     public void addPost(final Post post) {
         posts.add(post);
+    }
+
+    public void addFollowedUser(final Follow followedUser) {
+        followedUsers.add(followedUser);
+    }
+
+    public void addFollowingUser(final Follow followingUser) {
+        followingUsers.add(followingUser);
     }
 
 }
