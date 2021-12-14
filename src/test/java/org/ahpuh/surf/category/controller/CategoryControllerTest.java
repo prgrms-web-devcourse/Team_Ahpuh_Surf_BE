@@ -8,6 +8,7 @@ import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.dto.UserLoginResponseDto;
+import org.ahpuh.surf.user.entity.Permission;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.ahpuh.surf.user.service.UserService;
@@ -57,7 +58,7 @@ class CategoryControllerTest {
                 .email("test@naver.com")
                 .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                 .build();
-        user.setPermission("ROLE_USER");
+        user.setPermission(Permission.ROLE_USER);
         userRepository.save(user);
         category = categoryRepository.save(Category.builder()
                 .user(user)
