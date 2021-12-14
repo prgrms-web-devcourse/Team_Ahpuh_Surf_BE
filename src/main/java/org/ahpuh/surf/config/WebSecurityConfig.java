@@ -77,20 +77,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        configuration.addAllowedOrigin("*");
-//        configuration.addAllowedHeader("*");
-//        configuration.addAllowedMethod("*");
-//        configuration.setAllowCredentials(true);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         final Jwt jwt = getApplicationContext().getBean(Jwt.class);
         return new JwtAuthenticationFilter(jwtConfig.getHeader(), jwt);
@@ -104,9 +90,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
 //                .anyRequest().authenticated()
                 .and()
-//            .cors()
-//                .configurationSource(corsConfigurationSource())
-//                .and()
             .headers()
                 .disable()
             .csrf()
