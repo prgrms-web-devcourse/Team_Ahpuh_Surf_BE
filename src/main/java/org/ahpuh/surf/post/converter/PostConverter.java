@@ -4,6 +4,7 @@ import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
+import org.ahpuh.surf.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -11,8 +12,9 @@ import java.time.LocalDate;
 @Component
 public class PostConverter {
 
-    public static Post toEntity(final Category category, final PostRequestDto request) {
+    public static Post toEntity(final User user, final Category category, final PostRequestDto request) {
         return Post.builder()
+                .user(user)
                 .category(category)
                 .selectedDate(LocalDate.parse(request.getSelectedDate())) // yyyy-mm-dd
                 .content(request.getContent())
@@ -29,6 +31,7 @@ public class PostConverter {
                 .content(post.getContent())
                 .score(post.getScore())
                 .fileUrl(post.getFileUrl())
+                .favorite(post.getFavorite())
                 .createdAt(post.getCreatedAt().toString())
                 .build();
     }

@@ -5,12 +5,14 @@ import org.ahpuh.surf.post.dto.PostRequestDto;
 
 public interface PostService {
 
-    Long create(PostRequestDto request);
+    Long create(Long userId, PostRequestDto request);
 
     Long update(Long postId, PostRequestDto request);
 
     PostDto readOne(Long postId);
 
     void delete(Long postID);
+
+    Long clickFavorite(final Long userId, final Long postId);
 
 }

@@ -15,5 +15,6 @@ public class PostDto {
     private int score;
     private String fileUrl;
     private String createdAt;
+    private Boolean favorite;
 
 }

@@ -68,7 +68,7 @@ class PostControllerTest {
                 .build();
         final String requestBody = objectMapper.writeValueAsString(postRequestDto);
 
-        given(postService.create(any(PostRequestDto.class)))
+        given(postService.create(anyLong(), any(PostRequestDto.class)))
                 .willReturn(postId);
 
         // when

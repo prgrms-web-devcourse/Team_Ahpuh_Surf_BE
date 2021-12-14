@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
+import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.user.entity.User;
 import org.hibernate.annotations.Where;
 
@@ -46,6 +47,9 @@ public class Post extends BaseEntity {
     @Column(name = "file_url")
     private String fileUrl;
 
+    @Column(name = "favorite")
+    private Boolean favorite;
+
     @Builder
     public Post(final User user, final Category category, final LocalDate selectedDate, final String content, final int score, final String fileUrl) {
         this.user = user;
@@ -54,6 +58,7 @@ public class Post extends BaseEntity {
         this.content = content;
         this.score = score;
         this.fileUrl = fileUrl;
+        favorite = false;
         user.addPost(this);
         category.addPost(this);
     }
@@ -66,4 +71,10 @@ public class Post extends BaseEntity {
         this.fileUrl = fileUrl;
     }
 
+    public void updateFavorite(final Long userId) {
+        if (!user.getUserId().equals(userId)) {
+            throw EntityExceptionHandler.UserNotMatching(user.getUserId(), userId);
+        }
+        favorite = !favorite;
+    }
 }

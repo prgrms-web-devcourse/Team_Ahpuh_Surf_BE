@@ -69,6 +69,7 @@ class PostServiceImplTest {
     @DisplayName("post 생성")
     void create() {
         // given
+        final Long userId = 1L;
         final PostRequestDto request = PostRequestDto.builder()
                 .categoryId(categoryId)
                 .selectedDate(selectedDate)
@@ -79,7 +80,7 @@ class PostServiceImplTest {
                 .thenReturn(post);
 
         // when
-        final Long response = postService.create(request);
+        final Long response = postService.create(userId, request);
 
         // then
         assertAll(

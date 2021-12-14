@@ -9,6 +9,8 @@ import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
+import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +23,14 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public Long create(final PostRequestDto request) {
-        // TODO: 1. category aop 적용     2. category의 최근 게시글 점수 컬럼 update
+    public Long create(final Long userId, final PostRequestDto request) {
+        final User user = getUserById(userId);
         final Category category = getCategoryById(request.getCategoryId());
-        final Post post = PostConverter.toEntity(category, request);
+
+        final Post post = PostConverter.toEntity(user, category, request);
         final Post saved = postRepository.save(post);
 
         return saved.getPostId();
@@ -52,6 +56,18 @@ public class PostServiceImpl implements PostService {
         post.delete();
     }
 
+    @Transactional
+    public Long clickFavorite(final Long userId, final Long postId) {
+        final Post post = getPostById(postId);
+        post.updateFavorite(userId);
+        return post.getPostId();
+    }
+
+    private User getUserById(final Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
+    }
+
     private Category getCategoryById(final Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
@@ -61,5 +77,4 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(postId)
                 .orElseThrow(() -> EntityExceptionHandler.PostNotFound(postId));
     }
-
 }
