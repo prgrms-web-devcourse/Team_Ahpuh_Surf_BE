@@ -5,7 +5,6 @@ import org.ahpuh.surf.common.s3.S3Service;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.user.dto.*;
 import org.ahpuh.surf.user.service.UserService;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -49,13 +48,16 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping
     public ResponseEntity<Long> updateUser(
             @AuthenticationPrincipal final JwtAuthentication authentication,
-            @Valid @RequestBody final UserUpdateRequestDto request,
-            @RequestPart final MultipartFile profilePhoto
+            @Valid @RequestPart(value = "request") final UserUpdateRequestDto request,
+            @RequestPart(value = "file", required = false) final MultipartFile profilePhoto
     ) throws IOException {
-        final String profilePhotoUrl = s3Service.upload(profilePhoto);
+        String profilePhotoUrl = null;
+        if (!profilePhoto.isEmpty()) {
+            profilePhotoUrl = s3Service.upload(profilePhoto);
+        }
         userService.update(authentication.userId, request, profilePhotoUrl);
         return ResponseEntity.ok().body(authentication.userId);
     }
