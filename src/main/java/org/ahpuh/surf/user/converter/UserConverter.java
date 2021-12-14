@@ -31,6 +31,7 @@ public class UserConverter {
                 .url(userEntity.getUrl())
                 .followerCount(userEntity.getFollowers().size())
                 .followingCount(userEntity.getFollowing().size())
+                .accountPublic(userEntity.getAccountPublic())
                 .build();
     }
 

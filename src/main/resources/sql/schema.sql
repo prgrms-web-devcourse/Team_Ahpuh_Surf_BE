@@ -43,6 +43,7 @@ CREATE TABLE posts
     selected_date VARCHAR(255) NOT NULL,
     content       VARCHAR(500) NOT NULL,
     score         INTEGER      NOT NULL,
+    image_url     VARCHAR(255),
     file_url      VARCHAR(255),
     favorite      BOOLEAN   DEFAULT false,
     created_at    TIMESTAMP DEFAULT current_timestamp,
