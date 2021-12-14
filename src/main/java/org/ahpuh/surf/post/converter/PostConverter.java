@@ -29,6 +29,7 @@ public class PostConverter {
                 .content(post.getContent())
                 .score(post.getScore())
                 .fileUrl(post.getFileUrl())
+                .createdAt(post.getCreatedAt().toString())
                 .build();
     }
 
