@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Component
 public class PostConverter {
 
-    public Post toEntity(final Category category, final PostRequest request) {
+    public static Post toEntity(final Category category, final PostRequest request) {
         return Post.builder()
                 .category(category)
                 .selectedDate(LocalDate.parse(request.getSelectedDate())) // yyyy-mm-dd
@@ -22,7 +22,7 @@ public class PostConverter {
                 .build();
     }
 
-    public PostDto toDto(final Post post) {
+    public static PostDto toDto(final Post post) {
         return PostDto.builder()
                 .postId(post.getId())
                 .categoryId(post.getCategory().getCategoryId())
@@ -33,7 +33,7 @@ public class PostConverter {
                 .build();
     }
 
-    public PostResponseDto toPostResponseDto(final Post post, final Category category) {
+    public static PostResponseDto toPostResponseDto(final Post post, final Category category) {
         return PostResponseDto.builder()
                 .categoryName(category.getName())
                 .colorCode(category.getColorCode())

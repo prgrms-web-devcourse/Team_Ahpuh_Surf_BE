@@ -45,7 +45,8 @@ public class Post extends BaseEntity {
     private String fileUrl;
 
     @Builder
-    public Post(final User user, final Category category, final LocalDate selectedDate, final String content, final int score, final String fileUrl) {
+    public Post(Long id, final User user, final Category category, final LocalDate selectedDate, final String content, final int score, final String fileUrl) {
+        this.id = id;
         this.user = user;
         this.category = category;
         this.selectedDate = selectedDate;

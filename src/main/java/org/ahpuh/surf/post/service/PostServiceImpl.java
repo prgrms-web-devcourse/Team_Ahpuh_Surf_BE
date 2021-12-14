@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
     public PostIdResponse create(final PostRequest request) {
         // TODO: 1. category aop 적용     2. category의 최근 게시글 점수 컬럼 update
         final Category category = getCategoryById(request.getCategoryId());
-        final Post post = postConverter.toEntity(category, request);
+        final Post post = PostConverter.toEntity(category, request);
         final Post saved = postRepository.save(post);
 
         return new PostIdResponse(saved.getId());
@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto readOne(final Long postId) {
         final Post post = getPostById(postId);
-        return postConverter.toDto(post);
+        return PostConverter.toDto(post);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PostServiceImpl implements PostService {
         final List<Post> postList = postRepository.findAllByUserAndSelectedDateBetweenOrderBySelectedDate(user, LocalDate.of(year, month, 1), LocalDate.of(year, month, 31));
 
         return postList.stream()
-                .map((Post post) -> postConverter.toPostResponseDto(post, post.getCategory()))
+                .map((Post post) -> PostConverter.toPostResponseDto(post, post.getCategory()))
                 .toList();
     }
 
@@ -90,7 +90,7 @@ public class PostServiceImpl implements PostService {
                 null : postList.get(postList.size() - 1).getId();
 
         final List<PostResponseDto> posts = postList.stream()
-                .map((Post post) -> postConverter.toPostResponseDto(post, post.getCategory()))
+                .map((Post post) -> PostConverter.toPostResponseDto(post, post.getCategory()))
                 .toList();
 
         return new CursorResult<>(posts, hasNext(lastIdOfIndex));
@@ -111,7 +111,7 @@ public class PostServiceImpl implements PostService {
                 null : postList.get(postList.size() - 1).getId();
 
         final List<PostResponseDto> posts = postList.stream()
-                .map((Post post) -> postConverter.toPostResponseDto(post, category))
+                .map((Post post) -> PostConverter.toPostResponseDto(post, category))
                 .toList();
 
         return new CursorResult<>(posts, hasNext(lastIdOfIndex));
