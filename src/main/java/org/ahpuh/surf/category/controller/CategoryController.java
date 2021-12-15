@@ -24,9 +24,10 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<Long> createCategory(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
             @Valid @RequestBody final CategoryCreateRequestDto request
     ) {
-        final Long categoryId = categoryService.createCategory(request);
+        final Long categoryId = categoryService.createCategory(authentication.userId, request);
         return ResponseEntity.created(URI.create("/api/v1/categories" + categoryId)).body(categoryId);
     }
 

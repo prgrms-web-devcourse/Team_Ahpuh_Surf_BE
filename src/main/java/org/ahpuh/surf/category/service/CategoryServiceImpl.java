@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +30,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Long createCategory(final CategoryCreateRequestDto categoryDto) {
-        final User user = userRepository.findById(categoryDto.getUserId())
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(categoryDto.getUserId()));
+    public Long createCategory(final Long userId, final CategoryCreateRequestDto categoryDto) {
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
         final Category category = categoryConverter.toEntity(user, categoryDto);
 
         return categoryRepository.save(category).getCategoryId();
