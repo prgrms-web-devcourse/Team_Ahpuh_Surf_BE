@@ -1,15 +1,11 @@
 package org.ahpuh.surf.post.service;
 
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
-import org.ahpuh.surf.post.dto.FollowingPostDto;
-import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.common.response.CursorResult;
-import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostRequestDto;
+import org.ahpuh.surf.post.dto.*;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import org.ahpuh.surf.post.dto.PostResponseDto;
-import org.springframework.data.domain.Pageable;
 
 
 public interface PostService {
