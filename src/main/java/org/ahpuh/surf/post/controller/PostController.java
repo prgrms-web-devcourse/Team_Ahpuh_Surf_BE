@@ -52,13 +52,13 @@ public class PostController {
     }
 
     @GetMapping("/posts/calendarGraph")
-    public ResponseEntity<List<PostCountDto>> getCounts(@RequestParam final int year) {
-        final List<PostCountDto> responses = postService.getCountsPerDayWithYear(year);
+    public ResponseEntity<List<PostCountDto>> getCounts(@RequestParam final int year, @RequestParam final Long userId) {
+        final List<PostCountDto> responses = postService.getCountsPerDayWithYear(year, userId);
         return ResponseEntity.ok()
                 .body(responses);
     }
 
-    @GetMapping("/posts/score")
+    @GetMapping("/posts/score") // 사용 X
     public ResponseEntity<List<CategorySimpleDto>> getScores(@RequestParam final Long userId) {
         final List<CategorySimpleDto> responses = postService.getScoresWithCategoryByUserId(userId);
         return ResponseEntity.ok()

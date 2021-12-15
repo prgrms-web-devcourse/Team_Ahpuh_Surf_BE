@@ -93,7 +93,7 @@ class LikeControllerTest {
                         .content("content")
                         .score(80)
                         .build())
-                .getId();
+                .getPostId();
     }
 
     @Test

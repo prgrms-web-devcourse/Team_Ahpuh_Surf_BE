@@ -13,12 +13,12 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostCountDto {
 
-    private String date;
+    private LocalDate date;
     private Long count;
 
     @QueryProjection
     public PostCountDto(final LocalDate date, final Long count) {
-        this.date = date.toString();
+        this.date = date;
         this.count = count;
     }
 }

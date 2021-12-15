@@ -43,14 +43,16 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     }
 
     @Override
-    public List<PostCountDto> findAllDateAndCountBetween(final int year) {
+    public List<PostCountDto> findAllDateAndCountBetween(final int year, final User user) {
         return queryFactory
                 .select(new QPostCountDto(
                         post.selectedDate.as("date"),
                         post.selectedDate.count().as("count")))
                 .from(post)
-                .where(post.selectedDate.between(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31)))
+                .where(post.selectedDate.between(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31)),
+                        post.user.eq(user))
                 .groupBy(post.selectedDate)
+                .orderBy(post.selectedDate.asc())
                 .fetch()
                 ;
     }

@@ -11,7 +11,7 @@ public interface PostRepositoryQuerydsl {
 
     List<FollowingPostDto> followingPosts(Long userId);
 
-    List<PostCountDto> findAllDateAndCountBetween(int year);
+    List<PostCountDto> findAllDateAndCountBetween(int year, User user);
 
     List<CategorySimpleDto> findAllScoreWithCategoryByUser(User user);
 

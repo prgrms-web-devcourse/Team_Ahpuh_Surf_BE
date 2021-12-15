@@ -78,8 +78,9 @@ public class PostServiceImpl implements PostService {
         return followingPostDtos;
     }
 
-    public List<PostCountDto> getCountsPerDayWithYear(final int year) {
-        return postRepository.findAllDateAndCountBetween(year);
+    public List<PostCountDto> getCountsPerDayWithYear(final int year, final Long userId) {
+        final User user = getUserById(userId);
+        return postRepository.findAllDateAndCountBetween(year, user);
     }
 
     public List<CategorySimpleDto> getScoresWithCategoryByUserId(final Long userId) {

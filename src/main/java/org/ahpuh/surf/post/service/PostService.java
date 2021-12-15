@@ -22,7 +22,7 @@ public interface PostService {
 
     List<FollowingPostDto> explore(Long userId);
 
-    List<PostCountDto> getCountsPerDayWithYear(int year);
+    List<PostCountDto> getCountsPerDayWithYear(int year, Long userId);
 
     List<CategorySimpleDto> getScoresWithCategoryByUserId(Long userId);
 
