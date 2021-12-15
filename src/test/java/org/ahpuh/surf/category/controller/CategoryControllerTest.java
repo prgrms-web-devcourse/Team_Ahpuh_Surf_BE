@@ -56,6 +56,7 @@ class CategoryControllerTest {
     void setUp() {
         user = User.builder()
                 .email("test@naver.com")
+                .userName("test")
                 .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                 .build();
         user.setPermission(Permission.ROLE_USER);
