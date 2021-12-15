@@ -2,14 +2,12 @@ package org.ahpuh.surf.post.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
+import org.ahpuh.surf.common.response.CursorResult;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.post.dto.FollowingPostDto;
 import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostIdResponse;
-import org.ahpuh.surf.post.dto.PostRequest;
 import org.ahpuh.surf.post.dto.PostResponseDto;
-import org.ahpuh.surf.post.service.PostServiceImpl;
 import org.springframework.data.domain.PageRequest;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.service.PostService;

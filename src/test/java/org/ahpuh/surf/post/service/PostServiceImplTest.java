@@ -6,6 +6,8 @@ import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
+import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,11 +35,15 @@ class PostServiceImplTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
     @InjectMocks
     private PostServiceImpl postService;
 
     private Post post;
     private Category category;
+    private User user;
 
     private Long postId;
     private Long categoryId;
@@ -47,6 +53,15 @@ class PostServiceImplTest {
 
     @BeforeEach
     void setUp() {
+        user = User.builder()
+                .userName("ah-puh")
+                .email("aaa@gmail.com")
+                .password("pswd")
+                .build();
+
+        Mockito.lenient().when(userRepository.findById(1L))
+                .thenReturn(Optional.of(user));
+
         postId = 1L;
         categoryId = 1L;
         selectedDate = "2021-12-06";

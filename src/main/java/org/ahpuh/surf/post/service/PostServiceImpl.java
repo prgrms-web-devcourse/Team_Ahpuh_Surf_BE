@@ -12,13 +12,9 @@ import org.ahpuh.surf.post.dto.FollowingPostDto;
 import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
-import org.ahpuh.surf.post.dto.PostIdResponse;
-import org.ahpuh.surf.post.dto.PostRequest;
 import org.ahpuh.surf.post.dto.PostResponseDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
-import org.ahpuh.surf.user.entity.User;
-import org.ahpuh.surf.user.repository.UserRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.data.domain.Pageable;
@@ -101,15 +97,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<FollowingPostDto> explore(final Long userId) {
-        final List<FollowingPostDto> followingPostDtos = postRepository.followingPosts(userId);
-        for (final FollowingPostDto dto : followingPostDtos) {
-            dto.likedCheck(likeRepository.findByUserIdAndPostId(userId, dto.getPostId()));
-        }
-        return followingPostDtos;
-    }
-
-    @Override
     public List<PostResponseDto> getPost(final Long userId, final Integer year, final Integer month) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
@@ -127,10 +114,10 @@ public class PostServiceImpl implements PostService {
 
         final List<Post> postList = cursorId == null ?
                 postRepository.findAllByUserOrderBySelectedDateDesc(user, page) :
-                postRepository.findByUserAndIdLessThanOrderBySelectedDateDesc(user, cursorId, page);
+                postRepository.findByUserAndPostIdLessThanOrderBySelectedDateDesc(user, cursorId, page);
 
         final Long lastIdOfIndex = postList.isEmpty() ?
-                null : postList.get(postList.size() - 1).getId();
+                null : postList.get(postList.size() - 1).getPostId();
 
         final List<PostResponseDto> posts = postList.stream()
                 .map((Post post) -> PostConverter.toPostResponseDto(post, post.getCategory()))
@@ -148,10 +135,10 @@ public class PostServiceImpl implements PostService {
 
         final List<Post> postList = cursorId == null ?
                 postRepository.findAllByUserAndCategoryOrderBySelectedDateDesc(user, category, page) :
-                postRepository.findByUserAndCategoryAndIdLessThanOrderBySelectedDateDesc(user, category, cursorId, page);
+                postRepository.findByUserAndCategoryAndPostIdLessThanOrderBySelectedDateDesc(user, category, cursorId, page);
 
         final Long lastIdOfIndex = postList.isEmpty() ?
-                null : postList.get(postList.size() - 1).getId();
+                null : postList.get(postList.size() - 1).getPostId();
 
         final List<PostResponseDto> posts = postList.stream()
                 .map((Post post) -> PostConverter.toPostResponseDto(post, category))
@@ -171,7 +158,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private Boolean hasNext(final Long id) {
-        return id != null && postRepository.existsByIdLessThanOrderBySelectedDate(id);
+        return id != null && postRepository.existsByPostIdLessThanOrderBySelectedDate(id);
     }
 
 }
