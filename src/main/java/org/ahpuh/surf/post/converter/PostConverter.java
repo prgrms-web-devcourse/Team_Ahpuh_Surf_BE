@@ -1,14 +1,17 @@
 package org.ahpuh.surf.post.converter;
 
+import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;
-import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostRequestDto;
-import org.ahpuh.surf.post.dto.PostResponseDto;
+import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PostConverter {
@@ -47,6 +50,41 @@ public class PostConverter {
                 .fileUrl(post.getFileUrl())
                 .selectedDate(post.getSelectedDate().toString())
                 .build();
+    }
+
+    public List<CategorySimpleDto> sortPostScoresByCategory(
+            final List<PostScoreCategoryDto> posts,
+            final List<Category> categories) {
+
+        final List<CategorySimpleDto> categorySimpleDtos = categories.stream()
+                .map(category -> new CategorySimpleDto(
+                        category.getCategoryId(),
+                        category.getName(),
+                        category.getColorCode(),
+                        new ArrayList<>()))
+                .collect(Collectors.toList());
+
+        posts.forEach(postScoreCategoryDto -> {
+            final Category category = postScoreCategoryDto.getCategory();
+            if (categories.contains(category)) {
+                categorySimpleDtos.stream()
+                        .filter(categorySimpleDto -> categorySimpleDto.getCategoryId().equals(category.getCategoryId()))
+                        .findFirst()
+                        .map(categorySimpleDto -> categorySimpleDto.getPostScores()
+                                .add(PostScoreDto.builder()
+                                        .selectedDate(postScoreCategoryDto.getSelectedDate())
+                                        .score(postScoreCategoryDto.getScore())
+                                        .build())
+                        );
+            } else {
+                throw EntityExceptionHandler.CategoryNotFound(category.getCategoryId());
+            }
+
+        });
+
+        categorySimpleDtos.removeIf(categorySimpleDto -> categorySimpleDto.getPostScores().size() == 0);
+
+        return categorySimpleDtos;
     }
 
 }

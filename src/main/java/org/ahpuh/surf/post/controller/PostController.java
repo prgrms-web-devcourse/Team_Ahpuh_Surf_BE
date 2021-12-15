@@ -4,13 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.response.CursorResult;
 import org.ahpuh.surf.jwt.JwtAuthentication;
-import org.ahpuh.surf.post.dto.FollowingPostDto;
-import org.ahpuh.surf.post.dto.PostCountDto;
-import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostResponseDto;
-import org.springframework.data.domain.PageRequest;
-import org.ahpuh.surf.post.dto.PostRequestDto;
+import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.post.service.PostService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +57,7 @@ public class PostController {
                 .body(responses);
     }
 
-    @GetMapping("/posts/score") // 사용 X
+    @GetMapping("/posts/score")
     public ResponseEntity<List<CategorySimpleDto>> getScores(@RequestParam final Long userId) {
         final List<CategorySimpleDto> responses = postService.getScoresWithCategoryByUserId(userId);
         return ResponseEntity.ok()
