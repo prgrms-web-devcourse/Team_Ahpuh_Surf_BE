@@ -57,34 +57,6 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("post 생성")
-    void createPost() throws Exception {
-        // given
-        final PostRequestDto postRequestDto = PostRequestDto.builder()
-                .categoryId(1L)
-                .selectedDate("2021-12-06")
-                .content("ah-puh")
-                .score(50)
-                .build();
-        final String requestBody = objectMapper.writeValueAsString(postRequestDto);
-
-        given(postService.create(anyLong(), any(PostRequestDto.class)))
-                .willReturn(postId);
-
-        // when
-        final ResultActions resultActions = mockMvc.perform(post(postUrl)
-                .content(requestBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON));
-
-        // then
-        resultActions.andExpectAll(
-                status().isCreated(),
-                header().string(LOCATION, postUrl + "/" + postId)
-        );
-    }
-
-    @Test
     @DisplayName("post 수정")
     void updatePost() throws Exception {
         // given

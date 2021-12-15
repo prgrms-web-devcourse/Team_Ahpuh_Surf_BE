@@ -104,24 +104,6 @@ class PostServiceImplTest {
     }
 
     @Test
-    @DisplayName("post 조회")
-    void readOne() {
-        // given
-        when(postRepository.findById(anyLong()))
-                .thenReturn(Optional.of(post));
-
-        // when
-        final PostDto postDto = postService.readOne(postId);
-
-        // then
-        assertAll(
-                () -> verify(postRepository, times(1)).findById(postId),
-                () -> assertThat(postDto).isNotNull(),
-                () -> assertThat(postDto.getContent()).isEqualTo(content)
-        );
-    }
-
-    @Test
     @DisplayName("존재하지 않는 id로 post 조회")
     void throwException_getPostById() {
         // given
