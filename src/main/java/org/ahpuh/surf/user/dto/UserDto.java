@@ -24,4 +24,6 @@ public class UserDto {
 
     private int followingCount;
 
+    private Boolean accountPublic;
+
 }

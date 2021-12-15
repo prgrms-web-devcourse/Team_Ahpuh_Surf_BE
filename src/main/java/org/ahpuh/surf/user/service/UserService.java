@@ -16,7 +16,7 @@ public interface UserService {
 
     UserDto findById(Long userId);
 
-    Long update(Long userId, UserUpdateRequestDto updateDto);
+    Long update(Long userId, UserUpdateRequestDto updateDto, String profilePhotoUrl);
 
     void delete(Long userId);
 

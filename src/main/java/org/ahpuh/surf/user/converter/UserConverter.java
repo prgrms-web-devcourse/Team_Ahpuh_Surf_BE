@@ -14,11 +14,11 @@ public class UserConverter {
     private final PasswordEncoder bCryptEncoder;
 
     public User toEntity(final UserJoinRequestDto dto) {
-        final User user = User.builder()
+        return User.builder()
                 .email(dto.getEmail())
                 .password(bCryptEncoder.encode(dto.getPassword()))
+                .userName(dto.getUserName())
                 .build();
-        return user;
     }
 
     public UserDto toUserDto(final User userEntity) {
@@ -29,8 +29,9 @@ public class UserConverter {
                 .profilePhotoUrl(userEntity.getProfilePhotoUrl())
                 .aboutMe(userEntity.getAboutMe())
                 .url(userEntity.getUrl())
-                .followerCount(userEntity.getFollowingUsers().size())
-                .followingCount(userEntity.getFollowedUsers().size())
+                .followerCount(userEntity.getFollowers().size())
+                .followingCount(userEntity.getFollowing().size())
+                .accountPublic(userEntity.getAccountPublic())
                 .build();
     }
 

@@ -1,11 +1,14 @@
 package org.ahpuh.surf.post.service;
 
+import org.ahpuh.surf.post.dto.FollowingPostDto;
 import org.ahpuh.surf.common.response.CursorResult;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostIdResponse;
 import org.ahpuh.surf.post.dto.PostRequest;
 import org.ahpuh.surf.post.dto.PostResponseDto;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -18,6 +21,8 @@ public interface PostService {
     PostDto readOne(Long postId);
 
     void delete(Long postID);
+
+    List<FollowingPostDto> explore(Long userId);
 
     List<PostResponseDto> getPost(Long userId, Integer year, Integer month);
 

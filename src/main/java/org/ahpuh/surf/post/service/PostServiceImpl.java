@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.common.response.CursorResult;
 import org.ahpuh.surf.post.converter.PostConverter;
+import org.ahpuh.surf.post.dto.FollowingPostDto;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostIdResponse;
 import org.ahpuh.surf.post.dto.PostRequest;
@@ -28,6 +30,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
+    private final LikeRepository likeRepository;
     private final UserRepository userRepository;
 
     private final PostConverter postConverter;
@@ -64,6 +67,15 @@ public class PostServiceImpl implements PostService {
     public void delete(final Long postId) {
         final Post post = getPostById(postId);
         post.delete();
+    }
+
+    @Override
+    public List<FollowingPostDto> explore(final Long userId) {
+        final List<FollowingPostDto> followingPostDtos = postRepository.followingPosts(userId);
+        for (final FollowingPostDto dto : followingPostDtos) {
+            dto.likedCheck(likeRepository.findByUserIdAndPostId(userId, dto.getPostId()));
+        }
+        return followingPostDtos;
     }
 
     @Override

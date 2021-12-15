@@ -28,7 +28,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false)
     private String userName;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -65,16 +65,17 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Follow> followedUsers = new ArrayList<>(); // 내가 팔로우한 (팔로우 당한)
+    private List<Follow> following = new ArrayList<>(); // 내가 팔로잉한
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Follow> followingUsers = new ArrayList<>(); // 나를 팔로잉한
+    private List<Follow> followers = new ArrayList<>(); // 나를 팔로우한
 
     @Builder
-    public User(final String email, final String password) {
+    public User(final String email, final String password, final String userName) {
         this.email = email;
         this.password = password;
+        this.userName = userName;
     }
 
     public void checkPassword(final PasswordEncoder passwordEncoder, final String credentials) {
@@ -86,13 +87,17 @@ public class User extends BaseEntity {
         this.permission = permission;
     }
 
-    public void update(final UserUpdateRequestDto request) {
+    public void update(final UserUpdateRequestDto request, final String profilePhotoUrl) {
         this.userName = request.getUserName();
-        this.password = request.getPassword();
-        this.profilePhotoUrl = request.getProfilePhotoUrl();
         this.url = request.getUrl();
         this.aboutMe = request.getAboutMe();
         this.accountPublic = request.getAccountPublic();
+        if (request.getPassword() != null) {
+            this.password = request.getPassword();
+        }
+        if (profilePhotoUrl != null) {
+            this.profilePhotoUrl = profilePhotoUrl;
+        }
     }
 
     public void addCategory(final Category category) {
@@ -103,12 +108,12 @@ public class User extends BaseEntity {
         posts.add(post);
     }
 
-    public void addFollowedUser(final Follow followedUser) {
-        followedUsers.add(followedUser);
+    public void addFollowing(final Follow followingUser) {
+        following.add(followingUser);
     }
 
-    public void addFollowingUser(final Follow followingUser) {
-        followingUsers.add(followingUser);
+    public void addFollowers(final Follow follower) {
+        followers.add(follower);
     }
 
 }

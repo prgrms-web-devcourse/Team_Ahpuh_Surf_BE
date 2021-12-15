@@ -54,6 +54,7 @@ class CategoryServiceTest {
         user = userRepository.save(User.builder()
                 .password("password")
                 .email("suebeen@gmail.com")
+                .userName("name")
                 .build());
         category = categoryRepository.save(Category.builder()
                 .user(user)
