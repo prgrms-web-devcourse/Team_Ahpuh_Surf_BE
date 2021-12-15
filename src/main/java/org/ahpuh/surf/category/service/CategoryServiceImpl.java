@@ -9,6 +9,8 @@ import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.post.entity.Post;
+import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+
+    private final PostRepository postRepository;
 
     private final UserRepository userRepository;
 
@@ -74,7 +78,13 @@ public class CategoryServiceImpl implements CategoryService {
         final List<Category> categoryList = categoryRepository.findByUser(user).orElse(Collections.emptyList());
 
         return categoryList.stream()
-                .map(categoryConverter::toCategoryDetailResponseDto)
+                .map((Category category) -> categoryConverter.toCategoryDetailResponseDto(category, (int) getAverageScore(user, category)))
                 .toList();
+    }
+
+    private double getAverageScore(final User user, final Category category) {
+        return postRepository.findAllByUserAndCategory(user, category).stream()
+                .mapToInt(Post::getScore)
+                .average().orElse(0);
     }
 }

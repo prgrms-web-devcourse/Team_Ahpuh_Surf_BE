@@ -38,14 +38,6 @@ public class Category extends BaseEntity {
     @Column(name = "color_code")
     private String colorCode;
 
-    @Column(name = "average_score")
-    @Builder.Default
-    private int averageScore = 0;
-
-    @Column(name = "recent_score")
-    @Builder.Default
-    private int recentScore = 0;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
@@ -68,18 +60,12 @@ public class Category extends BaseEntity {
 
     public void addPost(final Post post) {
         posts.add(post);
-        this.recentScore = post.getScore();
-        this.averageScore = updateAverageScore(post.getScore()) / (++postCount);
     }
 
     public void update(final String name, final boolean isPublic, final String colorCode) {
         this.name = name;
         this.isPublic = isPublic;
         this.colorCode = colorCode;
-    }
-
-    public int updateAverageScore(final int score) {
-        return this.averageScore * this.postCount + score;
     }
 
 }
