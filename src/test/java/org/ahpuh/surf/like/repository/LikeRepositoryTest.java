@@ -71,7 +71,7 @@ class LikeRepositoryTest {
                         .content("content1")
                         .score(80)
                         .build())
-                .getId();
+                .getPostId();
         postId2 = postRepository.save(Post.builder()
                         .user(user2)
                         .category(category1)
@@ -79,7 +79,7 @@ class LikeRepositoryTest {
                         .content("content2")
                         .score(80)
                         .build())
-                .getId();
+                .getPostId();
 
         // user1이 post2를 좋아요 누름
         likeId1 = likeRepository.save(Like.builder()

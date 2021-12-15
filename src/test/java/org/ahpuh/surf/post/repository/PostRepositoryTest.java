@@ -145,7 +145,7 @@ class PostRepositoryTest {
                         post.user.userId.as("userId"),
                         post.category.name.as("categoryName"),
                         post.category.colorCode.as("colorCode"),
-                        post.id.as("postId"),
+                        post.postId.as("postId"),
                         post.content.as("content"),
                         post.score.as("score"),
                         post.fileUrl.as("fileUrl"),
@@ -155,7 +155,7 @@ class PostRepositoryTest {
                 .from(post)
                 .leftJoin(follow).on(follow.user.userId.eq(userId1))
                 .where(follow.followedUser.userId.eq(post.user.userId))
-                .groupBy(post.id, follow.followId)
+                .groupBy(post.postId, follow.followId)
                 .orderBy(post.updatedAt.desc())
                 .fetch();
 

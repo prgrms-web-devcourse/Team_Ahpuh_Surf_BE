@@ -1,16 +1,16 @@
 package org.ahpuh.surf.post.controller;
 
-import org.ahpuh.surf.common.response.ApiResponse;
-import org.ahpuh.surf.jwt.JwtAuthentication;
-import org.ahpuh.surf.post.dto.FollowingPostDto;
+import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.response.CursorResult;
 import org.ahpuh.surf.jwt.JwtAuthentication;
+import org.ahpuh.surf.post.dto.FollowingPostDto;
+import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostIdResponse;
-import org.ahpuh.surf.post.dto.PostRequest;
 import org.ahpuh.surf.post.dto.PostResponseDto;
-import org.ahpuh.surf.post.service.PostServiceImpl;
 import org.springframework.data.domain.PageRequest;
+import org.ahpuh.surf.post.dto.PostRequestDto;
+import org.ahpuh.surf.post.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,43 +19,68 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RequestMapping("/api/v1")
 @RestController
 public class PostController {
 
-    private final PostServiceImpl postService;
-
-    public PostController(final PostServiceImpl postService) {
-        this.postService = postService;
-    }
+    private final PostService postService;
 
     @PostMapping("/posts")
-    public ResponseEntity<ApiResponse<PostIdResponse>> createPost(@Valid @RequestBody final PostRequest request) {
-        // TODO: userId
-        final PostIdResponse response = postService.create(request);
-        return ResponseEntity.created(URI.create("/api/v1/posts/" + response.getId()))
-                .body(ApiResponse.created(response));
+    public ResponseEntity<Long> createPost(@AuthenticationPrincipal final JwtAuthentication authentication,
+                                           @Valid @RequestBody final PostRequestDto request) {
+        final Long response = postService.create(authentication.userId, request);
+        return ResponseEntity.created(URI.create("/api/v1/posts/" + response))
+                .body(response);
     }
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<ApiResponse<PostIdResponse>> updatePost(@PathVariable final Long postId, @Valid @RequestBody final PostRequest request) {
-        final PostIdResponse response = postService.update(postId, request);
+    public ResponseEntity<Long> updatePost(@PathVariable final Long postId, @Valid @RequestBody final PostRequestDto request) {
+        final Long response = postService.update(postId, request);
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(response));
+                .body(response);
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<ApiResponse<PostDto>> readPost(@PathVariable final Long postId) {
+    public ResponseEntity<PostDto> readPost(@PathVariable final Long postId) {
         final PostDto postDto = postService.readOne(postId);
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postDto));
+                .body(postDto);
     }
 
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable final Long postId) {
+    public ResponseEntity<Void> deletePost(@PathVariable final Long postId) {
         postService.delete(postId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/posts/calendarGraph")
+    public ResponseEntity<List<PostCountDto>> getCounts(@RequestParam final int year, @RequestParam final Long userId) {
+        final List<PostCountDto> responses = postService.getCountsPerDayWithYear(year, userId);
         return ResponseEntity.ok()
-                .body(ApiResponse.noContent());
+                .body(responses);
+    }
+
+    @GetMapping("/posts/score") // 사용 X
+    public ResponseEntity<List<CategorySimpleDto>> getScores(@RequestParam final Long userId) {
+        final List<CategorySimpleDto> responses = postService.getScoresWithCategoryByUserId(userId);
+        return ResponseEntity.ok()
+                .body(responses);
+    }
+
+    @PostMapping("/posts/{postId}/favorite")
+    public ResponseEntity<Long> makeFavorite(@AuthenticationPrincipal final JwtAuthentication authentication,
+                                             @PathVariable final Long postId) {
+        final Long response = postService.clickFavorite(authentication.userId, postId);
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    @DeleteMapping("/posts/{postId}/favorite")
+    public ResponseEntity<Void> cancelFavorite(@AuthenticationPrincipal final JwtAuthentication authentication,
+                                               @PathVariable final Long postId) {
+        postService.clickFavorite(authentication.userId, postId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/follow/posts")
@@ -66,7 +91,7 @@ public class PostController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/month")
+    @GetMapping("/posts/month")
     public ResponseEntity<List<PostResponseDto>> getPost(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Integer year,
@@ -76,7 +101,7 @@ public class PostController {
         return ResponseEntity.ok().body(postService.getPost(userId, year, month));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/posts/all")
     public ResponseEntity<CursorResult<PostResponseDto>> getAllPost(
             @RequestParam final Long userId,
             final Long cursorId
@@ -84,7 +109,7 @@ public class PostController {
         return ResponseEntity.ok().body(postService.getAllPost(userId, cursorId, PageRequest.of(0, 10)));
     }
 
-    @GetMapping
+    @GetMapping("/posts")
     public ResponseEntity<CursorResult<PostResponseDto>> getAllPostByCategory(
             @RequestParam final Long userId,
             @RequestParam final Long categoryId,

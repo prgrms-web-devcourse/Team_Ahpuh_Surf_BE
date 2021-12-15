@@ -3,8 +3,7 @@ package org.ahpuh.surf.post.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.config.WebSecurityConfig;
 import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostIdResponse;
-import org.ahpuh.surf.post.dto.PostRequest;
+import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.service.PostServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -58,50 +57,19 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("post 생성")
-    void createPost() throws Exception {
-        // given
-        final PostRequest postRequest = PostRequest.builder()
-                .categoryId(1L)
-                .selectedDate("2021-12-06")
-                .content("ah-puh")
-                .score(50)
-                .build();
-        final String requestBody = objectMapper.writeValueAsString(postRequest);
-
-        given(postService.create(any(PostRequest.class)))
-                .willReturn(new PostIdResponse(postId));
-
-        // when
-        final ResultActions resultActions = mockMvc.perform(post(postUrl)
-                .content(requestBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON));
-
-        // then
-        resultActions.andExpectAll(
-                status().isCreated(),
-                header().string(LOCATION, postUrl + "/" + postId),
-                jsonPath("statusCode").value(201),
-                jsonPath("data").isNotEmpty(),
-                jsonPath("data.id").value(postId)
-        );
-    }
-
-    @Test
     @DisplayName("post 수정")
     void updatePost() throws Exception {
         // given
-        final PostRequest postRequest = PostRequest.builder()
+        final PostRequestDto postRequestDto = PostRequestDto.builder()
                 .categoryId(1L)
                 .selectedDate("2021-12-06")
                 .content("ah-puh")
                 .score(100)
                 .build();
-        final String requestBody = objectMapper.writeValueAsString(postRequest);
+        final String requestBody = objectMapper.writeValueAsString(postRequestDto);
 
-        given(postService.update(anyLong(), any(PostRequest.class)))
-                .willReturn(new PostIdResponse(postId));
+        given(postService.update(anyLong(), any(PostRequestDto.class)))
+                .willReturn(postId);
 
         // when
         final ResultActions resultActions = mockMvc.perform(put(postUrl + "/{postId}", postId)
@@ -111,10 +79,7 @@ class PostControllerTest {
 
         // then
         resultActions.andExpectAll(
-                status().isOk(),
-                jsonPath("statusCode").value(200),
-                jsonPath("data").isNotEmpty(),
-                jsonPath("data.id").value(postId)
+                status().isOk()
         );
     }
 
@@ -139,10 +104,8 @@ class PostControllerTest {
         // then
         resultActions.andExpectAll(
                 status().isOk(),
-                jsonPath("statusCode").value(200),
-                jsonPath("data").isNotEmpty(),
-                jsonPath("data.postId").value(postId),
-                jsonPath("data.content").value("surf")
+                jsonPath("postId").value(postId),
+                jsonPath("content").value("surf")
         );
     }
 
@@ -157,9 +120,7 @@ class PostControllerTest {
 
         // then
         resultActions.andExpectAll(
-                status().isOk(),
-                jsonPath("statusCode").value(204),
-                jsonPath("data").isEmpty()
+                status().isNoContent()
         );
     }
 
