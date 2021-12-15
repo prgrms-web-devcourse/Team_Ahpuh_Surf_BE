@@ -19,7 +19,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -82,30 +85,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
+            .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .anyRequest().permitAll()
 //                .anyRequest().authenticated()
                 .and()
-                .headers()
+            .headers()
                 .disable()
-                .csrf()
+            .csrf()
                 .disable()
-                .formLogin()
+            .formLogin()
                 .disable()
-                .httpBasic()
+            .httpBasic()
                 .disable()
-                .rememberMe()
+            .rememberMe()
                 .disable()
-                .logout()
+            .logout()
                 .disable()
-                .exceptionHandling()
+            .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
                 .and()
-                .sessionManagement()
+            .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
+            .addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
         ;
     }
 }

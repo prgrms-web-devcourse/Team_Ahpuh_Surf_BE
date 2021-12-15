@@ -6,6 +6,11 @@ import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.post.dto.FollowingPostDto;
 import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.PostDto;
+import org.ahpuh.surf.post.dto.PostIdResponse;
+import org.ahpuh.surf.post.dto.PostRequest;
+import org.ahpuh.surf.post.dto.PostResponseDto;
+import org.ahpuh.surf.post.service.PostServiceImpl;
+import org.springframework.data.domain.PageRequest;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.service.PostService;
 import org.springframework.http.ResponseEntity;
@@ -86,6 +91,33 @@ public class PostController {
     ) {
         final List<FollowingPostDto> response = postService.explore(authentication.userId);
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/posts/month")
+    public ResponseEntity<List<PostResponseDto>> getPost(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @RequestParam final Integer year,
+            @RequestParam final Integer month
+    ) {
+        final Long userId = authentication.userId;
+        return ResponseEntity.ok().body(postService.getPost(userId, year, month));
+    }
+
+    @GetMapping("/posts/all")
+    public ResponseEntity<CursorResult<PostResponseDto>> getAllPost(
+            @RequestParam final Long userId,
+            final Long cursorId
+    ) {
+        return ResponseEntity.ok().body(postService.getAllPost(userId, cursorId, PageRequest.of(0, 10)));
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<CursorResult<PostResponseDto>> getAllPostByCategory(
+            @RequestParam final Long userId,
+            @RequestParam final Long categoryId,
+            final Long cursorId
+    ) {
+        return ResponseEntity.ok().body(postService.getAllPostByCategory(userId, categoryId, cursorId, PageRequest.of(0, 10)));
     }
 
 }

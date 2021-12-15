@@ -68,13 +68,12 @@ class CategoryServiceTest {
     void createCategoryTest() {
         // given
         final CategoryCreateRequestDto createRequestDto = CategoryCreateRequestDto.builder()
-                .userId(user.getUserId())
                 .name(category.getName())
                 .colorCode(category.getColorCode())
                 .build();
 
         // when
-        categoryService.createCategory(createRequestDto);
+        categoryService.createCategory(user.getUserId(), createRequestDto);
 
         // then
         assertAll(

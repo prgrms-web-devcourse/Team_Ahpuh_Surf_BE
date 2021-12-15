@@ -1,6 +1,10 @@
 package org.ahpuh.surf.post.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.ahpuh.surf.post.dto.FollowingPostDto;
+import org.ahpuh.surf.post.dto.QFollowingPostDto;
+
+import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.post.dto.FollowingPostDto;

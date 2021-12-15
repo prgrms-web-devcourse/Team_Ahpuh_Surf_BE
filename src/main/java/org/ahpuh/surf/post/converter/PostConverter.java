@@ -3,6 +3,8 @@ package org.ahpuh.surf.post.converter;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostRequestDto;
+import org.ahpuh.surf.post.dto.PostRequest;
+import org.ahpuh.surf.post.dto.PostResponseDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.entity.User;
 import org.springframework.stereotype.Component;
@@ -33,6 +35,18 @@ public class PostConverter {
                 .fileUrl(post.getFileUrl())
                 .favorite(post.getFavorite())
                 .createdAt(post.getCreatedAt().toString())
+                .build();
+    }
+
+    public static PostResponseDto toPostResponseDto(final Post post, final Category category) {
+        return PostResponseDto.builder()
+                .categoryName(category.getName())
+                .colorCode(category.getColorCode())
+                .postId(post.getId())
+                .content(post.getContent())
+                .score(post.getScore())
+                .fileUrl(post.getFileUrl())
+                .selectedDate(post.getSelectedDate().toString())
                 .build();
     }
 
