@@ -118,4 +118,11 @@ public class PostController {
         return ResponseEntity.ok().body(postService.getAllPostByCategory(userId, categoryId, cursorId, PageRequest.of(0, 10)));
     }
 
+    @GetMapping("/recentscore")
+    public ResponseEntity<Integer> getAllPostByCategory(
+            @RequestParam final Long categoryId
+    ) {
+        return ResponseEntity.ok().body(postService.getRecentScore(categoryId));
+    }
+
 }

@@ -24,7 +24,6 @@ public class CategoryConverter {
                 .name(category.getName())
                 .isPublic(category.getIsPublic())
                 .colorCode(category.getColorCode())
-                .recentScore(category.getRecentScore())
                 .build();
     }
 

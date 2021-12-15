@@ -23,4 +23,5 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
     Boolean existsByPostIdLessThanOrderBySelectedDate(Long cursorId);
 
+    Post findTop1ByCategoryOrderBySelectedDateDesc(Category category);
 }

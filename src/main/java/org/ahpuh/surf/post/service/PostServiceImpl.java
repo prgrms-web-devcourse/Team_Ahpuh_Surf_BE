@@ -147,6 +147,14 @@ public class PostServiceImpl implements PostService {
         return new CursorResult<>(posts, hasNext(lastIdOfIndex));
     }
 
+    public int getRecentScore(final Long categoryId) {
+        final Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
+        Post post = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category);
+
+        return post.getScore();
+    }
+
     private Category getCategoryById(final Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));

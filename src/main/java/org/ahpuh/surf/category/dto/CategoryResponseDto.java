@@ -16,6 +16,4 @@ public class CategoryResponseDto {
 
     private String colorCode;
 
-    private int recentScore;
-
 }
