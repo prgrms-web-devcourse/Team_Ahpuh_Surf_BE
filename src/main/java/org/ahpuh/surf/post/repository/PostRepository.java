@@ -25,6 +25,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
     Post findTop1ByCategoryOrderBySelectedDateDesc(Category category);
 
-    List<Post> findAllByUserAndCategory(User user, Category category);
+    List<Post> findAllByCategory(Category category);
 
 }

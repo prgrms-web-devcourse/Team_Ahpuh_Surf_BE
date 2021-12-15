@@ -78,12 +78,12 @@ public class CategoryServiceImpl implements CategoryService {
         final List<Category> categoryList = categoryRepository.findByUser(user).orElse(Collections.emptyList());
 
         return categoryList.stream()
-                .map((Category category) -> categoryConverter.toCategoryDetailResponseDto(category, (int) getAverageScore(user, category)))
+                .map((Category category) -> categoryConverter.toCategoryDetailResponseDto(category, (int) getAverageScore(category)))
                 .toList();
     }
 
-    private double getAverageScore(final User user, final Category category) {
-        return postRepository.findAllByUserAndCategory(user, category).stream()
+    private double getAverageScore(final Category category) {
+        return postRepository.findAllByCategory(category).stream()
                 .mapToInt(Post::getScore)
                 .average().orElse(0);
     }
