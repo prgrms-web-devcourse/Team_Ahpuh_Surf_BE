@@ -9,11 +9,14 @@ import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.s3.S3Service.FileStatus;
+import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.user.entity.User;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,6 +57,10 @@ public class Post extends BaseEntity {
     @Column(name = "favorite")
     private Boolean favorite;
 
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true)
+    @Builder.Default
+    private List<Like> likes = new ArrayList<>();
+
     @Builder
     public Post(final User user, final Category category, final LocalDate selectedDate, final String content, final int score) {
         this.user = user;
@@ -90,6 +97,10 @@ public class Post extends BaseEntity {
             throw EntityExceptionHandler.UserNotMatching(user.getUserId(), userId);
         }
         favorite = !favorite;
+    }
+
+    public void addLike(final Like like) {
+        likes.add(like);
     }
 
 }

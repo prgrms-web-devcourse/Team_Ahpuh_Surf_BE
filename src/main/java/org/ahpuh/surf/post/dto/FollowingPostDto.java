@@ -2,11 +2,9 @@ package org.ahpuh.surf.post.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
-import org.ahpuh.surf.like.entity.Like;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,16 +13,30 @@ import java.util.Optional;
 public class FollowingPostDto {
 
     private Long userId;
+
     private String categoryName;
+
     private String colorCode;
+
     private Long postId;
+
     private String content;
+
     private Integer score;
+
+    private String imageUrl;
+
     private String fileUrl;
+
     private LocalDate selectedDate;
+
     private LocalDateTime updatedAt;
-    private Long likeId;
-    private Boolean isLiked;
+
+    @Builder.Default
+    private Long likeId = null;
+
+    @Builder.Default
+    private Boolean isLiked = false;
 
     @QueryProjection
     public FollowingPostDto(final Long userId,
@@ -33,6 +45,7 @@ public class FollowingPostDto {
                             final Long postId,
                             final String content,
                             final Integer score,
+                            final String imageUrl,
                             final String fileUrl,
                             final LocalDate selectedDate,
                             final LocalDateTime updatedAt) {
@@ -42,6 +55,7 @@ public class FollowingPostDto {
         this.postId = postId;
         this.content = content;
         this.score = score;
+        this.imageUrl = imageUrl;
         this.fileUrl = fileUrl;
         this.selectedDate = selectedDate;
         this.updatedAt = updatedAt;
@@ -49,14 +63,9 @@ public class FollowingPostDto {
         this.isLiked = false;
     }
 
-    public void likedCheck(final Optional<Like> likeId) {
-        if (likeId.isPresent()) {
-            this.likeId = likeId.get().getLikeId();
-            this.isLiked = true;
-        } else {
-            this.likeId = null;
-            this.isLiked = false;
-        }
+    public void setLiked(final Long likeId) {
+        this.likeId = likeId;
+        this.isLiked = true;
     }
 
 }

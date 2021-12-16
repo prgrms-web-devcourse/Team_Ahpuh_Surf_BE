@@ -8,13 +8,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/likes")
+@RequestMapping("/api/v1/posts/{postId}")
 @RequiredArgsConstructor
 public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/{postId}")
+    @PostMapping("/like")
     public ResponseEntity<Long> like(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
@@ -23,8 +23,9 @@ public class LikeController {
         return ResponseEntity.ok().body(likeId);
     }
 
-    @DeleteMapping("/{likeId}")
+    @DeleteMapping("/unlike/{likeId}")
     public ResponseEntity<Void> unlike(
+            @PathVariable final Long postId,
             @PathVariable final Long likeId
     ) {
         likeService.unlike(likeId);

@@ -1,6 +1,7 @@
 package org.ahpuh.surf.like.entity;
 
 import lombok.*;
+import org.ahpuh.surf.post.entity.Post;
 
 import javax.persistence.*;
 
@@ -26,13 +27,15 @@ public class Like {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "post_id")
-    private Long postId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id")
+    private Post post;
 
     @Builder
-    public Like(final Long userId, final Long postId) {
+    public Like(final Long userId, final Post post) {
         this.userId = userId;
-        this.postId = postId;
+        this.post = post;
+        post.addLike(this);
     }
 
 }

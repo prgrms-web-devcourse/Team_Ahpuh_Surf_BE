@@ -116,7 +116,7 @@ class PostServiceImplTest {
                 .thenReturn(Optional.empty());
 
         // when, then
-        assertThatThrownBy(() -> postService.readOne(invalidPostId))
+        assertThatThrownBy(() -> postService.readOne(1L, invalidPostId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Post with given id not found. Invalid id is " + invalidPostId);
     }

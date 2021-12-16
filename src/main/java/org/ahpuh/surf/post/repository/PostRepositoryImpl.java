@@ -17,7 +17,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<FollowingPostDto> followingPosts(final Long userId) {
+    public List<FollowingPostDto> findFollowingPosts(final Long userId) {
         return queryFactory
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),
@@ -26,6 +26,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.postId.as("postId"),
                         post.content.as("content"),
                         post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
                         post.fileUrl.as("fileUrl"),
                         post.selectedDate,
                         post.updatedAt.as("updatedAt")

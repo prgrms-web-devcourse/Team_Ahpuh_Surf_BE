@@ -15,7 +15,7 @@ public interface PostService {
 
     Long update(Long postId, PostRequestDto request, FileStatus fileStatus);
 
-    PostDto readOne(Long postId);
+    PostDto readOne(Long myId, Long postId);
 
     void delete(Long postID);
 
@@ -25,13 +25,13 @@ public interface PostService {
 
     List<CategorySimpleDto> getScoresWithCategoryByUserId(Long userId);
 
-    List<FollowingPostDto> explore(Long userId);
+    CursorResult<FollowingPostDto> explore(Long userId, final Long cursorId, final Pageable page);
 
     List<PostResponseDto> getPost(Long userId, Integer year, Integer month);
 
-    CursorResult<PostResponseDto> getAllPost(Long userId, Long cursorId, Pageable page);
+    CursorResult<AllPostResponseDto> getAllPost(Long myId, Long userId, Long cursorId, Pageable page);
 
-    CursorResult<PostResponseDto> getAllPostByCategory(Long userId, Long categoryId, Long cursorId, Pageable page);
+    CursorResult<AllPostResponseDto> getAllPostByCategory(Long myId, Long userId, Long categoryId, Long cursorId, Pageable page);
 
     int getRecentScore(Long categoryId);
 }

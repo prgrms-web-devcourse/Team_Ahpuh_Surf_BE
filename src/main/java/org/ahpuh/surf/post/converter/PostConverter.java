@@ -4,6 +4,7 @@ import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.s3.S3Service.FileStatus;
+import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.entity.User;
@@ -12,13 +13,14 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class PostConverter {
 
     public Post toEntity(final User user, final Category category, final PostRequestDto request, final FileStatus fileStatus) {
-        Post postEntity = Post.builder()
+        final Post postEntity = Post.builder()
                 .user(user)
                 .category(category)
                 .selectedDate(LocalDate.parse(request.getSelectedDate())) // yyyy-mm-dd
@@ -31,8 +33,8 @@ public class PostConverter {
         return postEntity;
     }
 
-    public PostDto toDto(final Post post) {
-        return PostDto.builder()
+    public PostDto toDto(final Post post, final Optional<Like> like) {
+        final PostDto dto = PostDto.builder()
                 .postId(post.getPostId())
                 .userId(post.getUser().getUserId())
                 .categoryId(post.getCategory().getCategoryId())
@@ -44,6 +46,8 @@ public class PostConverter {
                 .favorite(post.getFavorite())
                 .createdAt(post.getCreatedAt().toString())
                 .build();
+        like.ifPresent(likeEntity -> dto.setLiked(likeEntity.getLikeId()));
+        return dto;
     }
 
     public PostResponseDto toPostResponseDto(final Post post, final Category category) {
@@ -56,6 +60,21 @@ public class PostConverter {
                 .fileUrl(post.getFileUrl())
                 .selectedDate(post.getSelectedDate().toString())
                 .build();
+    }
+
+    public AllPostResponseDto toAllPostResponseDto(final Post post, final Optional<Like> like) {
+        final AllPostResponseDto allPostResponseDto = AllPostResponseDto.builder()
+                .categoryName(post.getCategory().getName())
+                .colorCode(post.getCategory().getColorCode())
+                .postId(post.getPostId())
+                .content(post.getContent())
+                .score(post.getScore())
+                .imageUrl(post.getImageUrl())
+                .fileUrl(post.getFileUrl())
+                .selectedDate(post.getSelectedDate().toString())
+                .build();
+        like.ifPresent(likeEntity -> allPostResponseDto.setLiked(likeEntity.getLikeId()));
+        return allPostResponseDto;
     }
 
     public List<CategorySimpleDto> sortPostScoresByCategory(

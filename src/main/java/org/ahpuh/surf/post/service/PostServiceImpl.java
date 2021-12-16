@@ -53,9 +53,9 @@ public class PostServiceImpl implements PostService {
         return postId;
     }
 
-    public PostDto readOne(final Long postId) {
+    public PostDto readOne(final Long myId, final Long postId) {
         final Post post = getPostById(postId);
-        return postConverter.toDto(post);
+        return postConverter.toDto(post, likeRepository.findByUserIdAndPost(myId, post));
     }
 
     @Transactional
@@ -72,12 +72,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<FollowingPostDto> explore(final Long userId) {
-        final List<FollowingPostDto> followingPostDtos = postRepository.followingPosts(userId);
+    public CursorResult<FollowingPostDto> explore(final Long myId, final Long cursorId, final Pageable page) {
+        final List<FollowingPostDto> followingPostDtos = postRepository.findFollowingPosts(myId);
         for (final FollowingPostDto dto : followingPostDtos) {
-            dto.likedCheck(likeRepository.findByUserIdAndPostId(userId, dto.getPostId()));
+            likeRepository.findByUserIdAndPost(myId, getPostById(dto.getPostId()))
+                    .ifPresent(like -> dto.setLiked(like.getLikeId()));
         }
-        return followingPostDtos;
+
+        final Long lastIdOfIndex = followingPostDtos.isEmpty() ?
+                null : followingPostDtos.get(followingPostDtos.size() - 1).getPostId();
+
+        return new CursorResult<>(followingPostDtos, hasNext(lastIdOfIndex));
     }
 
     public List<PostCountDto> getCountsPerDayWithYear(final int year, final Long userId) {
@@ -111,7 +116,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public CursorResult<PostResponseDto> getAllPost(final Long userId, final Long cursorId, final Pageable page) {
+    public CursorResult<AllPostResponseDto> getAllPost(final Long myId, final Long userId, final Long cursorId, final Pageable page) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
 
@@ -122,15 +127,15 @@ public class PostServiceImpl implements PostService {
         final Long lastIdOfIndex = postList.isEmpty() ?
                 null : postList.get(postList.size() - 1).getPostId();
 
-        final List<PostResponseDto> posts = postList.stream()
-                .map((Post post) -> postConverter.toPostResponseDto(post, post.getCategory()))
+        final List<AllPostResponseDto> posts = postList.stream()
+                .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
                 .toList();
 
         return new CursorResult<>(posts, hasNext(lastIdOfIndex));
     }
 
     @Override
-    public CursorResult<PostResponseDto> getAllPostByCategory(final Long userId, final Long categoryId, final Long cursorId, final Pageable page) {
+    public CursorResult<AllPostResponseDto> getAllPostByCategory(final Long myId, final Long userId, final Long categoryId, final Long cursorId, final Pageable page) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
         final Category category = categoryRepository.findById(categoryId)
@@ -143,8 +148,8 @@ public class PostServiceImpl implements PostService {
         final Long lastIdOfIndex = postList.isEmpty() ?
                 null : postList.get(postList.size() - 1).getPostId();
 
-        final List<PostResponseDto> posts = postList.stream()
-                .map((Post post) -> postConverter.toPostResponseDto(post, category))
+        final List<AllPostResponseDto> posts = postList.stream()
+                .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
                 .toList();
 
         return new CursorResult<>(posts, hasNext(lastIdOfIndex));

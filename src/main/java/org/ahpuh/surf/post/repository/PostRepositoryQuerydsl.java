@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PostRepositoryQuerydsl {
 
-    List<FollowingPostDto> followingPosts(Long userId);
+    List<FollowingPostDto> findFollowingPosts(Long userId);
 
     List<PostCountDto> findAllDateAndCountBetween(int year, User user);
 
