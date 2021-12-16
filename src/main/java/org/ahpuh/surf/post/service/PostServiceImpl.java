@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
         final User user = getUserById(userId);
         final Category category = getCategoryById(request.getCategoryId());
 
-        final Post post = PostConverter.toEntity(user, category, request, fileStatus);
+        final Post post = postConverter.toEntity(user, category, request, fileStatus);
         final Post saved = postRepository.save(post);
 
         return saved.getPostId();
@@ -106,10 +106,12 @@ public class PostServiceImpl implements PostService {
     public List<PostResponseDto> getPost(final Long userId, final Integer year, final Integer month) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
-        final List<Post> postList = postRepository.findAllByUserAndSelectedDateBetweenOrderBySelectedDate(user, LocalDate.of(year, month, 1), LocalDate.of(year, month, 31));
+        final LocalDate start = LocalDate.of(year, month, 1);
+        final LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+        final List<Post> postList = postRepository.findAllByUserAndSelectedDateBetweenOrderBySelectedDate(user, start, end);
 
         return postList.stream()
-                .map((Post post) -> PostConverter.toPostResponseDto(post, post.getCategory()))
+                .map((Post post) -> postConverter.toPostResponseDto(post, post.getCategory()))
                 .toList();
     }
 
