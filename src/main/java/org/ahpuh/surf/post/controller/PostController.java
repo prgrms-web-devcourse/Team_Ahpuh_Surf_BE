@@ -25,16 +25,16 @@ public class PostController {
     @PostMapping("/posts")
     public ResponseEntity<Long> createPost(@AuthenticationPrincipal final JwtAuthentication authentication,
                                            @Valid @RequestBody final PostRequestDto request) {
-        final Long response = postService.create(authentication.userId, request);
-        return ResponseEntity.created(URI.create("/api/v1/posts/" + response))
-                .body(response);
+        final Long postId = postService.create(authentication.userId, request);
+        return ResponseEntity.created(URI.create("/api/v1/posts/" + postId))
+                .body(postId);
     }
 
     @PutMapping("/posts/{postId}")
     public ResponseEntity<Long> updatePost(@PathVariable final Long postId, @Valid @RequestBody final PostRequestDto request) {
-        final Long response = postService.update(postId, request);
+        final Long responsePostId = postService.update(postId, request);
         return ResponseEntity.ok()
-                .body(response);
+                .body(responsePostId);
     }
 
     @GetMapping("/posts/{postId}")
@@ -52,24 +52,24 @@ public class PostController {
 
     @GetMapping("/posts/calendarGraph")
     public ResponseEntity<List<PostCountDto>> getCounts(@RequestParam final int year, @RequestParam final Long userId) {
-        final List<PostCountDto> responses = postService.getCountsPerDayWithYear(year, userId);
+        final List<PostCountDto> postCountDtos = postService.getCountsPerDayWithYear(year, userId);
         return ResponseEntity.ok()
-                .body(responses);
+                .body(postCountDtos);
     }
 
     @GetMapping("/posts/score")
     public ResponseEntity<List<CategorySimpleDto>> getScores(@RequestParam final Long userId) {
-        final List<CategorySimpleDto> responses = postService.getScoresWithCategoryByUserId(userId);
+        final List<CategorySimpleDto> categorySimpleDtos = postService.getScoresWithCategoryByUserId(userId);
         return ResponseEntity.ok()
-                .body(responses);
+                .body(categorySimpleDtos);
     }
 
     @PostMapping("/posts/{postId}/favorite")
     public ResponseEntity<Long> makeFavorite(@AuthenticationPrincipal final JwtAuthentication authentication,
                                              @PathVariable final Long postId) {
-        final Long response = postService.clickFavorite(authentication.userId, postId);
+        final Long responsePostId = postService.clickFavorite(authentication.userId, postId);
         return ResponseEntity.ok()
-                .body(response);
+                .body(responsePostId);
     }
 
     @DeleteMapping("/posts/{postId}/favorite")
@@ -83,8 +83,8 @@ public class PostController {
     public ResponseEntity<List<FollowingPostDto>> explore(
             @AuthenticationPrincipal final JwtAuthentication authentication
     ) {
-        final List<FollowingPostDto> response = postService.explore(authentication.userId);
-        return ResponseEntity.ok().body(response);
+        final List<FollowingPostDto> followingPostDtos = postService.explore(authentication.userId);
+        return ResponseEntity.ok().body(followingPostDtos);
     }
 
     @GetMapping("/posts/month")
