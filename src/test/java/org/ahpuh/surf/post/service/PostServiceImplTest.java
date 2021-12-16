@@ -95,7 +95,7 @@ class PostServiceImplTest {
                 .thenReturn(post);
 
         // when
-        final Long response = postService.create(userId, request);
+        final Long response = postService.create(userId, request, null);
 
         // then
         assertAll(

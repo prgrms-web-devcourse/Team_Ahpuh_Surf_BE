@@ -3,6 +3,8 @@ package org.ahpuh.surf.post.controller;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.response.CursorResult;
+import org.ahpuh.surf.common.s3.S3Service;
+import org.ahpuh.surf.common.s3.S3Service.FileStatus;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.post.service.PostService;
@@ -10,8 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -22,59 +26,83 @@ public class PostController {
 
     private final PostService postService;
 
+    private final S3Service s3Service;
+
     @PostMapping("/posts")
-    public ResponseEntity<Long> createPost(@AuthenticationPrincipal final JwtAuthentication authentication,
-                                           @Valid @RequestBody final PostRequestDto request) {
-        final Long response = postService.create(authentication.userId, request);
+    public ResponseEntity<Long> createPost(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @Valid @RequestPart(value = "request") final PostRequestDto request,
+            @RequestPart(value = "file", required = false) final MultipartFile file
+    ) throws IOException {
+        FileStatus fileStatus = s3Service.uploadPostFile(file);
+        final Long response = postService.create(authentication.userId, request, fileStatus);
         return ResponseEntity.created(URI.create("/api/v1/posts/" + response))
                 .body(response);
     }
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<Long> updatePost(@PathVariable final Long postId, @Valid @RequestBody final PostRequestDto request) {
-        final Long response = postService.update(postId, request);
+    public ResponseEntity<Long> updatePost(
+            @PathVariable final Long postId,
+            @Valid @RequestPart(value = "request") final PostRequestDto request,
+            @RequestPart(value = "file", required = false) final MultipartFile file
+    ) throws IOException {
+        FileStatus fileStatus = s3Service.uploadPostFile(file);
+        final Long response = postService.update(postId, request, fileStatus);
         return ResponseEntity.ok()
                 .body(response);
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<PostDto> readPost(@PathVariable final Long postId) {
+    public ResponseEntity<PostDto> readPost(
+            @PathVariable final Long postId
+    ) {
         final PostDto postDto = postService.readOne(postId);
         return ResponseEntity.ok()
                 .body(postDto);
     }
 
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable final Long postId) {
+    public ResponseEntity<Void> deletePost(
+            @PathVariable final Long postId
+    ) {
         postService.delete(postId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/posts/calendarGraph")
-    public ResponseEntity<List<PostCountDto>> getCounts(@RequestParam final int year, @RequestParam final Long userId) {
+    public ResponseEntity<List<PostCountDto>> getCounts(
+            @RequestParam final int year,
+            @RequestParam final Long userId
+    ) {
         final List<PostCountDto> responses = postService.getCountsPerDayWithYear(year, userId);
         return ResponseEntity.ok()
                 .body(responses);
     }
 
     @GetMapping("/posts/score")
-    public ResponseEntity<List<CategorySimpleDto>> getScores(@RequestParam final Long userId) {
+    public ResponseEntity<List<CategorySimpleDto>> getScores(
+            @RequestParam final Long userId
+    ) {
         final List<CategorySimpleDto> responses = postService.getScoresWithCategoryByUserId(userId);
         return ResponseEntity.ok()
                 .body(responses);
     }
 
     @PostMapping("/posts/{postId}/favorite")
-    public ResponseEntity<Long> makeFavorite(@AuthenticationPrincipal final JwtAuthentication authentication,
-                                             @PathVariable final Long postId) {
+    public ResponseEntity<Long> makeFavorite(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @PathVariable final Long postId
+    ) {
         final Long response = postService.clickFavorite(authentication.userId, postId);
         return ResponseEntity.ok()
                 .body(response);
     }
 
     @DeleteMapping("/posts/{postId}/favorite")
-    public ResponseEntity<Void> cancelFavorite(@AuthenticationPrincipal final JwtAuthentication authentication,
-                                               @PathVariable final Long postId) {
+    public ResponseEntity<Void> cancelFavorite(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @PathVariable final Long postId
+    ) {
         postService.clickFavorite(authentication.userId, postId);
         return ResponseEntity.noContent().build();
     }

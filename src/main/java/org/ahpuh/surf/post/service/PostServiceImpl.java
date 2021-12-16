@@ -6,6 +6,8 @@ import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.response.CursorResult;
+import org.ahpuh.surf.common.s3.S3Service;
+import org.ahpuh.surf.common.s3.S3Service.FileStatus;
 import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.*;
@@ -32,21 +34,22 @@ public class PostServiceImpl implements PostService {
     private final PostConverter postConverter;
 
     @Transactional
-    public Long create(final Long userId, final PostRequestDto request) {
+    public Long create(final Long userId, final PostRequestDto request, final FileStatus fileStatus) {
         final User user = getUserById(userId);
         final Category category = getCategoryById(request.getCategoryId());
 
-        final Post post = PostConverter.toEntity(user, category, request);
+        final Post post = PostConverter.toEntity(user, category, request, fileStatus);
         final Post saved = postRepository.save(post);
 
         return saved.getPostId();
     }
 
     @Transactional
-    public Long update(final Long postId, final PostRequestDto request) {
+    public Long update(final Long postId, final PostRequestDto request, final FileStatus fileStatus) {
         final Category category = getCategoryById(request.getCategoryId());
         final Post post = getPostById(postId);
-        post.editPost(category, LocalDate.parse(request.getSelectedDate()), request.getContent(), request.getScore(), request.getFileUrl());
+        post.editPost(category, LocalDate.parse(request.getSelectedDate()), request.getContent(), request.getScore());
+        post.editFile(fileStatus);
 
         return postId;
     }

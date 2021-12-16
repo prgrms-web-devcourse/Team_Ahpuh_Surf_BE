@@ -8,11 +8,14 @@ import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.common.s3.S3Service;
+import org.ahpuh.surf.common.s3.S3Service.FileStatus;
 import org.ahpuh.surf.user.entity.User;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,28 +50,41 @@ public class Post extends BaseEntity {
     @Column(name = "file_url")
     private String fileUrl;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "favorite")
     private Boolean favorite;
 
     @Builder
-    public Post(final User user, final Category category, final LocalDate selectedDate, final String content, final int score, final String fileUrl) {
+    public Post(final User user, final Category category, final LocalDate selectedDate, final String content, final int score) {
         this.user = user;
         this.category = category;
         this.selectedDate = selectedDate;
         this.content = content;
         this.score = score;
-        this.fileUrl = fileUrl;
         favorite = false;
         user.addPost(this);
         category.addPost(this);
     }
 
-    public void editPost(final Category category, final LocalDate selectedDate, final String content, final int score, final String fileUrl) {
+    public void editPost(final Category category, final LocalDate selectedDate, final String content, final int score) {
         this.category = category;
         this.selectedDate = selectedDate;
         this.content = content;
         this.score = score;
-        this.fileUrl = fileUrl;
+    }
+
+    public Post editFile(final FileStatus fileStatus) {
+        if (fileStatus.fileType.equals("img")) {
+            this.imageUrl = fileStatus.fileUrl;
+            this.fileUrl = null;
+        }
+        if (fileStatus.fileType.equals("file")) {
+            this.fileUrl = fileStatus.fileUrl;
+            this.imageUrl = null;
+        }
+        return this;
     }
 
     public void updateFavorite(final Long userId) {
@@ -77,4 +93,5 @@ public class Post extends BaseEntity {
         }
         favorite = !favorite;
     }
+
 }

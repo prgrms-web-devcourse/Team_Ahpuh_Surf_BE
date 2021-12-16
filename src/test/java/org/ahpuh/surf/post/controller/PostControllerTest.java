@@ -19,8 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -68,7 +67,7 @@ class PostControllerTest {
                 .build();
         final String requestBody = objectMapper.writeValueAsString(postRequestDto);
 
-        given(postService.update(anyLong(), any(PostRequestDto.class)))
+        given(postService.update(anyLong(), any(PostRequestDto.class), null))
                 .willReturn(postId);
 
         // when
