@@ -72,8 +72,8 @@ public class PostConverter {
                         .findFirst()
                         .map(categorySimpleDto -> categorySimpleDto.getPostScores()
                                 .add(PostScoreDto.builder()
-                                        .selectedDate(postScoreCategoryDto.getSelectedDate())
-                                        .score(postScoreCategoryDto.getScore())
+                                        .x(postScoreCategoryDto.getSelectedDate())
+                                        .y(postScoreCategoryDto.getScore())
                                         .build())
                         );
             } else {
