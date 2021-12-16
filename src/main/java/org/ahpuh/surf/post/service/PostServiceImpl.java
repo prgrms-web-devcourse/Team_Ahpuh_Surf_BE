@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
         final User user = getUserById(userId);
         final Category category = getCategoryById(request.getCategoryId());
 
-        final Post post = postConverter.toEntity(user, category, request);
+        final Post post = postConverter.toEntity(user, category, request, fileStatus);
         final Post saved = postRepository.save(post);
 
         return saved.getPostId();
