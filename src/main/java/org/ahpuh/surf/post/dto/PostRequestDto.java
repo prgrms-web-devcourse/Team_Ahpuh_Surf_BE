@@ -24,5 +24,4 @@ public class PostRequestDto {
     @Max(value = 100)
     private int score;
 
-    private String fileUrl;
 }

@@ -9,10 +9,12 @@ import lombok.*;
 public class PostDto {
 
     private Long postId;
+    private Long userId;
     private Long categoryId;
     private String selectedDate;
     private String content;
     private int score;
+    private String imageUrl;
     private String fileUrl;
     private String createdAt;
     private Boolean favorite;

@@ -54,10 +54,7 @@ public class UserController {
             @Valid @RequestPart(value = "request") final UserUpdateRequestDto request,
             @RequestPart(value = "file", required = false) final MultipartFile profilePhoto
     ) throws IOException {
-        String profilePhotoUrl = null;
-        if (!profilePhoto.isEmpty()) {
-            profilePhotoUrl = s3Service.upload(profilePhoto);
-        }
+        String profilePhotoUrl = s3Service.uploadUserImg(profilePhoto);
         userService.update(authentication.userId, request, profilePhotoUrl);
         return ResponseEntity.ok().body(authentication.userId);
     }

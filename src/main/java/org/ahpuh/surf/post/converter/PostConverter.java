@@ -3,6 +3,7 @@ package org.ahpuh.surf.post.converter;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.common.s3.S3Service.FileStatus;
 import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.entity.User;
@@ -16,24 +17,29 @@ import java.util.stream.Collectors;
 @Component
 public class PostConverter {
 
-    public Post toEntity(final User user, final Category category, final PostRequestDto request) {
-        return Post.builder()
+    public Post toEntity(final User user, final Category category, final PostRequestDto request, final FileStatus fileStatus) {
+        Post postEntity = Post.builder()
                 .user(user)
                 .category(category)
                 .selectedDate(LocalDate.parse(request.getSelectedDate())) // yyyy-mm-dd
                 .content(request.getContent())
                 .score(request.getScore())
-                .fileUrl(request.getFileUrl())
                 .build();
+        if (fileStatus != null) {
+            postEntity.editFile(fileStatus);
+        }
+        return postEntity;
     }
 
     public PostDto toDto(final Post post) {
         return PostDto.builder()
                 .postId(post.getPostId())
+                .userId(post.getUser().getUserId())
                 .categoryId(post.getCategory().getCategoryId())
                 .selectedDate(post.getSelectedDate().toString())
                 .content(post.getContent())
                 .score(post.getScore())
+                .imageUrl(post.getImageUrl())
                 .fileUrl(post.getFileUrl())
                 .favorite(post.getFavorite())
                 .createdAt(post.getCreatedAt().toString())
