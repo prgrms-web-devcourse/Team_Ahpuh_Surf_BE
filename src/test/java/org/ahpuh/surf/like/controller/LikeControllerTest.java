@@ -117,6 +117,7 @@ class LikeControllerTest {
                 () -> assertThat(likes.get(0).getUserId(), is(userId1)),
                 () -> assertThat(likes.get(0).getPost().getPostId(), is(postId1))
         );
+
     }
 
     @Test

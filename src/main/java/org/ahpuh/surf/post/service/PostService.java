@@ -15,7 +15,7 @@ public interface PostService {
 
     Long update(Long postId, PostRequestDto request, FileStatus fileStatus);
 
-    PostDto readOne(Long postId);
+    PostDto readOne(Long myId, Long postId);
 
     void delete(Long postID);
 

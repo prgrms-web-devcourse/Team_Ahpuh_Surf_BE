@@ -54,9 +54,10 @@ public class PostController {
 
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDto> readPost(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
     ) {
-        final PostDto postDto = postService.readOne(postId);
+        final PostDto postDto = postService.readOne(authentication.userId, postId);
         return ResponseEntity.ok()
                 .body(postDto);
     }

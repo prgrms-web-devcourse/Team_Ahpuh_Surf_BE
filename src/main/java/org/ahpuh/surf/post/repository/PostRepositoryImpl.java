@@ -17,7 +17,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<FollowingPostDto> followingPosts(final Long userId) {
+    public List<FollowingPostDto> findFollowingPosts(final Long userId) {
         return queryFactory
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),
@@ -26,6 +26,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.postId.as("postId"),
                         post.content.as("content"),
                         post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
                         post.fileUrl.as("fileUrl"),
                         post.selectedDate,
                         post.updatedAt.as("updatedAt")
@@ -49,8 +50,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.user.eq(user))
                 .groupBy(post.selectedDate)
                 .orderBy(post.selectedDate.asc())
-                .fetch()
-                ;
+                .fetch();
     }
 
     @Override
@@ -64,8 +64,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .from(post)
                 .where(post.user.eq(user))
                 .orderBy(post.category.categoryId.asc(), post.selectedDate.asc())
-                .fetch()
-                ;
+                .fetch();
     }
 
 }

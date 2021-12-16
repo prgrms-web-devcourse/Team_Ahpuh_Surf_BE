@@ -31,8 +31,8 @@ public class PostConverter {
         return postEntity;
     }
 
-    public static PostDto toDto(final Post post) {
-        return PostDto.builder()
+    public PostDto toDto(final Post post, final Optional<Like> like) {
+        final PostDto dto = PostDto.builder()
                 .postId(post.getPostId())
                 .userId(post.getUser().getUserId())
                 .categoryId(post.getCategory().getCategoryId())
@@ -44,6 +44,8 @@ public class PostConverter {
                 .favorite(post.getFavorite())
                 .createdAt(post.getCreatedAt().toString())
                 .build();
+        like.ifPresent(likeEntity -> dto.setLiked(likeEntity.getLikeId()));
+        return dto;
     }
 
     public static PostResponseDto toPostResponseDto(final Post post, final Category category) {

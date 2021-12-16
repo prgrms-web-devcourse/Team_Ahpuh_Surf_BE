@@ -53,9 +53,9 @@ public class PostServiceImpl implements PostService {
         return postId;
     }
 
-    public PostDto readOne(final Long postId) {
+    public PostDto readOne(final Long myId, final Long postId) {
         final Post post = getPostById(postId);
-        return PostConverter.toDto(post);
+        return postConverter.toDto(post, likeRepository.findByUserIdAndPost(myId, post));
     }
 
     @Transactional
@@ -75,9 +75,14 @@ public class PostServiceImpl implements PostService {
     public CursorResult<FollowingPostDto> explore(final Long myId, final Long cursorId, final Pageable page) {
         final List<FollowingPostDto> followingPostDtos = postRepository.findFollowingPosts(myId);
         for (final FollowingPostDto dto : followingPostDtos) {
-            dto.likedCheck(likeRepository.findByUserIdAndPostId(userId, dto.getPostId()));
+            likeRepository.findByUserIdAndPost(myId, getPostById(dto.getPostId()))
+                    .ifPresent(like -> dto.setLiked(like.getLikeId()));
         }
-        return followingPostDtos;
+
+        final Long lastIdOfIndex = followingPostDtos.isEmpty() ?
+                null : followingPostDtos.get(followingPostDtos.size() - 1).getPostId();
+
+        return new CursorResult<>(followingPostDtos, hasNext(lastIdOfIndex));
     }
 
     public List<PostCountDto> getCountsPerDayWithYear(final int year, final Long userId) {
@@ -120,8 +125,8 @@ public class PostServiceImpl implements PostService {
         final Long lastIdOfIndex = postList.isEmpty() ?
                 null : postList.get(postList.size() - 1).getPostId();
 
-        final List<PostResponseDto> posts = postList.stream()
-                .map((Post post) -> PostConverter.toPostResponseDto(post, post.getCategory()))
+        final List<AllPostResponseDto> posts = postList.stream()
+                .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
                 .toList();
 
         return new CursorResult<>(posts, hasNext(lastIdOfIndex));
@@ -141,8 +146,8 @@ public class PostServiceImpl implements PostService {
         final Long lastIdOfIndex = postList.isEmpty() ?
                 null : postList.get(postList.size() - 1).getPostId();
 
-        final List<PostResponseDto> posts = postList.stream()
-                .map((Post post) -> PostConverter.toPostResponseDto(post, category))
+        final List<AllPostResponseDto> posts = postList.stream()
+                .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
                 .toList();
 
         return new CursorResult<>(posts, hasNext(lastIdOfIndex));

@@ -148,6 +148,7 @@ class PostRepositoryTest {
                         post.postId.as("postId"),
                         post.content.as("content"),
                         post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
                         post.fileUrl.as("fileUrl"),
                         post.selectedDate,
                         post.updatedAt.as("updatedAt")
@@ -170,7 +171,7 @@ class PostRepositoryTest {
         );
 
         // JpaRepository에 Querydsl 적용 test
-        final List<FollowingPostDto> findByJpaRepo = postRepository.followingPosts(userId1);
+        final List<FollowingPostDto> findByJpaRepo = postRepository.findFollowingPosts(userId1);
 
         assertAll("follow한 사용자의 모든 posts in repository",
                 () -> assertThat(findByJpaRepo.size(), is(3)),
