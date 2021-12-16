@@ -16,7 +16,6 @@ import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -64,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryResponseDto> findAllCategoryByUser(final Long userId) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
-        final List<Category> categoryList = categoryRepository.findByUser(user).orElse(Collections.emptyList());
+        final List<Category> categoryList = categoryRepository.findByUser(user);
 
         return categoryList.stream()
                 .map(categoryConverter::toCategoryResponseDto)
@@ -75,7 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryDetailResponseDto> getCategoryDashboard(final Long userId) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
-        final List<Category> categoryList = categoryRepository.findByUser(user).orElse(Collections.emptyList());
+        final List<Category> categoryList = categoryRepository.findByUser(user);
 
         return categoryList.stream()
                 .map((Category category) -> categoryConverter.toCategoryDetailResponseDto(category, (int) getAverageScore(category)))
@@ -83,7 +82,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private double getAverageScore(final Category category) {
-        return postRepository.findAllByCategory(category).stream()
+        return postRepository.findByCategory(category).stream()
                 .mapToInt(Post::getScore)
                 .average().orElse(0);
     }

@@ -46,9 +46,8 @@ public class Category extends BaseEntity {
     @Builder.Default
     private List<Post> posts = new ArrayList<>();
 
-    @Formula("(select count(1) from posts where posts.category_id = category_id AND is_deleted = false)")
-    @Builder.Default
-    private int postCount = 0;
+    @Formula("(select count(1) from posts p where p.category_id = category_id and p.is_deleted = false)")
+    private int postCount;
 
     @Builder
     public Category(final User user, final String name, final String colorCode) {
