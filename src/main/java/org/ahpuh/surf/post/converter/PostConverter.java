@@ -13,13 +13,14 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class PostConverter {
 
     public Post toEntity(final User user, final Category category, final PostRequestDto request, final FileStatus fileStatus) {
-        Post postEntity = Post.builder()
+        final Post postEntity = Post.builder()
                 .user(user)
                 .category(category)
                 .selectedDate(LocalDate.parse(request.getSelectedDate())) // yyyy-mm-dd
