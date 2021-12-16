@@ -97,14 +97,14 @@ class LikeControllerTest {
     }
 
     @Test
-    @DisplayName("게시글 좋아요와 취소를 할 수 있다.")
+    @DisplayName("게시글 좋아요를 할 수 있다.")
     @Transactional
-    void testLikeAndUnlike() throws Exception {
+    void testLike() throws Exception {
         // Given
         assertThat(likeRepository.findAll().size(), is(0));
 
         // When
-        mockMvc.perform(post("/api/v1/likes/{postId}", postId1)
+        mockMvc.perform(post("/api/v1/posts/{postId}/like", postId1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("token", userToken1))
                 .andExpect(status().isOk())
@@ -115,11 +115,32 @@ class LikeControllerTest {
         assertAll("afterLikePost",
                 () -> assertThat(likes.size(), is(1)),
                 () -> assertThat(likes.get(0).getUserId(), is(userId1)),
-                () -> assertThat(likes.get(0).getPostId(), is(postId1))
+                () -> assertThat(likes.get(0).getPost().getPostId(), is(postId1))
+        );
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요 취소를 할 수 있다.")
+    @Transactional
+    void testUnlike() throws Exception {
+        // Given
+        assertThat(likeRepository.findAll().size(), is(0));
+
+        mockMvc.perform(post("/api/v1/posts/{postId}/like", postId1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("token", userToken1))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        final List<Like> likes = likeRepository.findAll();
+        assertAll("beforeUnlikePost",
+                () -> assertThat(likes.size(), is(1)),
+                () -> assertThat(likes.get(0).getUserId(), is(userId1)),
+                () -> assertThat(likes.get(0).getPost().getPostId(), is(postId1))
         );
 
         // When
-        mockMvc.perform(delete("/api/v1/likes/{likeId}", likes.get(0).getLikeId())
+        mockMvc.perform(delete("/api/v1/posts/{postId}/unlike/{likeId}", postId1, likes.get(0).getLikeId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("token", userToken1))
                 .andExpect(status().isNoContent())
