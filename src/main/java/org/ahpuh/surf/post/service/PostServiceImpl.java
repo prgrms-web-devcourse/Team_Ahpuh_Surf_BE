@@ -99,7 +99,9 @@ public class PostServiceImpl implements PostService {
     public List<PostResponseDto> getPost(final Long userId, final Integer year, final Integer month) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
-        final List<Post> postList = postRepository.findAllByUserAndSelectedDateBetweenOrderBySelectedDate(user, LocalDate.of(year, month, 1), LocalDate.of(year, month, 31));
+        final LocalDate start = LocalDate.of(year, month, 1);
+        final LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+        final List<Post> postList = postRepository.findAllByUserAndSelectedDateBetweenOrderBySelectedDate(user, start, end);
 
         return postList.stream()
                 .map((Post post) -> PostConverter.toPostResponseDto(post, post.getCategory()))
