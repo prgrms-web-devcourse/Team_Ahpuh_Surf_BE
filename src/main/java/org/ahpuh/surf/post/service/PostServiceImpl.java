@@ -72,8 +72,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<FollowingPostDto> explore(final Long userId) {
-        final List<FollowingPostDto> followingPostDtos = postRepository.followingPosts(userId);
+    public CursorResult<FollowingPostDto> explore(final Long myId, final Long cursorId, final Pageable page) {
+        final List<FollowingPostDto> followingPostDtos = postRepository.findFollowingPosts(myId);
         for (final FollowingPostDto dto : followingPostDtos) {
             dto.likedCheck(likeRepository.findByUserIdAndPostId(userId, dto.getPostId()));
         }
@@ -109,7 +109,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public CursorResult<PostResponseDto> getAllPost(final Long userId, final Long cursorId, final Pageable page) {
+    public CursorResult<AllPostResponseDto> getAllPost(final Long myId, final Long userId, final Long cursorId, final Pageable page) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
 
@@ -128,7 +128,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public CursorResult<PostResponseDto> getAllPostByCategory(final Long userId, final Long categoryId, final Long cursorId, final Pageable page) {
+    public CursorResult<AllPostResponseDto> getAllPostByCategory(final Long myId, final Long userId, final Long categoryId, final Long cursorId, final Pageable page) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
         final Category category = categoryRepository.findById(categoryId)

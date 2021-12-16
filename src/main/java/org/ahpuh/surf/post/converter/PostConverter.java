@@ -58,6 +58,21 @@ public class PostConverter {
                 .build();
     }
 
+    public AllPostResponseDto toAllPostResponseDto(final Post post, final Optional<Like> like) {
+        final AllPostResponseDto allPostResponseDto = AllPostResponseDto.builder()
+                .categoryName(post.getCategory().getName())
+                .colorCode(post.getCategory().getColorCode())
+                .postId(post.getPostId())
+                .content(post.getContent())
+                .score(post.getScore())
+                .imageUrl(post.getImageUrl())
+                .fileUrl(post.getFileUrl())
+                .selectedDate(post.getSelectedDate().toString())
+                .build();
+        like.ifPresent(likeEntity -> allPostResponseDto.setLiked(likeEntity.getLikeId()));
+        return allPostResponseDto;
+    }
+
     public List<CategorySimpleDto> sortPostScoresByCategory(
             final List<PostScoreCategoryDto> posts,
             final List<Category> categories) {

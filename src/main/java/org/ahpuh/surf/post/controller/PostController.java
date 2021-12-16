@@ -108,10 +108,11 @@ public class PostController {
     }
 
     @GetMapping("/follow/posts")
-    public ResponseEntity<List<FollowingPostDto>> explore(
-            @AuthenticationPrincipal final JwtAuthentication authentication
+    public ResponseEntity<CursorResult<FollowingPostDto>> explore(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @RequestParam final Long cursorId
     ) {
-        final List<FollowingPostDto> response = postService.explore(authentication.userId);
+        final CursorResult<FollowingPostDto> response = postService.explore(authentication.userId, cursorId, PageRequest.of(0, 10));
         return ResponseEntity.ok().body(response);
     }
 
@@ -126,20 +127,22 @@ public class PostController {
     }
 
     @GetMapping("/posts/all")
-    public ResponseEntity<CursorResult<PostResponseDto>> getAllPost(
+    public ResponseEntity<CursorResult<AllPostResponseDto>> getAllPost(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Long userId,
             @RequestParam final Long cursorId
     ) {
-        return ResponseEntity.ok().body(postService.getAllPost(userId, cursorId, PageRequest.of(0, 10)));
+        return ResponseEntity.ok().body(postService.getAllPost(authentication.userId, userId, cursorId, PageRequest.of(0, 10)));
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<CursorResult<PostResponseDto>> getAllPostByCategory(
+    public ResponseEntity<CursorResult<AllPostResponseDto>> getAllPostByCategory(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Long userId,
             @RequestParam final Long categoryId,
             @RequestParam final Long cursorId
     ) {
-        return ResponseEntity.ok().body(postService.getAllPostByCategory(userId, categoryId, cursorId, PageRequest.of(0, 10)));
+        return ResponseEntity.ok().body(postService.getAllPostByCategory(authentication.userId, userId, categoryId, cursorId, PageRequest.of(0, 10)));
     }
 
     @GetMapping("/recentscore")
