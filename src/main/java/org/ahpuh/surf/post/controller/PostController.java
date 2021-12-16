@@ -100,7 +100,7 @@ public class PostController {
     @GetMapping("/posts/all")
     public ResponseEntity<CursorResult<PostResponseDto>> getAllPost(
             @RequestParam final Long userId,
-            final Long cursorId
+            @RequestParam final Long cursorId
     ) {
         return ResponseEntity.ok().body(postService.getAllPost(userId, cursorId, PageRequest.of(0, 10)));
     }
@@ -109,9 +109,16 @@ public class PostController {
     public ResponseEntity<CursorResult<PostResponseDto>> getAllPostByCategory(
             @RequestParam final Long userId,
             @RequestParam final Long categoryId,
-            final Long cursorId
+            @RequestParam final Long cursorId
     ) {
         return ResponseEntity.ok().body(postService.getAllPostByCategory(userId, categoryId, cursorId, PageRequest.of(0, 10)));
+    }
+
+    @GetMapping("/recentscore")
+    public ResponseEntity<Integer> getAllPostByCategory(
+            @RequestParam final Long categoryId
+    ) {
+        return ResponseEntity.ok().body(postService.getRecentScore(categoryId));
     }
 
 }

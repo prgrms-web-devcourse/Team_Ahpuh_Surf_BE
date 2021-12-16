@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CategoryService {
 
-    Long createCategory(Long uerId, CategoryCreateRequestDto categoryDto);
+    Long createCategory(Long userId, CategoryCreateRequestDto categoryDto);
 
     Long updateCategory(Long categoryId, CategoryUpdateRequestDto categoryDto);
 

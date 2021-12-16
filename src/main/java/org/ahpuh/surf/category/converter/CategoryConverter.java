@@ -24,15 +24,14 @@ public class CategoryConverter {
                 .name(category.getName())
                 .isPublic(category.getIsPublic())
                 .colorCode(category.getColorCode())
-                .recentScore(category.getRecentScore())
                 .build();
     }
 
-    public CategoryDetailResponseDto toCategoryDetailResponseDto(final Category category) {
+    public CategoryDetailResponseDto toCategoryDetailResponseDto(final Category category, int averageScore) {
         return CategoryDetailResponseDto.builder()
                 .categoryId(category.getCategoryId())
                 .name(category.getName())
-                .averageScore(category.getAverageScore())
+                .averageScore(averageScore)
                 .isPublic(category.getIsPublic())
                 .colorCode(category.getColorCode())
                 .postCount(category.getPostCount())

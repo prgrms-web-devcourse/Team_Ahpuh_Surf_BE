@@ -111,7 +111,7 @@ public class PostServiceImpl implements PostService {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
 
-        final List<Post> postList = cursorId == null ?
+        final List<Post> postList = cursorId == 0 ?
                 postRepository.findAllByUserOrderBySelectedDateDesc(user, page) :
                 postRepository.findByUserAndPostIdLessThanOrderBySelectedDateDesc(user, cursorId, page);
 
@@ -132,7 +132,7 @@ public class PostServiceImpl implements PostService {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
 
-        final List<Post> postList = cursorId == null ?
+        final List<Post> postList = cursorId == 0 ?
                 postRepository.findAllByUserAndCategoryOrderBySelectedDateDesc(user, category, page) :
                 postRepository.findByUserAndCategoryAndPostIdLessThanOrderBySelectedDateDesc(user, category, cursorId, page);
 
@@ -144,6 +144,14 @@ public class PostServiceImpl implements PostService {
                 .toList();
 
         return new CursorResult<>(posts, hasNext(lastIdOfIndex));
+    }
+
+    public int getRecentScore(final Long categoryId) {
+        final Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
+        final Post post = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category);
+
+        return post.getScore();
     }
 
     private Category getCategoryById(final Long categoryId) {

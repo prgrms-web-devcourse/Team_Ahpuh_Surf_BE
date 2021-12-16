@@ -9,12 +9,13 @@ import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.post.entity.Post;
+import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -23,6 +24,8 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+
+    private final PostRepository postRepository;
 
     private final UserRepository userRepository;
 
@@ -60,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryResponseDto> findAllCategoryByUser(final Long userId) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
-        final List<Category> categoryList = categoryRepository.findByUser(user).orElse(Collections.emptyList());
+        final List<Category> categoryList = categoryRepository.findByUser(user);
 
         return categoryList.stream()
                 .map(categoryConverter::toCategoryResponseDto)
@@ -71,10 +74,16 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryDetailResponseDto> getCategoryDashboard(final Long userId) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
-        final List<Category> categoryList = categoryRepository.findByUser(user).orElse(Collections.emptyList());
+        final List<Category> categoryList = categoryRepository.findByUser(user);
 
         return categoryList.stream()
-                .map(categoryConverter::toCategoryDetailResponseDto)
+                .map((Category category) -> categoryConverter.toCategoryDetailResponseDto(category, (int) getAverageScore(category)))
                 .toList();
+    }
+
+    private double getAverageScore(final Category category) {
+        return postRepository.findByCategory(category).stream()
+                .mapToInt(Post::getScore)
+                .average().orElse(0);
     }
 }
