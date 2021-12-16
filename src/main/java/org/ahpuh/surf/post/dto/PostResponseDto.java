@@ -18,6 +18,8 @@ public class PostResponseDto {
 
     private int score;
 
+    private String imageUrl;
+
     private String fileUrl;
 
     private String selectedDate;

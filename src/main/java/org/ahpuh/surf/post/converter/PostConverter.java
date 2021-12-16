@@ -57,6 +57,7 @@ public class PostConverter {
                 .postId(post.getPostId())
                 .content(post.getContent())
                 .score(post.getScore())
+                .imageUrl(post.getImageUrl())
                 .fileUrl(post.getFileUrl())
                 .selectedDate(post.getSelectedDate().toString())
                 .build();

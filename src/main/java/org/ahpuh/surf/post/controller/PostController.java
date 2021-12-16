@@ -9,6 +9,7 @@ import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.post.service.PostService;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,25 +29,25 @@ public class PostController {
 
     private final S3Service s3Service;
 
-    @PostMapping("/posts")
+    @PostMapping(value = "/posts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Long> createPost(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @Valid @RequestPart(value = "request") final PostRequestDto request,
             @RequestPart(value = "file", required = false) final MultipartFile file
     ) throws IOException {
-        FileStatus fileStatus = s3Service.uploadPostFile(file);
+        final FileStatus fileStatus = s3Service.uploadPostFile(file);
         final Long postId = postService.create(authentication.userId, request, fileStatus);
         return ResponseEntity.created(URI.create("/api/v1/posts/" + postId))
                 .body(postId);
     }
 
-    @PutMapping("/posts/{postId}")
+    @PutMapping(value = "/posts/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Long> updatePost(
             @PathVariable final Long postId,
             @Valid @RequestPart(value = "request") final PostRequestDto request,
             @RequestPart(value = "file", required = false) final MultipartFile file
     ) throws IOException {
-        FileStatus fileStatus = s3Service.uploadPostFile(file);
+        final FileStatus fileStatus = s3Service.uploadPostFile(file);
         final Long responsePostId = postService.update(postId, request, fileStatus);
         return ResponseEntity.ok().body(responsePostId);
     }
