@@ -35,9 +35,9 @@ public class PostController {
             @RequestPart(value = "file", required = false) final MultipartFile file
     ) throws IOException {
         FileStatus fileStatus = s3Service.uploadPostFile(file);
-        final Long response = postService.create(authentication.userId, request, fileStatus);
-        return ResponseEntity.created(URI.create("/api/v1/posts/" + response))
-                .body(response);
+        final Long postId = postService.create(authentication.userId, request, fileStatus);
+        return ResponseEntity.created(URI.create("/api/v1/posts/" + postId))
+                .body(postId);
     }
 
     @PutMapping("/posts/{postId}")
@@ -47,9 +47,8 @@ public class PostController {
             @RequestPart(value = "file", required = false) final MultipartFile file
     ) throws IOException {
         FileStatus fileStatus = s3Service.uploadPostFile(file);
-        final Long response = postService.update(postId, request, fileStatus);
-        return ResponseEntity.ok()
-                .body(response);
+        final Long responsePostId = postService.update(postId, request, fileStatus);
+        return ResponseEntity.ok().body(responsePostId);
     }
 
     @GetMapping("/posts/{postId}")
@@ -74,18 +73,16 @@ public class PostController {
             @RequestParam final int year,
             @RequestParam final Long userId
     ) {
-        final List<PostCountDto> responses = postService.getCountsPerDayWithYear(year, userId);
-        return ResponseEntity.ok()
-                .body(responses);
+        final List<PostCountDto> postCountDtos = postService.getCountsPerDayWithYear(year, userId);
+        return ResponseEntity.ok().body(postCountDtos);
     }
 
     @GetMapping("/posts/score")
     public ResponseEntity<List<CategorySimpleDto>> getScores(
             @RequestParam final Long userId
     ) {
-        final List<CategorySimpleDto> responses = postService.getScoresWithCategoryByUserId(userId);
-        return ResponseEntity.ok()
-                .body(responses);
+        final List<CategorySimpleDto> categorySimpleDtos = postService.getScoresWithCategoryByUserId(userId);
+        return ResponseEntity.ok().body(categorySimpleDtos);
     }
 
     @PostMapping("/posts/{postId}/favorite")
@@ -93,9 +90,8 @@ public class PostController {
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
     ) {
-        final Long response = postService.clickFavorite(authentication.userId, postId);
-        return ResponseEntity.ok()
-                .body(response);
+        final Long responsePostId = postService.clickFavorite(authentication.userId, postId);
+        return ResponseEntity.ok().body(responsePostId);
     }
 
     @DeleteMapping("/posts/{postId}/favorite")
@@ -111,8 +107,8 @@ public class PostController {
     public ResponseEntity<List<FollowingPostDto>> explore(
             @AuthenticationPrincipal final JwtAuthentication authentication
     ) {
-        final List<FollowingPostDto> response = postService.explore(authentication.userId);
-        return ResponseEntity.ok().body(response);
+        final List<FollowingPostDto> followingPostDtos = postService.explore(authentication.userId);
+        return ResponseEntity.ok().body(followingPostDtos);
     }
 
     @GetMapping("/posts/month")

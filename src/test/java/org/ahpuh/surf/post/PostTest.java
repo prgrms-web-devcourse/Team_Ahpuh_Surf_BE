@@ -105,16 +105,16 @@ public class PostTest {
 
                 () -> assertThat(categorySimpleDto1.getCategoryId()).isEqualTo(category2.getCategoryId()),
                 () -> assertThat(categorySimpleDto1.getPostScores().size()).isEqualTo(4),
-                () -> assertThat(categorySimpleDto1.getPostScores().get(0).getScore()).isEqualTo(100),
-                () -> assertThat(categorySimpleDto1.getPostScores().get(1).getScore()).isEqualTo(80),
-                () -> assertThat(categorySimpleDto1.getPostScores().get(2).getScore()).isEqualTo(50),
-                () -> assertThat(categorySimpleDto1.getPostScores().get(3).getScore()).isEqualTo(90),
+                () -> assertThat(categorySimpleDto1.getPostScores().get(0).getY()).isEqualTo(100),
+                () -> assertThat(categorySimpleDto1.getPostScores().get(1).getY()).isEqualTo(80),
+                () -> assertThat(categorySimpleDto1.getPostScores().get(2).getY()).isEqualTo(50),
+                () -> assertThat(categorySimpleDto1.getPostScores().get(3).getY()).isEqualTo(90),
 
                 () -> assertThat(categorySimpleDto2.getCategoryId()).isEqualTo(category3.getCategoryId()),
                 () -> assertThat(categorySimpleDto2.getPostScores().size()).isEqualTo(3),
-                () -> assertThat(categorySimpleDto2.getPostScores().get(0).getScore()).isEqualTo(90),
-                () -> assertThat(categorySimpleDto2.getPostScores().get(1).getScore()).isEqualTo(100),
-                () -> assertThat(categorySimpleDto2.getPostScores().get(2).getScore()).isEqualTo(50)
+                () -> assertThat(categorySimpleDto2.getPostScores().get(0).getY()).isEqualTo(90),
+                () -> assertThat(categorySimpleDto2.getPostScores().get(1).getY()).isEqualTo(100),
+                () -> assertThat(categorySimpleDto2.getPostScores().get(2).getY()).isEqualTo(50)
         );
     }
 

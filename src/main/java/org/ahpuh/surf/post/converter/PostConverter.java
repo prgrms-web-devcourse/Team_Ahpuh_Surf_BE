@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Component
 public class PostConverter {
 
-    public static Post toEntity(final User user, final Category category, final PostRequestDto request, final FileStatus fileStatus) {
+    public Post toEntity(final User user, final Category category, final PostRequestDto request, final FileStatus fileStatus) {
         Post postEntity = Post.builder()
                 .user(user)
                 .category(category)
@@ -31,7 +31,7 @@ public class PostConverter {
         return postEntity;
     }
 
-    public static PostDto toDto(final Post post) {
+    public PostDto toDto(final Post post) {
         return PostDto.builder()
                 .postId(post.getPostId())
                 .userId(post.getUser().getUserId())
@@ -46,7 +46,7 @@ public class PostConverter {
                 .build();
     }
 
-    public static PostResponseDto toPostResponseDto(final Post post, final Category category) {
+    public PostResponseDto toPostResponseDto(final Post post, final Category category) {
         return PostResponseDto.builder()
                 .categoryName(category.getName())
                 .colorCode(category.getColorCode())
@@ -78,8 +78,8 @@ public class PostConverter {
                         .findFirst()
                         .map(categorySimpleDto -> categorySimpleDto.getPostScores()
                                 .add(PostScoreDto.builder()
-                                        .selectedDate(postScoreCategoryDto.getSelectedDate())
-                                        .score(postScoreCategoryDto.getScore())
+                                        .x(postScoreCategoryDto.getSelectedDate())
+                                        .y(postScoreCategoryDto.getScore())
                                         .build())
                         );
             } else {

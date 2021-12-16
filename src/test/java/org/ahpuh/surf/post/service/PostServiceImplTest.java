@@ -2,7 +2,7 @@ package org.ahpuh.surf.post.service;
 
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
-import org.ahpuh.surf.post.dto.PostDto;
+import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
@@ -20,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,6 +27,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PostServiceImplTest {
+
+    @Mock
+    private PostConverter postConverter;
 
     @Mock
     private PostRepository postRepository;
@@ -91,6 +93,8 @@ class PostServiceImplTest {
                 .content(content)
                 .score(score)
                 .build();
+        when(postConverter.toEntity(any(), any(), any()))
+                .thenReturn(post);
         when(postRepository.save(any(Post.class)))
                 .thenReturn(post);
 
