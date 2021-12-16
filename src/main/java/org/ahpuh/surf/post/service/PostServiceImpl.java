@@ -5,14 +5,10 @@ import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
-import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.common.response.CursorResult;
+import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.converter.PostConverter;
-import org.ahpuh.surf.post.dto.FollowingPostDto;
-import org.ahpuh.surf.post.dto.PostCountDto;
-import org.ahpuh.surf.post.dto.PostDto;
-import org.ahpuh.surf.post.dto.PostRequestDto;
-import org.ahpuh.surf.post.dto.PostResponseDto;
+import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
@@ -33,6 +29,7 @@ public class PostServiceImpl implements PostService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final PostConverter postConverter;
 
     @Transactional
     public Long create(final Long userId, final PostRequestDto request) {
@@ -88,7 +85,9 @@ public class PostServiceImpl implements PostService {
 
     public List<CategorySimpleDto> getScoresWithCategoryByUserId(final Long userId) {
         final User user = getUserById(userId);
-        return postRepository.findAllScoreWithCategoryByUser(user);
+        final List<PostScoreCategoryDto> posts = postRepository.findAllScoreWithCategoryByUser(user);
+        final List<Category> categories = categoryRepository.findAll();
+        return postConverter.sortPostScoresByCategory(posts, categories);
     }
 
     private User getUserById(final Long userId) {

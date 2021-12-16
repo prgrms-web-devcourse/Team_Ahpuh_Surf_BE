@@ -1,16 +1,8 @@
 package org.ahpuh.surf.post.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.ahpuh.surf.post.dto.FollowingPostDto;
-import org.ahpuh.surf.post.dto.QFollowingPostDto;
-
-import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.ahpuh.surf.category.dto.CategorySimpleDto;
-import org.ahpuh.surf.post.dto.FollowingPostDto;
-import org.ahpuh.surf.post.dto.PostCountDto;
-import org.ahpuh.surf.post.dto.QFollowingPostDto;
-import org.ahpuh.surf.post.dto.QPostCountDto;
+import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.user.entity.User;
 
 import java.time.LocalDate;
@@ -62,27 +54,18 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     }
 
     @Override
-    public List<CategorySimpleDto> findAllScoreWithCategoryByUser(final User user) {
-        // TODO: query 수정
-        /*return queryFactory
-                .select(new QCategorySimpleDto(
-                        post.category.categoryId.as("categoryId"),
-                        post.category.name.as("categoryName"),
-                        post.category.colorCode.as("colorCode"),
-                        ExpressionUtils.as(
-                                JPAExpressions
-                                        .select(new QPostScoreDto(post.selectedDate, post.score))
-                                        .from(post)
-                                        .where(post.category.eq()),
-                                "posts")
+    public List<PostScoreCategoryDto> findAllScoreWithCategoryByUser(final User user) {
+        return queryFactory
+                .select(new QPostScoreCategoryDto(
+                        post.category.as("category"),
+                        post.selectedDate.as("selectedDate"),
+                        post.score.as("score")
                 ))
                 .from(post)
-                .where(post.selectedDate.after(LocalDate.now().minusYears(1)),  // 현재부터 1년 전
-                        post.user.eq(user))
-                .groupBy(post.category)
+                .where(post.user.eq(user))
+                .orderBy(post.category.categoryId.asc(), post.selectedDate.asc())
                 .fetch()
-                ;*/
-        return null;
+                ;
     }
 
 }
