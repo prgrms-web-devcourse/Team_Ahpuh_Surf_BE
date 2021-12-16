@@ -8,14 +8,12 @@ import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
-import org.ahpuh.surf.common.s3.S3Service;
 import org.ahpuh.surf.common.s3.S3Service.FileStatus;
 import org.ahpuh.surf.user.entity.User;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

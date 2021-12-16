@@ -6,7 +6,6 @@ import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.response.CursorResult;
-import org.ahpuh.surf.common.s3.S3Service;
 import org.ahpuh.surf.common.s3.S3Service.FileStatus;
 import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.converter.PostConverter;
