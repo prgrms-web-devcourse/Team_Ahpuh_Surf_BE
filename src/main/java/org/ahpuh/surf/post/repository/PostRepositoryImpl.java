@@ -49,8 +49,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.user.eq(user))
                 .groupBy(post.selectedDate)
                 .orderBy(post.selectedDate.asc())
-                .fetch()
-                ;
+                .fetch();
     }
 
     @Override
@@ -64,8 +63,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .from(post)
                 .where(post.user.eq(user))
                 .orderBy(post.category.categoryId.asc(), post.selectedDate.asc())
-                .fetch()
-                ;
+                .fetch();
     }
 
 }
