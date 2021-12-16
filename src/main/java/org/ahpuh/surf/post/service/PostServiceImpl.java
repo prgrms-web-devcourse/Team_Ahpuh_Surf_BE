@@ -48,7 +48,9 @@ public class PostServiceImpl implements PostService {
         final Category category = getCategoryById(request.getCategoryId());
         final Post post = getPostById(postId);
         post.editPost(category, LocalDate.parse(request.getSelectedDate()), request.getContent(), request.getScore());
-        post.editFile(fileStatus);
+        if (fileStatus != null) {
+            post.editFile(fileStatus);
+        }
 
         return postId;
     }
