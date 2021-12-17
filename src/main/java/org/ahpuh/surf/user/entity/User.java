@@ -87,13 +87,13 @@ public class User extends BaseEntity {
         this.permission = permission;
     }
 
-    public void update(final UserUpdateRequestDto request, final String profilePhotoUrl) {
+    public void update(final PasswordEncoder passwordEncoder, final UserUpdateRequestDto request, final String profilePhotoUrl) {
         this.userName = request.getUserName();
         this.url = request.getUrl();
         this.aboutMe = request.getAboutMe();
         this.accountPublic = request.getAccountPublic();
         if (request.getPassword() != null) {
-            this.password = request.getPassword();
+            this.password = passwordEncoder.encode(request.getPassword());
         }
         if (profilePhotoUrl != null) {
             this.profilePhotoUrl = profilePhotoUrl;

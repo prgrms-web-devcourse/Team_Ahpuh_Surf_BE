@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public Long update(final Long userId, final UserUpdateRequestDto updateDto, final String profilePhotoUrl) {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        userEntity.update(updateDto, profilePhotoUrl);
+        userEntity.update(passwordEncoder, updateDto, profilePhotoUrl);
         return userEntity.getUserId();
     }
 
