@@ -75,7 +75,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public CursorResult<FollowingPostDto> explore(final Long myId, final Long cursorId, final Pageable page) {
-        final List<FollowingPostDto> followingPostDtos = postRepository.findFollowingPosts(myId);
+
+        final Post findPost = postRepository.findById(cursorId).orElse(null);
+
+        final List<FollowingPostDto> followingPostDtos = findPost == null ?
+                postRepository.findFollowingPosts(myId, page) :
+                postRepository.findNextFollowingPosts(myId, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
+
         for (final FollowingPostDto dto : followingPostDtos) {
             likeRepository.findByUserIdAndPost(myId, getPostById(dto.getPostId()))
                     .ifPresent(like -> dto.setLiked(like.getLikeId()));
