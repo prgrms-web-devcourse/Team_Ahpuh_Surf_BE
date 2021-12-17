@@ -32,7 +32,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public void unlike(final Long postId, final Long likeId) {
-        final Like like = likeRepository.findById(likeId).orElseThrow(() -> EntityExceptionHandler.LikeNotFound(likeId));
+        final Like like = likeRepository.findById(likeId).orElseThrow(() -> new IllegalArgumentException("좋아요한 기록이 없습니다." + likeId));
         if (!Objects.equals(like.getPost().getPostId(), postId)) {
             throw new IllegalArgumentException("The post ID does not match. " + postId);
         }
