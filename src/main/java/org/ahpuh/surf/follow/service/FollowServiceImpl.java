@@ -46,7 +46,7 @@ public class FollowServiceImpl implements FollowService {
         final User followedUser = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
 
-        final Follow followEntity = followRepository.findByUserAndAndFollowedUser(me, followedUser)
+        final Follow followEntity = followRepository.findByUserAndFollowedUser(me, followedUser)
                 .orElseThrow(EntityExceptionHandler::FollowNotFound);
 
         followRepository.delete(followEntity);

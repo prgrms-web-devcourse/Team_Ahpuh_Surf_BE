@@ -21,7 +21,7 @@ public class UserConverter {
                 .build();
     }
 
-    public UserDto toUserDto(final User userEntity) {
+    public UserDto toUserDto(final User userEntity, final long followingCount, final long followerCount) {
         return UserDto.builder()
                 .userId(userEntity.getUserId())
                 .email(userEntity.getEmail())
@@ -29,8 +29,8 @@ public class UserConverter {
                 .profilePhotoUrl(userEntity.getProfilePhotoUrl())
                 .aboutMe(userEntity.getAboutMe())
                 .url(userEntity.getUrl())
-                .followerCount(userEntity.getFollowers().size())
-                .followingCount(userEntity.getFollowing().size())
+                .followingCount(followingCount)
+                .followerCount(followerCount)
                 .accountPublic(userEntity.getAccountPublic())
                 .build();
     }
