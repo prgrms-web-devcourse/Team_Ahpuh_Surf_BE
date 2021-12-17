@@ -32,8 +32,8 @@ public class EntityExceptionHandler {
         return new IllegalArgumentException("삭제하려는 팔로우 기록이 없습니다.");
     }
 
-    public static IllegalArgumentException LikeNotFound() {
-        return new IllegalArgumentException("좋아요한 기록이 없습니다.");
+    public static IllegalArgumentException LikeNotFound(final Long likeId) {
+        return new IllegalArgumentException("좋아요한 기록이 없습니다." + likeId);
     }
 
     public static IllegalArgumentException UserNotMatching(final Long userId, final Long requestUserId) {
