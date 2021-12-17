@@ -1,6 +1,7 @@
 package org.ahpuh.surf.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
@@ -81,6 +82,10 @@ public class UserServiceImpl implements UserService {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
         userEntity.delete();
+        userEntity.getCategories()
+                .forEach(BaseEntity::delete);
+        userEntity.getPosts()
+                .forEach(BaseEntity::delete);
     }
 
 }
