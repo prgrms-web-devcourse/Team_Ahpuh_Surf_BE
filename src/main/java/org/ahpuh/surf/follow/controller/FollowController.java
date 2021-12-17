@@ -28,16 +28,17 @@ public class FollowController {
                 .body(followId);
     }
 
-    @DeleteMapping("/follow/{followId}")
+    @DeleteMapping("/follow/{userId}")
     public ResponseEntity<Void> unfollow(
-            @PathVariable final Long followId
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @PathVariable final Long userId
     ) {
-        followService.unfollow(followId);
+        followService.unfollow(authentication.userId, userId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/users/{userId}/followers")
-    public ResponseEntity<List<FollowUserDto>> findFollowingList(
+    public ResponseEntity<List<FollowUserDto>> findFollowersList(
             @PathVariable final Long userId
     ) {
         final List<FollowUserDto> response = followService.findFollowerList(userId);
@@ -45,7 +46,7 @@ public class FollowController {
     }
 
     @GetMapping("/users/{userId}/following")
-    public ResponseEntity<List<FollowUserDto>> findFollowList(
+    public ResponseEntity<List<FollowUserDto>> findFollowingList(
             @PathVariable final Long userId
     ) {
         final List<FollowUserDto> response = followService.findFollowingList(userId);

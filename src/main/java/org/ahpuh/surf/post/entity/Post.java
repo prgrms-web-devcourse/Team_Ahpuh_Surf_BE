@@ -55,7 +55,8 @@ public class Post extends BaseEntity {
     private String imageUrl;
 
     @Column(name = "favorite")
-    private Boolean favorite;
+    @Builder.Default
+    private Boolean favorite = false;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true)
     @Builder.Default

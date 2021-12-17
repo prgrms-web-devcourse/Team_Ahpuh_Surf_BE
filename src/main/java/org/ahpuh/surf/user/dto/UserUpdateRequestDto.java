@@ -2,7 +2,6 @@ package org.ahpuh.surf.user.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -13,7 +12,6 @@ public class UserUpdateRequestDto {
 
     private String userName;
 
-    @NotBlank(message = "password must be provided.")
     private String password;
 
     private String url;

@@ -1,6 +1,7 @@
 package org.ahpuh.surf.follow.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.follow.converter.FollowConverter;
 import org.ahpuh.surf.follow.dto.FollowUserDto;
 import org.ahpuh.surf.follow.entity.Follow;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.ahpuh.surf.common.exception.EntityExceptionHandler.*;
+import static org.ahpuh.surf.common.exception.EntityExceptionHandler.UserNotFound;
 
 @Service
 @RequiredArgsConstructor
@@ -39,27 +40,23 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     @Transactional
-    public void unfollow(final Long followId) {
-        final Follow followEntity = followRepository.findById(followId)
-                .orElseThrow(() -> FollowNotFound(followId));
-        final User user = followEntity.getUser();
-        final User followedUser = followEntity.getFollowedUser();
+    public void unfollow(final Long myId, final Long userId) {
+        final User me = userRepository.findById(myId)
+                .orElseThrow(() -> UserNotFound(myId));
+        final User followedUser = userRepository.findById(userId)
+                .orElseThrow(() -> UserNotFound(userId));
 
-        if (!user.getFollowing().remove(followEntity)) {
-            throw FollowingNotFound();
-        }
-        if (!followedUser.getFollowers().remove(followEntity)) {
-            throw FollowingNotFound();
-        }
+        final Follow followEntity = followRepository.findByUserAndAndFollowedUser(me, followedUser)
+                .orElseThrow(EntityExceptionHandler::FollowNotFound);
 
-        followRepository.deleteById(followId);
+        followRepository.delete(followEntity);
     }
 
     @Override
     public List<FollowUserDto> findFollowerList(final Long userId) {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        return userEntity.getFollowers()
+        return followRepository.findByFollowedUser(userEntity)
                 .stream()
                 .map(Follow::getUser)
                 .map(followConverter::toFollowUserDto)
@@ -70,7 +67,7 @@ public class FollowServiceImpl implements FollowService {
     public List<FollowUserDto> findFollowingList(final Long userId) {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        return userEntity.getFollowing()
+        return followRepository.findByUser(userEntity)
                 .stream()
                 .map(Follow::getFollowedUser)
                 .map(followConverter::toFollowUserDto)

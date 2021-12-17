@@ -41,6 +41,9 @@ class FollowControllerTest {
     @Autowired
     private UserController userController;
 
+    private User user1;
+    private User user2;
+    private User user3;
     private Long userId1;
     private Long userId2;
     private Long userId3;
@@ -48,24 +51,24 @@ class FollowControllerTest {
 
     @BeforeEach
     void setUp() {
-        userId1 = userRepository.save(User.builder()
-                        .email("user1@naver.com")
-                        .userName("name")
-                        .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
-                        .build())
-                .getUserId();
-        userId2 = userRepository.save(User.builder()
-                        .email("user2@naver.com")
-                        .userName("name")
-                        .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
-                        .build())
-                .getUserId();
-        userId3 = userRepository.save(User.builder()
-                        .email("user3@naver.com")
-                        .userName("name")
-                        .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
-                        .build())
-                .getUserId();
+        user1 = userRepository.save(User.builder()
+                .email("user1@naver.com")
+                .userName("name")
+                .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
+                .build());
+        userId1 = user1.getUserId();
+        user2 = userRepository.save(User.builder()
+                .email("user2@naver.com")
+                .userName("name")
+                .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
+                .build());
+        userId2 = user2.getUserId();
+        user3 = userRepository.save(User.builder()
+                .email("user3@naver.com")
+                .userName("name")
+                .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
+                .build());
+        userId3 = user3.getUserId();
 
         final UserLoginRequestDto userJoinRequest = UserLoginRequestDto.builder()
                 .email("user1@naver.com")
@@ -80,17 +83,6 @@ class FollowControllerTest {
     @DisplayName("팔로우를 할 수 있다.")
     @Transactional
     void testFollow() throws Exception {
-        // Given
-        final User user1 = userRepository.getById(userId1);
-        final User user2 = userRepository.getById(userId2);
-
-        assertAll("beforeFollow",
-                () -> assertThat(user1.getEmail(), is("user1@naver.com")),
-                () -> assertThat(user1.getFollowing().size(), is(0)),
-                () -> assertThat(user2.getEmail(), is("user2@naver.com")),
-                () -> assertThat(user2.getFollowers().size(), is(0))
-        );
-
         // When
         mockMvc.perform(post("/api/v1/follow")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -100,15 +92,11 @@ class FollowControllerTest {
                 .andDo(print());
 
         // Then
-        final User afterFollowUser1 = userRepository.getById(userId1);
-        final User afterFollowUser2 = userRepository.getById(userId2);
+        final List<Follow> allFollow = followRepository.findAll();
         assertAll("afterFollow",
-                () -> assertThat(afterFollowUser1.getFollowing().size(), is(1)),
-                () -> assertThat(afterFollowUser1.getFollowing().get(0).getUser().getUserId(), is(userId1)),
-                () -> assertThat(afterFollowUser1.getFollowing().get(0).getFollowedUser().getUserId(), is(userId2)),
-                () -> assertThat(afterFollowUser2.getFollowers().size(), is(1)),
-                () -> assertThat(afterFollowUser2.getFollowers().get(0).getUser().getUserId(), is(userId1)),
-                () -> assertThat(afterFollowUser2.getFollowers().get(0).getFollowedUser().getUserId(), is(userId2))
+                () -> assertThat(allFollow.size(), is(1)),
+                () -> assertThat(allFollow.get(0).getUser(), is(user1)),
+                () -> assertThat(allFollow.get(0).getFollowedUser(), is(user2))
         );
     }
 
@@ -117,74 +105,83 @@ class FollowControllerTest {
     @Transactional
     void testUnfollow() throws Exception {
         // Given
-        mockMvc.perform(post("/api/v1/follow")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userId2))
-                        .header("token", token))
-                .andExpect(status().isCreated())
-                .andDo(print());
+        followRepository.save(Follow.builder()
+                .user(user1)
+                .followedUser(user2)
+                .build());
 
         final List<Follow> follows = followRepository.findAll();
-        assertAll("beforeFollow",
-                () -> assertThat(userRepository.getById(userId1).getFollowing().size(), is(1)),
-                () -> assertThat(userRepository.getById(userId2).getFollowers().size(), is(1)),
-                () -> assertThat(follows.size(), is(1))
+        assertAll("beforeUnfollow",
+                () -> assertThat(follows.size(), is(1)),
+                () -> assertThat(follows.get(0).getUser(), is(user1)),
+                () -> assertThat(follows.get(0).getFollowedUser(), is(user2))
         );
-        final Long followid = follows.get(0).getFollowId();
 
         // When
-        mockMvc.perform(delete("/api/v1/follow/{followId}", followid)
+        mockMvc.perform(delete("/api/v1/follow/{userId}", userId2)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("token", token))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
         // Then
-        assertAll("afterFollow",
-                () -> assertThat(userRepository.getById(userId1).getFollowing().size(), is(0)),
-                () -> assertThat(userRepository.getById(userId2).getFollowers().size(), is(0)),
-                () -> assertThat(followRepository.findAll().size(), is(0))
-        );
+        assertThat(followRepository.findAll().size(), is(0));
     }
 
     @Test
-    @DisplayName("'특정 user를 팔로잉 한 user 목록' & '특정 user가 팔로우 한 user 목록'을 조회할 수 있다.")
+    @DisplayName("특정 user를 팔로우 한 user 목록을 조회할 수 있다.")
     @Transactional
-    void testFindFollowListAndFollowingList() throws Exception {
+    void testFindFollowerList() throws Exception {
         // Given
-        mockMvc.perform(post("/api/v1/follow")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userId2))
-                        .header("token", token))
-                .andExpect(status().isCreated())
-                .andDo(print());
+        followRepository.save(Follow.builder()
+                .user(user1)
+                .followedUser(user2)
+                .build());
+        followRepository.save(Follow.builder()
+                .user(user1)
+                .followedUser(user3)
+                .build());
 
-        mockMvc.perform(post("/api/v1/follow")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userId3))
-                        .header("token", token))
-                .andExpect(status().isCreated())
-                .andDo(print());
-
-        final User user1 = userRepository.getById(userId1);
-        final User user2 = userRepository.getById(userId2);
+        final List<Follow> allFollow = followRepository.findAll();
         assertAll("user1이 user2, user3을 팔로우",
-                () -> assertThat(followRepository.findAll().size(), is(2)),
-                () -> assertThat(user1.getFollowing().size(), is(2)),
-                () -> assertThat(user1.getFollowing().get(0).getFollowedUser().getUserId(), is(userId2)),
-                () -> assertThat(user1.getFollowing().get(1).getFollowedUser().getUserId(), is(userId3)),
-                () -> assertThat(user2.getFollowers().size(), is(1)),
-                () -> assertThat(user2.getFollowers().get(0).getUser().getUserId(), is(userId1))
+                () -> assertThat(allFollow.size(), is(2)),
+                () -> assertThat(allFollow.get(0).getUser(), is(user1)),
+                () -> assertThat(allFollow.get(0).getFollowedUser(), is(user2)),
+                () -> assertThat(allFollow.get(1).getUser(), is(user1)),
+                () -> assertThat(allFollow.get(1).getFollowedUser(), is(user3))
         );
 
         // When, Then
-        // user2를 팔로잉 한 사람 목록
         mockMvc.perform(get("/api/v1/users/{userId}/followers", userId2)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
 
-        // user1이 팔로우 한 사람 목록
+    @Test
+    @DisplayName("특정 user가 팔로잉 한 user 목록을 조회할 수 있다.")
+    @Transactional
+    void testFollowingList() throws Exception {
+        // Given
+        followRepository.save(Follow.builder()
+                .user(user1)
+                .followedUser(user2)
+                .build());
+        followRepository.save(Follow.builder()
+                .user(user1)
+                .followedUser(user3)
+                .build());
+
+        final List<Follow> allFollow = followRepository.findAll();
+        assertAll("user1이 user2, user3을 팔로우",
+                () -> assertThat(allFollow.size(), is(2)),
+                () -> assertThat(allFollow.get(0).getUser(), is(user1)),
+                () -> assertThat(allFollow.get(0).getFollowedUser(), is(user2)),
+                () -> assertThat(allFollow.get(1).getUser(), is(user1)),
+                () -> assertThat(allFollow.get(1).getFollowedUser(), is(user3))
+        );
+
+        // When, Then
         mockMvc.perform(get("/api/v1/users/{userId}/following", userId1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
