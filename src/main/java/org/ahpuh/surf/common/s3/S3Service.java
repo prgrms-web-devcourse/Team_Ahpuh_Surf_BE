@@ -1,139 +1,23 @@
 package org.ahpuh.surf.common.s3;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.Objects;
 
-@Service
-@NoArgsConstructor
-@Slf4j
-public class S3Service {
+public interface S3Service {
 
-    private AmazonS3 s3Client;
+    String uploadUserImg(final MultipartFile profilePhoto) throws IOException;
 
-    @Value("${cloud.aws.credentials.accessKey}")
-    private String accessKey;
+    S3ServiceImpl.FileStatus uploadPostFile(final MultipartFile file) throws IOException;
 
-    @Value("${cloud.aws.credentials.secretKey}")
-    private String secretKey;
+    String uploadImg(final MultipartFile file) throws IOException;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    String uploadFile(final MultipartFile file) throws IOException;
 
-    @Value("${cloud.aws.region.static}")
-    private String region;
+    boolean exist(final MultipartFile file);
 
-    final String[] PERMISSION_IMG_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "tif", "ico", "svg", "bmp", "webp", "tiff", "jfif"};
-    final String[] PERMISSION_FILE_EXTENSIONS = {"doc", "docx", "xls", "xlsx", "hwp", "pdf", "txt", "md", "ppt", "pptx", "key"};
+    boolean invalidImageExtension(final String extension);
 
-    @PostConstruct
-    public void setS3Client() {
-        final AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-
-        s3Client = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(this.region)
-                .build();
-    }
-
-    public String uploadUserImg(MultipartFile profilePhoto) throws IOException {
-        if (exist(profilePhoto)) {
-            return uploadImg(profilePhoto);
-        }
-        return null;
-    }
-
-    public FileStatus uploadPostFile(MultipartFile file) throws IOException {
-        String fileUrl;
-        if (exist(file)) {
-            fileUrl = uploadFile(file);
-            if (fileUrl != null) {
-                return new FileStatus(fileUrl, "file");
-            }
-
-            fileUrl = uploadImg(file);
-            if (fileUrl != null) {
-                return new FileStatus(fileUrl, "img");
-            }
-        }
-        return null;
-    }
-
-    public String uploadImg(final MultipartFile file) throws IOException {
-        final String fileName = file.getOriginalFilename();
-        final String extension = Objects.requireNonNull(fileName).split("\\.")[1];
-
-        if (!isPermissionImg(extension)) {
-            log.info("{}은(는) 지원하지 않는 확장자입니다.", extension);
-            return null;
-        }
-
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-
-        return s3Client.getUrl(bucket, fileName).toString();
-    }
-
-    public String uploadFile(final MultipartFile file) throws IOException {
-        final String fileName = file.getOriginalFilename();
-        final String extension = Objects.requireNonNull(fileName).split("\\.")[1];
-
-        if (!isPermissionFile(extension)) {
-            return null;
-        }
-
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-
-        return s3Client.getUrl(bucket, fileName).toString();
-    }
-
-    public Boolean exist(MultipartFile file) {
-        if (file.isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-
-    public Boolean isPermissionImg(String extension) {
-        for (String permissionExtension : PERMISSION_IMG_EXTENSIONS) {
-            if (extension.equals(permissionExtension)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Boolean isPermissionFile(String extension) {
-        for (String permissionExtension : PERMISSION_FILE_EXTENSIONS) {
-            if (extension.equals(permissionExtension)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static class FileStatus {
-        public String fileUrl;
-        public String fileType;
-
-        public FileStatus(String fileUrl, String fileType) {
-            this.fileUrl = fileUrl;
-            this.fileType = fileType;
-        }
-    }
+    boolean invalidFileExtension(final String extension);
 
 }

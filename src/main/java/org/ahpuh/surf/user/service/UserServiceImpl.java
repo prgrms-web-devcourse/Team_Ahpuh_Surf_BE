@@ -1,6 +1,8 @@
 package org.ahpuh.surf.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.common.entity.BaseEntity;
+import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.user.converter.UserConverter;
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
 
     private final UserConverter userConverter;
 
@@ -57,10 +60,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findById(final Long userId) {
-        final UserDto userDto = userRepository.findById(userId)
-                .map(userConverter::toUserDto)
+        final User user = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        return userDto;
+        final long followingCount = followRepository.countByUser(user);
+        final long followerCount = followRepository.countByFollowedUser(user);
+        return userConverter.toUserDto(user, followingCount, followerCount);
     }
 
     @Override
@@ -78,6 +82,10 @@ public class UserServiceImpl implements UserService {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
         userEntity.delete();
+        userEntity.getCategories()
+                .forEach(BaseEntity::delete);
+        userEntity.getPosts()
+                .forEach(BaseEntity::delete);
     }
 
 }

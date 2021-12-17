@@ -2,7 +2,7 @@ package org.ahpuh.surf.post.service;
 
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.response.CursorResult;
-import org.ahpuh.surf.common.s3.S3Service.FileStatus;
+import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
 import org.ahpuh.surf.post.dto.*;
 import org.springframework.data.domain.Pageable;
 

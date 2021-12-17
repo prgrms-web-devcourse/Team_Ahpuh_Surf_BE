@@ -20,9 +20,9 @@ public class UserDto {
 
     private String url;
 
-    private int followerCount;
+    private long followerCount;
 
-    private int followingCount;
+    private long followingCount;
 
     private Boolean accountPublic;
 
