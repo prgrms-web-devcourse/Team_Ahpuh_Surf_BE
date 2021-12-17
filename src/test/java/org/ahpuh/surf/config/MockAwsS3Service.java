@@ -1,4 +1,4 @@
-package org.ahpuh.surf.mockaws;
+package org.ahpuh.surf.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.common.s3.S3Service;
