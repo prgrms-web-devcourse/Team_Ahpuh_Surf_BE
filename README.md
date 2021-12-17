@@ -10,14 +10,15 @@
 
 ## 🧑🏽‍🤝‍🧑🏻팀원 소개
 
-| 최승은 | 박수빈 | 박정미 | 전효희 |
-| --- | --- | --- | --- |
-| <img src="https://user-images.githubusercontent.com/56287836/146504089-5dcad065-e5fe-4565-8d18-bcf1f573cce5.png"  width="150" height="150"> | <img src="https://user-images.githubusercontent.com/56287836/146503568-f24e194a-ff54-4340-89d5-66a042cd5d02.png"  width="150" height="150"> | <img src="https://user-images.githubusercontent.com/56287836/146504190-28688cf8-0435-421f-808a-ff97f12c25a8.png"  width="150" height="150"> |  |
+| [최승은](https://github.com/cse0518) | [박수빈](https://github.com/suebeen) | [박정미](https://github.com/Jummi10) | [전효희](https://github.com/kwhyo) |
+| :---: | :---: | :---: | :---: |
+| <img src="https://avatars.githubusercontent.com/u/60170616?v=4" width="150" height="150"> | <img src="https://user-images.githubusercontent.com/56287836/146503568-f24e194a-ff54-4340-89d5-66a042cd5d02.png" width="150" height="150"> | <img src="https://user-images.githubusercontent.com/56287836/146504190-28688cf8-0435-421f-808a-ff97f12c25a8.png" width="150" height="150"> | <img src="https://user-images.githubusercontent.com/60170616/146600241-4f634fce-7845-4a54-bd2f-7f6410fecffa.png" width="150" height="150"> |
 | 팀장, 개발자 | 개발자 | 개발자 | 개발자 |
 
 ## 📍프로젝트 목표 및 상세 설명
 
-열심히 달려온 나 자신! 열심히는 하고 있는데 내가 얼마나 발전했는지 기록하는 공간은 없을까? 그냥 일기는 메모장에라도 적을 수 있고, 블로그는 이미 무수히 존재하고, 색다른 방법으로 동기부여 받고 기록하고 공유하는 그런 공간이 필요해! 🙆‍♀️
+열심히 달려온 나 자신! 열심히는 하고 있는데 내가 얼마나 발전했는지 기록하는 공간은 없을까? 그냥 일기는 메모장에라도 적을 수 있고, 블로그는 이미 무수히 존재하고, 색다른 방법으로 동기부여 받고 기록하고 공유하는
+그런 공간이 필요해! 🙆‍♀️
 
 - 성장곡선으로 한눈에 내 인생을 돌아보기
 - 남들의 성장곡선을 보며 동기부여도 받기
