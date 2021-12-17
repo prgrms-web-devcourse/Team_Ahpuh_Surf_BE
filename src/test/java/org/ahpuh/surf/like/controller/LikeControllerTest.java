@@ -7,7 +7,6 @@ import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.controller.UserController;
-import org.ahpuh.surf.user.dto.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.UserLoginRequestDto;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
@@ -39,6 +38,7 @@ class LikeControllerTest {
     Long userId1;
     Long userId2;
     String userToken1;
+    Post post1;
     Long postId1;
     @Autowired
     private MockMvc mockMvc;
@@ -56,44 +56,43 @@ class LikeControllerTest {
     @BeforeEach
     void setUp() {
         // user1, user2 회원가입 후 userId 반환
-        userId1 = userController.join(UserJoinRequestDto.builder()
-                        .email("test1@naver.com")
+        userId1 = userRepository.save(User.builder()
+                        .email("user1@naver.com")
                         .userName("name")
-                        .password("test1")
+                        .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                         .build())
-                .getBody();
-        userId2 = userController.join(UserJoinRequestDto.builder()
-                        .email("test2@naver.com")
-                        .userName("name")
-                        .password("test2")
-                        .build())
-                .getBody();
+                .getUserId();
+        final User user2 = userRepository.save(User.builder()
+                .email("user2@naver.com")
+                .userName("name")
+                .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
+                .build());
+        userId2 = user2.getUserId();
 
         // user1 로그인 후 토큰 발급
         userToken1 = userController.login(UserLoginRequestDto.builder()
-                        .email("test1@naver.com")
-                        .password("test1")
+                        .email("user1@naver.com")
+                        .password("testpw")
                         .build())
                 .getBody()
                 .getToken();
-
-        final User user2 = userRepository.getById(userId2);
 
         // user2가 카테고리 생성
         final Category category1 = categoryRepository.save(Category.builder()
                 .user(user2)
                 .name("category 1")
+                .colorCode("#000000")
                 .build());
 
         // user2가 post 생성
-        postId1 = postRepository.save(Post.builder()
-                        .user(user2)
-                        .category(category1)
-                        .selectedDate(LocalDate.now())
-                        .content("content")
-                        .score(80)
-                        .build())
-                .getPostId();
+        post1 = postRepository.save(Post.builder()
+                .user(user2)
+                .category(category1)
+                .selectedDate(LocalDate.now())
+                .content("content")
+                .score(80)
+                .build());
+        postId1 = post1.getPostId();
     }
 
     @Test
@@ -125,19 +124,16 @@ class LikeControllerTest {
     @Transactional
     void testUnlike() throws Exception {
         // Given
-        assertThat(likeRepository.findAll().size(), is(0));
-
-        mockMvc.perform(post("/api/v1/posts/{postId}/like", postId1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("token", userToken1))
-                .andExpect(status().isOk())
-                .andDo(print());
+        likeRepository.save(Like.builder()
+                .userId(userId1)
+                .post(post1)
+                .build());
 
         final List<Like> likes = likeRepository.findAll();
         assertAll("beforeUnlikePost",
                 () -> assertThat(likes.size(), is(1)),
                 () -> assertThat(likes.get(0).getUserId(), is(userId1)),
-                () -> assertThat(likes.get(0).getPost().getPostId(), is(postId1))
+                () -> assertThat(likes.get(0).getPost(), is(post1))
         );
 
         // When
