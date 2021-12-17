@@ -33,9 +33,9 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 ))
                 .from(post)
                 .leftJoin(follow).on(follow.user.userId.eq(userId))
-                .where(follow.followedUser.userId.eq(post.user.userId))
+                .where(follow.followedUser.userId.eq(post.user.userId), post.isDeleted.eq(false))
                 .groupBy(post.postId, follow.followId)
-                .orderBy(post.updatedAt.desc())
+                .orderBy(post.selectedDate.desc())
                 .fetch();
     }
 
@@ -47,7 +47,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.selectedDate.count().as("count")))
                 .from(post)
                 .where(post.selectedDate.between(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31)),
-                        post.user.eq(user))
+                        post.user.eq(user), post.isDeleted.eq(false))
                 .groupBy(post.selectedDate)
                 .orderBy(post.selectedDate.asc())
                 .fetch();
@@ -62,7 +62,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.score.as("score")
                 ))
                 .from(post)
-                .where(post.user.eq(user))
+                .where(post.user.eq(user), post.isDeleted.eq(false))
                 .orderBy(post.category.categoryId.asc(), post.selectedDate.asc())
                 .fetch();
     }
