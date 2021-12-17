@@ -3,7 +3,7 @@ package org.ahpuh.surf.post.converter;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
-import org.ahpuh.surf.common.s3.S3Service.FileStatus;
+import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
 import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.post.entity.Post;
