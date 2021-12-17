@@ -57,10 +57,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findById(final Long userId) {
-        final UserDto userDto = userRepository.findById(userId)
+        return userRepository.findById(userId)
                 .map(userConverter::toUserDto)
                 .orElseThrow(() -> UserNotFound(userId));
-        return userDto;
     }
 
     @Override
