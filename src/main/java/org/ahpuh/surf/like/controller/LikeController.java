@@ -28,7 +28,7 @@ public class LikeController {
             @PathVariable final Long postId,
             @PathVariable final Long likeId
     ) {
-        likeService.unlike(likeId);
+        likeService.unlike(postId, likeId);
         return ResponseEntity.noContent().build();
     }
 
