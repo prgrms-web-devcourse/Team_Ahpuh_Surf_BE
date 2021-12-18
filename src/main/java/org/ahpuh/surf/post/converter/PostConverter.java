@@ -113,4 +113,21 @@ public class PostConverter {
         return categorySimpleDtos;
     }
 
+    public ExploreDto toRecentAllPosts(final Post post, final Optional<Like> like) {
+        final ExploreDto recentPostDtos = ExploreDto.builder()
+                .userId(post.getUser().getUserId())
+                .userName(post.getUser().getUserName())
+                .profilePhotoUrl(post.getUser().getProfilePhotoUrl())
+                .categoryName(post.getCategory().getName())
+                .colorCode(post.getCategory().getColorCode())
+                .postId(post.getPostId())
+                .content(post.getContent())
+                .score(post.getScore())
+                .selectedDate(post.getSelectedDate())
+                .createdAt(post.getCreatedAt())
+                .build();
+        like.ifPresent(likeEntity -> recentPostDtos.setLiked(likeEntity.getLikeId()));
+        return recentPostDtos;
+    }
+
 }

@@ -15,6 +15,7 @@ import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -77,37 +79,37 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public CursorResult<FollowingPostDto> explore(final Long myId, final Long cursorId, final Pageable page) {
+    public CursorResult<ExploreDto> followingExplore(final Long myId, final Long cursorId, final Pageable page) {
         final User me = userRepository.findById(myId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(myId));
         if (followRepository.findByUser(me).isEmpty()) {
-            final List<FollowingPostDto> emptyList = new ArrayList<>();
-            emptyList.add(FollowingPostDto.builder().build());
+            final List<ExploreDto> emptyList = new ArrayList<>();
+            emptyList.add(ExploreDto.builder().build());
             return new CursorResult<>(emptyList, false);
         }
 
         final Post findPost = postRepository.findById(cursorId).orElse(null);
 
-        final List<FollowingPostDto> followingPostDtos = findPost == null ?
+        final List<ExploreDto> exploreDtos = findPost == null ?
                 postRepository.findFollowingPosts(myId, page) :
                 postRepository.findNextFollowingPosts(myId, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
 
-        for (final FollowingPostDto dto : followingPostDtos) {
+        for (final ExploreDto dto : exploreDtos) {
             likeRepository.findByUserIdAndPost(myId, getPostById(dto.getPostId()))
                     .ifPresent(like -> dto.setLiked(like.getLikeId()));
         }
 
-        final long lastIdOfIndex = followingPostDtos.isEmpty() ? 0 : followingPostDtos.get(followingPostDtos.size() - 1).getPostId();
+        final long lastIdOfIndex = exploreDtos.isEmpty() ? 0 : exploreDtos.get(exploreDtos.size() - 1).getPostId();
 
         final boolean hasNext = !postRepository.findNextFollowingPosts(
                 myId,
-                followingPostDtos
+                exploreDtos
                         .stream()
                         .filter(post -> post.getPostId().equals(lastIdOfIndex))
                         .findFirst()
                         .get()
                         .getSelectedDate(),
-                followingPostDtos
+                exploreDtos
                         .stream()
                         .filter(post -> post.getPostId().equals(lastIdOfIndex))
                         .findFirst()
@@ -115,7 +117,7 @@ public class PostServiceImpl implements PostService {
                         .getCreatedAt(),
                 page).isEmpty();
 
-        return new CursorResult<>(followingPostDtos, hasNext);
+        return new CursorResult<>(exploreDtos, hasNext);
     }
 
     public List<PostCountDto> getCountsPerDayWithYear(final int year, final Long userId) {
@@ -240,4 +242,12 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(postId)
                 .orElseThrow(() -> EntityExceptionHandler.PostNotFound(postId));
     }
+
+    public List<ExploreDto> recentAllPosts(final Long myId) {
+        return postRepository.findTop100ByIsDeletedIsFalseOrderByCreatedAtDesc(PageRequest.of(0, 100))
+                .stream()
+                .map(postEntity -> postConverter.toRecentAllPosts(postEntity, likeRepository.findByUserIdAndPost(myId, postEntity)))
+                .collect(Collectors.toList());
+    }
+
 }

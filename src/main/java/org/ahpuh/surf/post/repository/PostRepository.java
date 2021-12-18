@@ -22,10 +22,10 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
     List<Post> findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(User user, Category category, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
 
-    Boolean existsBySelectedDateLessThanAndCreatedAtLessThan(LocalDate selectedDate, LocalDateTime createdAt);
-
     Post findTop1ByCategoryOrderBySelectedDateDesc(Category category);
 
     List<Post> findByCategory(Category category);
+
+    List<Post> findTop100ByIsDeletedIsFalseOrderByCreatedAtDesc(Pageable page);
 
 }

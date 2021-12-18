@@ -105,11 +105,11 @@ public class PostController {
     }
 
     @GetMapping("/follow/posts")
-    public ResponseEntity<CursorResult<FollowingPostDto>> explore(
+    public ResponseEntity<CursorResult<ExploreDto>> explore(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Long cursorId
     ) {
-        final CursorResult<FollowingPostDto> followingPostDtos = postService.explore(authentication.userId, cursorId, PageRequest.of(0, 10));
+        final CursorResult<ExploreDto> followingPostDtos = postService.followingExplore(authentication.userId, cursorId, PageRequest.of(0, 10));
         return ResponseEntity.ok().body(followingPostDtos);
     }
 
@@ -147,6 +147,14 @@ public class PostController {
             @RequestParam final Long categoryId
     ) {
         return ResponseEntity.ok().body(postService.getRecentScore(categoryId));
+    }
+
+    @GetMapping("/posts/recent")
+    public ResponseEntity<List<ExploreDto>> recentAllPosts(
+            @AuthenticationPrincipal final JwtAuthentication authentication
+    ) {
+        final List<ExploreDto> recentAllPosts = postService.recentAllPosts(authentication.userId);
+        return ResponseEntity.ok().body(recentAllPosts);
     }
 
 }
