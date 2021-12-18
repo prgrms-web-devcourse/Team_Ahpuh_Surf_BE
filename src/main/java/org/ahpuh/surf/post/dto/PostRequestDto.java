@@ -2,9 +2,7 @@ package org.ahpuh.surf.post.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,7 +20,8 @@ public class PostRequestDto {
     @Size(max = 500, message = "Post contents length must within 500.")
     private String content;
 
-    @Size(max = 100, message = "Score must be 0 ~ 100.")
-    private int score;
+    @Min(0)
+    @Max(100)
+    private Integer score;
 
 }

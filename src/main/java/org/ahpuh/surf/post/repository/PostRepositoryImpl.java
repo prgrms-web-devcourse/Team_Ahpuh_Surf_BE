@@ -39,7 +39,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .leftJoin(follow).on(follow.user.userId.eq(userId))
                 .where(follow.followedUser.userId.eq(post.user.userId), post.isDeleted.eq(false))
                 .groupBy(post.postId, follow.followId)
-                .orderBy(post.selectedDate.desc())
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
                 .limit(page.getPageSize())
                 .fetch();
     }

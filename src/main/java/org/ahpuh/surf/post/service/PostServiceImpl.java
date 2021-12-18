@@ -89,10 +89,20 @@ public class PostServiceImpl implements PostService {
 
         final long lastIdOfIndex = followingPostDtos.isEmpty() ? 0 : followingPostDtos.get(followingPostDtos.size() - 1).getPostId();
 
-        final Boolean hasNext = postRepository.findNextFollowingPosts(
+        final boolean hasNext = !postRepository.findNextFollowingPosts(
                 myId,
-                followingPostDtos.get(Math.toIntExact(lastIdOfIndex)).getSelectedDate(),
-                followingPostDtos.get(Math.toIntExact(lastIdOfIndex)).getCreatedAt(),
+                followingPostDtos
+                        .stream()
+                        .filter(post -> post.getPostId().equals(lastIdOfIndex))
+                        .findFirst()
+                        .get()
+                        .getSelectedDate(),
+                followingPostDtos
+                        .stream()
+                        .filter(post -> post.getPostId().equals(lastIdOfIndex))
+                        .findFirst()
+                        .get()
+                        .getCreatedAt(),
                 page).isEmpty();
 
         return new CursorResult<>(followingPostDtos, hasNext);
@@ -145,10 +155,20 @@ public class PostServiceImpl implements PostService {
                 .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
                 .toList();
 
-        final Boolean hasNext = postRepository.findByUserAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(
+        final boolean hasNext = !postRepository.findByUserAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(
                 user,
-                postList.get(Math.toIntExact(lastIdOfIndex)).getSelectedDate(),
-                postList.get(Math.toIntExact(lastIdOfIndex)).getCreatedAt(),
+                postList
+                        .stream()
+                        .filter(post -> post.getPostId().equals(lastIdOfIndex))
+                        .findFirst()
+                        .get()
+                        .getSelectedDate(),
+                postList
+                        .stream()
+                        .filter(post -> post.getPostId().equals(lastIdOfIndex))
+                        .findFirst()
+                        .get()
+                        .getCreatedAt(),
                 page).isEmpty();
 
         return new CursorResult<>(posts, hasNext);
@@ -173,11 +193,21 @@ public class PostServiceImpl implements PostService {
                 .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
                 .toList();
 
-        final Boolean hasNext = postRepository.findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(
+        final boolean hasNext = !postRepository.findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(
                 user,
                 category,
-                postList.get(Math.toIntExact(lastIdOfIndex)).getSelectedDate(),
-                postList.get(Math.toIntExact(lastIdOfIndex)).getCreatedAt(),
+                postList
+                        .stream()
+                        .filter(post -> post.getPostId().equals(lastIdOfIndex))
+                        .findFirst()
+                        .get()
+                        .getSelectedDate(),
+                postList
+                        .stream()
+                        .filter(post -> post.getPostId().equals(lastIdOfIndex))
+                        .findFirst()
+                        .get()
+                        .getCreatedAt(),
                 page).isEmpty();
 
         return new CursorResult<>(posts, hasNext);

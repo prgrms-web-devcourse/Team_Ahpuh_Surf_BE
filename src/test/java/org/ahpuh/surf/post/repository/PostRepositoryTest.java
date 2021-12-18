@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -98,7 +99,7 @@ class PostRepositoryTest {
         postRepository.save(Post.builder()
                 .user(user2)
                 .category(category1)
-                .selectedDate(LocalDate.of(2020, 12, 12))
+                .selectedDate(LocalDate.of(2021, 12, 12))
                 .content("content1")
                 .score(80)
                 .build());
@@ -139,6 +140,7 @@ class PostRepositoryTest {
     @Transactional
     void testQueryDsl() {
         final JPAQueryFactory query = new JPAQueryFactory(entityManager);
+        final PageRequest page = PageRequest.of(0, 10);
         final List<FollowingPostDto> posts = query
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),
@@ -156,20 +158,24 @@ class PostRepositoryTest {
                 ))
                 .from(post)
                 .leftJoin(follow).on(follow.user.userId.eq(userId1))
-                .where(follow.followedUser.userId.eq(post.user.userId))
+                .where(follow.followedUser.userId.eq(post.user.userId), post.isDeleted.eq(false))
                 .groupBy(post.postId, follow.followId)
-                .orderBy(post.updatedAt.desc())
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .limit(page.getPageSize())
                 .fetch();
 
         assertAll("follow한 사용자의 모든 posts by querydsl",
                 () -> assertThat(posts.size(), is(3)),
-                () -> assertThat(posts.get(0).getContent(), is("content3")),
+                () -> assertThat(posts.get(0).getContent(), is("content1")),
                 () -> assertThat(posts.get(0).getUserId(), is(userId2)),
-                () -> assertThat(posts.get(1).getContent(), is("content2")),
-                () -> assertThat(posts.get(1).getUserId(), is(userId3)),
-                () -> assertThat(posts.get(2).getContent(), is("content1")),
-                () -> assertThat(posts.get(2).getUserId(), is(userId2))
+                () -> assertThat(posts.get(1).getContent(), is("content3")),
+                () -> assertThat(posts.get(1).getUserId(), is(userId2)),
+                () -> assertThat(posts.get(2).getContent(), is("content2")),
+                () -> assertThat(posts.get(2).getUserId(), is(userId3)),
+                () -> assertThat(postRepository.findFollowingPosts(userId1, page).size(), is(3))
         );
+
+        ;
     }
 
 }
