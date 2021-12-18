@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -98,28 +99,28 @@ class PostRepositoryTest {
         postRepository.save(Post.builder()
                 .user(user2)
                 .category(category1)
-                .selectedDate(LocalDate.now())
+                .selectedDate(LocalDate.of(2020, 12, 12))
                 .content("content1")
                 .score(80)
                 .build());
         postRepository.save(Post.builder()
                 .user(user3)
                 .category(category2)
-                .selectedDate(LocalDate.now())
+                .selectedDate(LocalDate.of(2021, 2, 1))
                 .content("content2")
                 .score(80)
                 .build());
         postRepository.save(Post.builder()
                 .user(user1)
                 .category(category2)
-                .selectedDate(LocalDate.now())
+                .selectedDate(LocalDate.of(2021, 3, 3))
                 .content("content4")
                 .score(80)
                 .build());
         postRepository.save(Post.builder()
                 .user(user2)
                 .category(category1)
-                .selectedDate(LocalDate.now())
+                .selectedDate(LocalDate.of(2021, 8, 8))
                 .content("content3")
                 .score(80)
                 .build());
@@ -171,7 +172,7 @@ class PostRepositoryTest {
         );
 
         // JpaRepository에 Querydsl 적용 test
-        final List<FollowingPostDto> findByJpaRepo = postRepository.findFollowingPosts(userId1);
+        final List<FollowingPostDto> findByJpaRepo = postRepository.findFollowingPosts(userId1, PageRequest.of(0, 10));
 
         assertAll("follow한 사용자의 모든 posts in repository",
                 () -> assertThat(findByJpaRepo.size(), is(3)),

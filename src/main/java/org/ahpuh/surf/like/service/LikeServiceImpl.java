@@ -3,11 +3,14 @@ package org.ahpuh.surf.like.service;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.like.converter.LikeConverter;
+import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +31,11 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public void unlike(final Long likeId) {
+    public void unlike(final Long postId, final Long likeId) {
+        final Like like = likeRepository.findById(likeId).orElseThrow(() -> new IllegalArgumentException("좋아요한 기록이 없습니다." + likeId));
+        if (!Objects.equals(like.getPost().getPostId(), postId)) {
+            throw new IllegalArgumentException("The post ID does not match. " + postId);
+        }
         likeRepository.deleteById(likeId);
     }
 

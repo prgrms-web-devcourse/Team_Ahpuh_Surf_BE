@@ -4,6 +4,6 @@ public interface LikeService {
 
     Long like(Long userId, Long postId);
 
-    void unlike(Long likeId);
+    void unlike(Long postId, Long likeId);
 
 }

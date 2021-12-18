@@ -4,8 +4,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.user.entity.User;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.ahpuh.surf.follow.entity.QFollow.follow;
@@ -17,7 +19,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<FollowingPostDto> findFollowingPosts(final Long userId) {
+    public List<FollowingPostDto> findFollowingPosts(final Long userId, final Pageable page) {
         return queryFactory
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),
@@ -33,9 +35,34 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 ))
                 .from(post)
                 .leftJoin(follow).on(follow.user.userId.eq(userId))
-                .where(follow.followedUser.userId.eq(post.user.userId))
+                .where(follow.followedUser.userId.eq(post.user.userId), post.isDeleted.eq(false))
                 .groupBy(post.postId, follow.followId)
-                .orderBy(post.updatedAt.desc())
+                .orderBy(post.selectedDate.desc())
+                .limit(page.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<FollowingPostDto> findNextFollowingPosts(final Long userId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+        return queryFactory
+                .select(new QFollowingPostDto(
+                        post.user.userId.as("userId"),
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate,
+                        post.updatedAt.as("updatedAt")
+                ))
+                .from(post)
+                .leftJoin(follow).on(follow.user.userId.eq(userId))
+                .where(follow.followedUser.userId.eq(post.user.userId), post.isDeleted.eq(false), post.selectedDate.before(selectedDate), post.createdAt.before(createdAt))
+                .groupBy(post.postId, follow.followId)
+                .orderBy(post.selectedDate.desc())
+                .limit(page.getPageSize())
                 .fetch();
     }
 
@@ -47,7 +74,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.selectedDate.count().as("count")))
                 .from(post)
                 .where(post.selectedDate.between(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31)),
-                        post.user.eq(user))
+                        post.user.eq(user), post.isDeleted.eq(false))
                 .groupBy(post.selectedDate)
                 .orderBy(post.selectedDate.asc())
                 .fetch();
@@ -62,7 +89,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.score.as("score")
                 ))
                 .from(post)
-                .where(post.user.eq(user))
+                .where(post.user.eq(user), post.isDeleted.eq(false))
                 .orderBy(post.category.categoryId.asc(), post.selectedDate.asc())
                 .fetch();
     }

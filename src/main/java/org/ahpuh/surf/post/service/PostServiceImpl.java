@@ -75,7 +75,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public CursorResult<FollowingPostDto> explore(final Long myId, final Long cursorId, final Pageable page) {
-        final List<FollowingPostDto> followingPostDtos = postRepository.findFollowingPosts(myId);
+
+        final Post findPost = postRepository.findById(cursorId).orElse(null);
+
+        final List<FollowingPostDto> followingPostDtos = findPost == null ?
+                postRepository.findFollowingPosts(myId, page) :
+                postRepository.findNextFollowingPosts(myId, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
+
         for (final FollowingPostDto dto : followingPostDtos) {
             likeRepository.findByUserIdAndPost(myId, getPostById(dto.getPostId()))
                     .ifPresent(like -> dto.setLiked(like.getLikeId()));
@@ -122,12 +128,13 @@ public class PostServiceImpl implements PostService {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
 
-        final List<Post> postList = cursorId == 0 ?
-                postRepository.findAllByUserOrderBySelectedDateDesc(user, page) :
-                postRepository.findByUserAndPostIdLessThanOrderBySelectedDateDesc(user, cursorId, page);
+        final Post findPost = postRepository.findById(cursorId).orElse(null);
 
-        final Long lastIdOfIndex = postList.isEmpty() ?
-                null : postList.get(postList.size() - 1).getPostId();
+        final List<Post> postList = findPost == null ?
+                postRepository.findAllByUserOrderBySelectedDateDesc(user, page) :
+                postRepository.findByUserAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDate(user, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
+
+        final Long lastIdOfIndex = postList.isEmpty() ? 0 : postList.get(postList.size() - 1).getPostId();
 
         final List<AllPostResponseDto> posts = postList.stream()
                 .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
@@ -143,12 +150,13 @@ public class PostServiceImpl implements PostService {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
 
-        final List<Post> postList = cursorId == 0 ?
-                postRepository.findAllByUserAndCategoryOrderBySelectedDateDesc(user, category, page) :
-                postRepository.findByUserAndCategoryAndPostIdLessThanOrderBySelectedDateDesc(user, category, cursorId, page);
+        final Post findPost = postRepository.findById(cursorId).orElse(null);
 
-        final Long lastIdOfIndex = postList.isEmpty() ?
-                null : postList.get(postList.size() - 1).getPostId();
+        final List<Post> postList = findPost == null ?
+                postRepository.findAllByUserAndCategoryOrderBySelectedDateDesc(user, category, page) :
+                postRepository.findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDate(user, category, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
+
+        final Long lastIdOfIndex = postList.isEmpty() ? 0 : postList.get(postList.size() - 1).getPostId();
 
         final List<AllPostResponseDto> posts = postList.stream()
                 .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
@@ -176,7 +184,8 @@ public class PostServiceImpl implements PostService {
     }
 
     private Boolean hasNext(final Long id) {
-        return id != null && postRepository.existsByPostIdLessThanOrderBySelectedDate(id);
+        final Post post = postRepository.findById(id).orElse(null);
+        return post != null && postRepository.existsBySelectedDateLessThanAndCreatedAtLessThan(post.getSelectedDate(), post.getCreatedAt());
     }
 
 }
