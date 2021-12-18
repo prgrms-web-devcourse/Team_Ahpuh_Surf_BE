@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -139,7 +138,6 @@ class PostRepositoryTest {
     @Test
     @Transactional
     void testQueryDsl() {
-        // Querydsl test
         final JPAQueryFactory query = new JPAQueryFactory(entityManager);
         final List<FollowingPostDto> posts = query
                 .select(new QFollowingPostDto(
@@ -154,7 +152,7 @@ class PostRepositoryTest {
                         post.imageUrl.as("imageUrl"),
                         post.fileUrl.as("fileUrl"),
                         post.selectedDate,
-                        post.updatedAt.as("updatedAt")
+                        post.createdAt.as("createdAt")
                 ))
                 .from(post)
                 .leftJoin(follow).on(follow.user.userId.eq(userId1))
@@ -171,19 +169,6 @@ class PostRepositoryTest {
                 () -> assertThat(posts.get(1).getUserId(), is(userId3)),
                 () -> assertThat(posts.get(2).getContent(), is("content1")),
                 () -> assertThat(posts.get(2).getUserId(), is(userId2))
-        );
-
-        // JpaRepository에 Querydsl 적용 test
-        final List<FollowingPostDto> findByJpaRepo = postRepository.findFollowingPosts(userId1, PageRequest.of(0, 10));
-
-        assertAll("follow한 사용자의 모든 posts in repository",
-                () -> assertThat(findByJpaRepo.size(), is(3)),
-                () -> assertThat(findByJpaRepo.get(0).getContent(), is("content3")),
-                () -> assertThat(findByJpaRepo.get(0).getUserId(), is(userId2)),
-                () -> assertThat(findByJpaRepo.get(1).getContent(), is("content2")),
-                () -> assertThat(findByJpaRepo.get(1).getUserId(), is(userId3)),
-                () -> assertThat(findByJpaRepo.get(2).getContent(), is("content1")),
-                () -> assertThat(findByJpaRepo.get(2).getUserId(), is(userId2))
         );
     }
 

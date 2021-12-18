@@ -33,7 +33,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.imageUrl.as("imageUrl"),
                         post.fileUrl.as("fileUrl"),
                         post.selectedDate,
-                        post.updatedAt.as("updatedAt")
+                        post.createdAt.as("createdAt")
                 ))
                 .from(post)
                 .leftJoin(follow).on(follow.user.userId.eq(userId))
@@ -59,7 +59,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.imageUrl.as("imageUrl"),
                         post.fileUrl.as("fileUrl"),
                         post.selectedDate,
-                        post.updatedAt.as("updatedAt")
+                        post.createdAt.as("createdAt")
                 ))
                 .from(post)
                 .leftJoin(follow).on(follow.user.userId.eq(userId))
