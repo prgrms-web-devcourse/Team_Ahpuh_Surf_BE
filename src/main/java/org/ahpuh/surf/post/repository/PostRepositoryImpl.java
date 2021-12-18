@@ -23,6 +23,8 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
         return queryFactory
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),
+                        post.user.userName.as("userName"),
+                        post.user.profilePhotoUrl.as("profilePhotoUrl"),
                         post.category.name.as("categoryName"),
                         post.category.colorCode.as("colorCode"),
                         post.postId.as("postId"),
@@ -47,6 +49,8 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
         return queryFactory
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),
+                        post.user.userName.as("userName"),
+                        post.user.profilePhotoUrl.as("profilePhotoUrl"),
                         post.category.name.as("categoryName"),
                         post.category.colorCode.as("colorCode"),
                         post.postId.as("postId"),

@@ -14,6 +14,10 @@ public class FollowingPostDto {
 
     private Long userId;
 
+    private String userName;
+
+    private String profilePhotoUrl;
+
     private String categoryName;
 
     private String colorCode;
@@ -40,6 +44,8 @@ public class FollowingPostDto {
 
     @QueryProjection
     public FollowingPostDto(final Long userId,
+                            final String userName,
+                            final String profilePhotoUrl,
                             final String categoryName,
                             final String colorCode,
                             final Long postId,
@@ -50,6 +56,8 @@ public class FollowingPostDto {
                             final LocalDate selectedDate,
                             final LocalDateTime createdAt) {
         this.userId = userId;
+        this.userName = userName;
+        this.profilePhotoUrl = profilePhotoUrl;
         this.categoryName = categoryName;
         this.colorCode = colorCode;
         this.postId = postId;
