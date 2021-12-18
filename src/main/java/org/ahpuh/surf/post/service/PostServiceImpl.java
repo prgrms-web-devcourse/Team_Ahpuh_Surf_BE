@@ -7,6 +7,7 @@ import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.response.CursorResult;
 import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
+import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.*;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class PostServiceImpl implements PostService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final FollowRepository followRepository;
     private final PostConverter postConverter;
 
     @Transactional
@@ -75,6 +78,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public CursorResult<FollowingPostDto> explore(final Long myId, final Long cursorId, final Pageable page) {
+        final User me = userRepository.findById(myId)
+                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(myId));
+        if (followRepository.findByUser(me).isEmpty()) {
+            final List<FollowingPostDto> emptyList = new ArrayList<>();
+            emptyList.add(FollowingPostDto.builder().build());
+            return new CursorResult<>(emptyList, false);
+        }
 
         final Post findPost = postRepository.findById(cursorId).orElse(null);
 
