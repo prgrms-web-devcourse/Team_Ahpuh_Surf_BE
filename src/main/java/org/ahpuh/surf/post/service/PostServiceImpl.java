@@ -87,10 +87,15 @@ public class PostServiceImpl implements PostService {
                     .ifPresent(like -> dto.setLiked(like.getLikeId()));
         }
 
-        final Long lastIdOfIndex = followingPostDtos.isEmpty() ?
-                null : followingPostDtos.get(followingPostDtos.size() - 1).getPostId();
+        final long lastIdOfIndex = followingPostDtos.isEmpty() ? 0 : followingPostDtos.get(followingPostDtos.size() - 1).getPostId();
 
-        return new CursorResult<>(followingPostDtos, hasNext(lastIdOfIndex));
+        final Boolean hasNext = postRepository.findNextFollowingPosts(
+                myId,
+                followingPostDtos.get(Math.toIntExact(lastIdOfIndex)).getSelectedDate(),
+                followingPostDtos.get(Math.toIntExact(lastIdOfIndex)).getCreatedAt(),
+                page).isEmpty();
+
+        return new CursorResult<>(followingPostDtos, hasNext);
     }
 
     public List<PostCountDto> getCountsPerDayWithYear(final int year, final Long userId) {
@@ -134,13 +139,19 @@ public class PostServiceImpl implements PostService {
                 postRepository.findAllByUserOrderBySelectedDateDesc(user, page) :
                 postRepository.findByUserAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(user, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
 
-        final Long lastIdOfIndex = postList.isEmpty() ? 0 : postList.get(postList.size() - 1).getPostId();
+        final long lastIdOfIndex = postList.isEmpty() ? 0 : postList.get(postList.size() - 1).getPostId();
 
         final List<AllPostResponseDto> posts = postList.stream()
                 .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
                 .toList();
 
-        return new CursorResult<>(posts, hasNext(lastIdOfIndex));
+        final Boolean hasNext = postRepository.findByUserAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(
+                user,
+                postList.get(Math.toIntExact(lastIdOfIndex)).getSelectedDate(),
+                postList.get(Math.toIntExact(lastIdOfIndex)).getCreatedAt(),
+                page).isEmpty();
+
+        return new CursorResult<>(posts, hasNext);
     }
 
     @Override
@@ -156,13 +167,20 @@ public class PostServiceImpl implements PostService {
                 postRepository.findAllByUserAndCategoryOrderBySelectedDateDesc(user, category, page) :
                 postRepository.findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(user, category, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
 
-        final Long lastIdOfIndex = postList.isEmpty() ? 0 : postList.get(postList.size() - 1).getPostId();
+        final long lastIdOfIndex = postList.isEmpty() ? 0 : postList.get(postList.size() - 1).getPostId();
 
         final List<AllPostResponseDto> posts = postList.stream()
                 .map(post -> postConverter.toAllPostResponseDto(post, likeRepository.findByUserIdAndPost(myId, post)))
                 .toList();
 
-        return new CursorResult<>(posts, hasNext(lastIdOfIndex));
+        final Boolean hasNext = postRepository.findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(
+                user,
+                category,
+                postList.get(Math.toIntExact(lastIdOfIndex)).getSelectedDate(),
+                postList.get(Math.toIntExact(lastIdOfIndex)).getCreatedAt(),
+                page).isEmpty();
+
+        return new CursorResult<>(posts, hasNext);
     }
 
     public int getRecentScore(final Long categoryId) {
@@ -182,10 +200,4 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(postId)
                 .orElseThrow(() -> EntityExceptionHandler.PostNotFound(postId));
     }
-
-    private Boolean hasNext(final Long id) {
-        final Post post = postRepository.findById(id).orElse(null);
-        return post != null && postRepository.existsBySelectedDateLessThanAndCreatedAtLessThan(post.getSelectedDate(), post.getCreatedAt());
-    }
-
 }

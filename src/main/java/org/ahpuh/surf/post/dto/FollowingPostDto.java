@@ -30,7 +30,7 @@ public class FollowingPostDto {
 
     private LocalDate selectedDate;
 
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 
     @Builder.Default
     private Long likeId = null;
@@ -48,7 +48,7 @@ public class FollowingPostDto {
                             final String imageUrl,
                             final String fileUrl,
                             final LocalDate selectedDate,
-                            final LocalDateTime updatedAt) {
+                            final LocalDateTime createdAt) {
         this.userId = userId;
         this.categoryName = categoryName;
         this.colorCode = colorCode;
@@ -58,7 +58,7 @@ public class FollowingPostDto {
         this.imageUrl = imageUrl;
         this.fileUrl = fileUrl;
         this.selectedDate = selectedDate;
-        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
         this.likeId = null;
         this.isLiked = false;
     }
