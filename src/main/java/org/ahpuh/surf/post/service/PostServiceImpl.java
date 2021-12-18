@@ -132,7 +132,7 @@ public class PostServiceImpl implements PostService {
 
         final List<Post> postList = findPost == null ?
                 postRepository.findAllByUserOrderBySelectedDateDesc(user, page) :
-                postRepository.findByUserAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDate(user, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
+                postRepository.findByUserAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(user, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
 
         final Long lastIdOfIndex = postList.isEmpty() ? 0 : postList.get(postList.size() - 1).getPostId();
 
@@ -154,7 +154,7 @@ public class PostServiceImpl implements PostService {
 
         final List<Post> postList = findPost == null ?
                 postRepository.findAllByUserAndCategoryOrderBySelectedDateDesc(user, category, page) :
-                postRepository.findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDate(user, category, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
+                postRepository.findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(user, category, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
 
         final Long lastIdOfIndex = postList.isEmpty() ? 0 : postList.get(postList.size() - 1).getPostId();
 

@@ -18,9 +18,9 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
     List<Post> findAllByUserAndSelectedDateBetweenOrderBySelectedDate(User user, LocalDate start, LocalDate end);
 
-    List<Post> findByUserAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDate(User user, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+    List<Post> findByUserAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(User user, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
 
-    List<Post> findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDate(User user, Category category, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+    List<Post> findByUserAndCategoryAndSelectedDateLessThanAndCreatedAtLessThanOrderBySelectedDateDesc(User user, Category category, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
 
     Boolean existsBySelectedDateLessThanAndCreatedAtLessThan(LocalDate selectedDate, LocalDateTime createdAt);
 
