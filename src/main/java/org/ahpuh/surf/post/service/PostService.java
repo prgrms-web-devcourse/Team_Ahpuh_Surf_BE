@@ -19,13 +19,13 @@ public interface PostService {
 
     void delete(Long postID);
 
-    Long clickFavorite(final Long userId, final Long postId);
+    Long clickFavorite(Long userId, Long postId);
 
     List<PostCountDto> getCountsPerDayWithYear(int year, Long userId);
 
     List<CategorySimpleDto> getScoresWithCategoryByUserId(Long userId);
 
-    CursorResult<FollowingPostDto> explore(Long userId, final Long cursorId, final Pageable page);
+    CursorResult<ExploreDto> followingExplore(Long userId, Long cursorId, Pageable page);
 
     List<PostResponseDto> getPost(Long userId, Integer year, Integer month);
 

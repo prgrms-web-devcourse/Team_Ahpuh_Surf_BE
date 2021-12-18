@@ -77,37 +77,37 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public CursorResult<FollowingPostDto> explore(final Long myId, final Long cursorId, final Pageable page) {
+    public CursorResult<ExploreDto> followingExplore(final Long myId, final Long cursorId, final Pageable page) {
         final User me = userRepository.findById(myId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(myId));
         if (followRepository.findByUser(me).isEmpty()) {
-            final List<FollowingPostDto> emptyList = new ArrayList<>();
-            emptyList.add(FollowingPostDto.builder().build());
+            final List<ExploreDto> emptyList = new ArrayList<>();
+            emptyList.add(ExploreDto.builder().build());
             return new CursorResult<>(emptyList, false);
         }
 
         final Post findPost = postRepository.findById(cursorId).orElse(null);
 
-        final List<FollowingPostDto> followingPostDtos = findPost == null ?
+        final List<ExploreDto> exploreDtos = findPost == null ?
                 postRepository.findFollowingPosts(myId, page) :
                 postRepository.findNextFollowingPosts(myId, findPost.getSelectedDate(), findPost.getCreatedAt(), page);
 
-        for (final FollowingPostDto dto : followingPostDtos) {
+        for (final ExploreDto dto : exploreDtos) {
             likeRepository.findByUserIdAndPost(myId, getPostById(dto.getPostId()))
                     .ifPresent(like -> dto.setLiked(like.getLikeId()));
         }
 
-        final long lastIdOfIndex = followingPostDtos.isEmpty() ? 0 : followingPostDtos.get(followingPostDtos.size() - 1).getPostId();
+        final long lastIdOfIndex = exploreDtos.isEmpty() ? 0 : exploreDtos.get(exploreDtos.size() - 1).getPostId();
 
         final boolean hasNext = !postRepository.findNextFollowingPosts(
                 myId,
-                followingPostDtos
+                exploreDtos
                         .stream()
                         .filter(post -> post.getPostId().equals(lastIdOfIndex))
                         .findFirst()
                         .get()
                         .getSelectedDate(),
-                followingPostDtos
+                exploreDtos
                         .stream()
                         .filter(post -> post.getPostId().equals(lastIdOfIndex))
                         .findFirst()
@@ -115,7 +115,7 @@ public class PostServiceImpl implements PostService {
                         .getCreatedAt(),
                 page).isEmpty();
 
-        return new CursorResult<>(followingPostDtos, hasNext);
+        return new CursorResult<>(exploreDtos, hasNext);
     }
 
     public List<PostCountDto> getCountsPerDayWithYear(final int year, final Long userId) {

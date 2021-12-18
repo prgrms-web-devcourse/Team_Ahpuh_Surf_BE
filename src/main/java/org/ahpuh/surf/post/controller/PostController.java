@@ -105,11 +105,11 @@ public class PostController {
     }
 
     @GetMapping("/follow/posts")
-    public ResponseEntity<CursorResult<FollowingPostDto>> explore(
+    public ResponseEntity<CursorResult<ExploreDto>> explore(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Long cursorId
     ) {
-        final CursorResult<FollowingPostDto> followingPostDtos = postService.explore(authentication.userId, cursorId, PageRequest.of(0, 10));
+        final CursorResult<ExploreDto> followingPostDtos = postService.followingExplore(authentication.userId, cursorId, PageRequest.of(0, 10));
         return ResponseEntity.ok().body(followingPostDtos);
     }
 

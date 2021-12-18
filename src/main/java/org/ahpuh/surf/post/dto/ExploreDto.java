@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class FollowingPostDto {
+public class ExploreDto {
 
     private Long userId;
 
@@ -43,18 +43,18 @@ public class FollowingPostDto {
     private Boolean isLiked = false;
 
     @QueryProjection
-    public FollowingPostDto(final Long userId,
-                            final String userName,
-                            final String profilePhotoUrl,
-                            final String categoryName,
-                            final String colorCode,
-                            final Long postId,
-                            final String content,
-                            final Integer score,
-                            final String imageUrl,
-                            final String fileUrl,
-                            final LocalDate selectedDate,
-                            final LocalDateTime createdAt) {
+    public ExploreDto(final Long userId,
+                      final String userName,
+                      final String profilePhotoUrl,
+                      final String categoryName,
+                      final String colorCode,
+                      final Long postId,
+                      final String content,
+                      final Integer score,
+                      final String imageUrl,
+                      final String fileUrl,
+                      final LocalDate selectedDate,
+                      final LocalDateTime createdAt) {
         this.userId = userId;
         this.userName = userName;
         this.profilePhotoUrl = profilePhotoUrl;

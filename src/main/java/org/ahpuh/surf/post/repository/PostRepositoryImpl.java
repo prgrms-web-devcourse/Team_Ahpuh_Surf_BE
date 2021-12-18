@@ -19,7 +19,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<FollowingPostDto> findFollowingPosts(final Long userId, final Pageable page) {
+    public List<ExploreDto> findFollowingPosts(final Long userId, final Pageable page) {
         return queryFactory
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),
@@ -45,7 +45,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     }
 
     @Override
-    public List<FollowingPostDto> findNextFollowingPosts(final Long userId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+    public List<ExploreDto> findNextFollowingPosts(final Long userId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
         return queryFactory
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),

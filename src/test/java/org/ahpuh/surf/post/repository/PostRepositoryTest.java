@@ -5,7 +5,7 @@ import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.follow.entity.Follow;
 import org.ahpuh.surf.follow.repository.FollowRepository;
-import org.ahpuh.surf.post.dto.FollowingPostDto;
+import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.QFollowingPostDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.controller.UserController;
@@ -141,7 +141,7 @@ class PostRepositoryTest {
     void testQueryDsl() {
         final JPAQueryFactory query = new JPAQueryFactory(entityManager);
         final PageRequest page = PageRequest.of(0, 10);
-        final List<FollowingPostDto> posts = query
+        final List<ExploreDto> posts = query
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),
                         post.user.userName.as("userName"),
