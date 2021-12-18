@@ -35,6 +35,6 @@ public interface PostService {
 
     int getRecentScore(Long categoryId);
 
-    List<ExploreDto> recentAllPosts(Long myId);
+    List<RecentPostDto> recentAllPosts(Long myId);
 
 }
