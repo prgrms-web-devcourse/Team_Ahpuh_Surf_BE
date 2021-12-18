@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -11,13 +12,14 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class UserJoinRequestDto {
 
-    @Email(message = "email must be provided.")
+    @Email(message = "Invalid email.")
     private String email;
 
-    @NotBlank(message = "password must be provided.")
+    @NotBlank(message = "Password must be provided.")
     private String password;
 
-    @NotBlank(message = "userName must be provided.")
+    @NotBlank(message = "UserName must be provided.")
+    @Size(max = 20, message = "UserName length must within 20.")
     private String userName;
 
 }

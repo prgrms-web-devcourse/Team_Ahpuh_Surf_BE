@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class UserLoginRequestDto {
 
-    @Email(message = "email must be provided.")
+    @Email(message = "Invalid email.")
     private String email;
 
     @NotBlank(message = "password must be provided.")

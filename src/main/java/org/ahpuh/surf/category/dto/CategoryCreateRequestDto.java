@@ -12,11 +12,11 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class CategoryCreateRequestDto {
 
-    @NotBlank(message = "Category name is mandatory")
-    @Size(min = 1, max = 40)
+    @NotBlank(message = "Category name length must be 1 ~ 30.")
+    @Size(min = 1, max = 30)
     private String name;
 
-    @Pattern(regexp = "^#(?:[0-9a-fA-F]{3}){1,2}$")
+    @Pattern(regexp = "^#(?:[0-9a-fA-F]{3}){1,2}$", message = "Invalid colorCode.")
     private String colorCode;
 
 }

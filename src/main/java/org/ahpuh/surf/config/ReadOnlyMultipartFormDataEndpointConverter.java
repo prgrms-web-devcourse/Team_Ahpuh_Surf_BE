@@ -41,14 +41,6 @@ public class ReadOnlyMultipartFormDataEndpointConverter extends MappingJackson2H
         return super.canRead(type, contextClass, mediaType);
     }
 
-//      If you want to decide whether this converter can reads data depending on end point classes (i.e. classes with '@RestController'/'@Controller'),
-//      you have to compare 'contextClass' to the type(s) of your end point class(es).
-//      Use this 'canRead' method instead.
-//      @Override
-//      public boolean canRead(Type type, Class<?> contextClass, MediaType mediaType) {
-//          return YourEndpointController.class == contextClass && super.canRead(type, contextClass, mediaType);
-//      }
-
     @Override
     protected boolean canWrite(final MediaType mediaType) {
         // This converter is only be used for requests.
