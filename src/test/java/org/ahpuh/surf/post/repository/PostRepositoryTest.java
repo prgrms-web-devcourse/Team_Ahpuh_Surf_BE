@@ -144,6 +144,8 @@ class PostRepositoryTest {
         final List<FollowingPostDto> posts = query
                 .select(new QFollowingPostDto(
                         post.user.userId.as("userId"),
+                        post.user.userName.as("userName"),
+                        post.user.profilePhotoUrl.as("profilePhotoUrl"),
                         post.category.name.as("categoryName"),
                         post.category.colorCode.as("colorCode"),
                         post.postId.as("postId"),

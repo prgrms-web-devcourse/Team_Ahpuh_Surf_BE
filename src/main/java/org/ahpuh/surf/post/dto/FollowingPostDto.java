@@ -14,6 +14,10 @@ public class FollowingPostDto {
 
     private Long userId;
 
+    private String userName;
+
+    private String profilePhotoUrl;
+
     private String categoryName;
 
     private String colorCode;
@@ -30,7 +34,7 @@ public class FollowingPostDto {
 
     private LocalDate selectedDate;
 
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 
     @Builder.Default
     private Long likeId = null;
@@ -40,6 +44,8 @@ public class FollowingPostDto {
 
     @QueryProjection
     public FollowingPostDto(final Long userId,
+                            final String userName,
+                            final String profilePhotoUrl,
                             final String categoryName,
                             final String colorCode,
                             final Long postId,
@@ -48,8 +54,10 @@ public class FollowingPostDto {
                             final String imageUrl,
                             final String fileUrl,
                             final LocalDate selectedDate,
-                            final LocalDateTime updatedAt) {
+                            final LocalDateTime createdAt) {
         this.userId = userId;
+        this.userName = userName;
+        this.profilePhotoUrl = profilePhotoUrl;
         this.categoryName = categoryName;
         this.colorCode = colorCode;
         this.postId = postId;
@@ -58,7 +66,7 @@ public class FollowingPostDto {
         this.imageUrl = imageUrl;
         this.fileUrl = fileUrl;
         this.selectedDate = selectedDate;
-        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
         this.likeId = null;
         this.isLiked = false;
     }
