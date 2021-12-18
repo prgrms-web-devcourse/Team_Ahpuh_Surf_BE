@@ -149,4 +149,12 @@ public class PostController {
         return ResponseEntity.ok().body(postService.getRecentScore(categoryId));
     }
 
+    @GetMapping("/posts/recent")
+    public ResponseEntity<List<ExploreDto>> recentAllPosts(
+            @AuthenticationPrincipal final JwtAuthentication authentication
+    ) {
+        final List<ExploreDto> recentAllPosts = postService.recentAllPosts(authentication.userId);
+        return ResponseEntity.ok().body(recentAllPosts);
+    }
+
 }

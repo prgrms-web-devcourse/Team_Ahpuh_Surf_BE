@@ -26,4 +26,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
     List<Post> findByCategory(Category category);
 
+    List<Post> findTop100ByIsDeletedIsFalseOrderByCreatedAtDesc(Pageable page);
+
 }

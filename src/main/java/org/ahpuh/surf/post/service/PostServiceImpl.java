@@ -15,6 +15,7 @@ import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -240,4 +242,12 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(postId)
                 .orElseThrow(() -> EntityExceptionHandler.PostNotFound(postId));
     }
+
+    public List<ExploreDto> recentAllPosts(final Long myId) {
+        return postRepository.findTop100ByIsDeletedIsFalseOrderByCreatedAtDesc(PageRequest.of(0, 100))
+                .stream()
+                .map(postEntity -> postConverter.toRecentAllPosts(postEntity, likeRepository.findByUserIdAndPost(myId, postEntity)))
+                .collect(Collectors.toList());
+    }
+
 }
