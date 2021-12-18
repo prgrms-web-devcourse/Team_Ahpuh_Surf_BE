@@ -35,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class LikeControllerTest {
 
+    User user1;
+    User user2;
     Long userId1;
     Long userId2;
     String userToken1;
@@ -56,13 +58,13 @@ class LikeControllerTest {
     @BeforeEach
     void setUp() {
         // user1, user2 회원가입 후 userId 반환
-        userId1 = userRepository.save(User.builder()
-                        .email("user1@naver.com")
-                        .userName("name")
-                        .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
-                        .build())
-                .getUserId();
-        final User user2 = userRepository.save(User.builder()
+        user1 = userRepository.save(User.builder()
+                .email("user1@naver.com")
+                .userName("name")
+                .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
+                .build());
+        userId1 = user1.getUserId();
+        user2 = userRepository.save(User.builder()
                 .email("user2@naver.com")
                 .userName("name")
                 .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
@@ -113,7 +115,7 @@ class LikeControllerTest {
         final List<Like> likes = likeRepository.findAll();
         assertAll("afterLikePost",
                 () -> assertThat(likes.size(), is(1)),
-                () -> assertThat(likes.get(0).getUserId(), is(userId1)),
+                () -> assertThat(likes.get(0).getUser(), is(user1)),
                 () -> assertThat(likes.get(0).getPost().getPostId(), is(postId1))
         );
 
@@ -125,14 +127,14 @@ class LikeControllerTest {
     void testUnlike() throws Exception {
         // Given
         likeRepository.save(Like.builder()
-                .userId(userId1)
+                .user(user1)
                 .post(post1)
                 .build());
 
         final List<Like> likes = likeRepository.findAll();
         assertAll("beforeUnlikePost",
                 () -> assertThat(likes.size(), is(1)),
-                () -> assertThat(likes.get(0).getUserId(), is(userId1)),
+                () -> assertThat(likes.get(0).getUser(), is(user1)),
                 () -> assertThat(likes.get(0).getPost(), is(post1))
         );
 

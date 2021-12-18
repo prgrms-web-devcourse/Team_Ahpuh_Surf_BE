@@ -5,6 +5,7 @@ import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.follow.entity.Follow;
+import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
 import org.hibernate.annotations.Where;
@@ -67,9 +68,13 @@ public class User extends BaseEntity {
     @Builder.Default
     private List<Follow> following = new ArrayList<>(); // 내가 팔로잉한
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "followedUser", fetch = FetchType.LAZY, orphanRemoval = true)
     @Builder.Default
     private List<Follow> followers = new ArrayList<>(); // 나를 팔로우한
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @Builder.Default
+    private List<Like> likes = new ArrayList<>();
 
     @Builder
     public User(final String email, final String password, final String userName) {

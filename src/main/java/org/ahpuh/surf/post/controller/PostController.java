@@ -105,7 +105,7 @@ public class PostController {
     }
 
     @GetMapping("/follow/posts")
-    public ResponseEntity<CursorResult<ExploreDto>> explore(
+    public ResponseEntity<CursorResult<ExploreDto>> followingExplore(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Long cursorId
     ) {
@@ -150,10 +150,10 @@ public class PostController {
     }
 
     @GetMapping("/posts/recent")
-    public ResponseEntity<List<ExploreDto>> recentAllPosts(
+    public ResponseEntity<List<RecentPostDto>> recentAllPosts(
             @AuthenticationPrincipal final JwtAuthentication authentication
     ) {
-        final List<ExploreDto> recentAllPosts = postService.recentAllPosts(authentication.userId);
+        final List<RecentPostDto> recentAllPosts = postService.recentAllPosts(authentication.userId);
         return ResponseEntity.ok().body(recentAllPosts);
     }
 

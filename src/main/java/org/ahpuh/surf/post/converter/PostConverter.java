@@ -4,7 +4,6 @@ import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
-import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.post.dto.*;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.entity.User;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -33,7 +31,7 @@ public class PostConverter {
         return postEntity;
     }
 
-    public PostDto toDto(final Post post, final Optional<Like> like) {
+    public PostDto toDto(final Post post, final Long myId) {
         final PostDto dto = PostDto.builder()
                 .postId(post.getPostId())
                 .userId(post.getUser().getUserId())
@@ -46,7 +44,11 @@ public class PostConverter {
                 .favorite(post.getFavorite())
                 .createdAt(post.getCreatedAt().toString())
                 .build();
-        like.ifPresent(likeEntity -> dto.setLiked(likeEntity.getLikeId()));
+        post.getLikes()
+                .stream()
+                .filter(like -> like.getUser().getUserId().equals(myId))
+                .findFirst()
+                .ifPresent(likeEntity -> dto.setLiked(likeEntity.getLikeId()));
         return dto;
     }
 
@@ -63,7 +65,7 @@ public class PostConverter {
                 .build();
     }
 
-    public AllPostResponseDto toAllPostResponseDto(final Post post, final Optional<Like> like) {
+    public AllPostResponseDto toAllPostResponseDto(final Post post, final Long myId) {
         final AllPostResponseDto allPostResponseDto = AllPostResponseDto.builder()
                 .categoryName(post.getCategory().getName())
                 .colorCode(post.getCategory().getColorCode())
@@ -74,7 +76,11 @@ public class PostConverter {
                 .fileUrl(post.getFileUrl())
                 .selectedDate(post.getSelectedDate().toString())
                 .build();
-        like.ifPresent(likeEntity -> allPostResponseDto.setLiked(likeEntity.getLikeId()));
+        post.getLikes()
+                .stream()
+                .filter(like -> like.getUser().getUserId().equals(myId))
+                .findFirst()
+                .ifPresent(likeEntity -> allPostResponseDto.setLiked(likeEntity.getLikeId()));
         return allPostResponseDto;
     }
 
@@ -113,8 +119,8 @@ public class PostConverter {
         return categorySimpleDtos;
     }
 
-    public ExploreDto toRecentAllPosts(final Post post, final Optional<Like> like) {
-        final ExploreDto recentPostDtos = ExploreDto.builder()
+    public RecentPostDto toRecentAllPosts(final Post post, final User me) {
+        final RecentPostDto recentPostDto = RecentPostDto.builder()
                 .userId(post.getUser().getUserId())
                 .userName(post.getUser().getUserName())
                 .profilePhotoUrl(post.getUser().getProfilePhotoUrl())
@@ -126,8 +132,18 @@ public class PostConverter {
                 .selectedDate(post.getSelectedDate())
                 .createdAt(post.getCreatedAt())
                 .build();
-        like.ifPresent(likeEntity -> recentPostDtos.setLiked(likeEntity.getLikeId()));
-        return recentPostDtos;
+        post.getLikes()
+                .stream()
+                .filter(like -> like.getUser().equals(me))
+                .findFirst()
+                .ifPresent(like -> recentPostDto.setLiked(like.getLikeId()));
+        if (post.getUser()
+                .getFollowers()
+                .stream()
+                .anyMatch(follow -> follow.getUser().equals(me))) {
+            recentPostDto.checkFollowed();
+        }
+        return recentPostDto;
     }
 
 }
