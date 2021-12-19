@@ -35,6 +35,6 @@ public interface PostService {
 
     int getRecentScore(Long categoryId);
 
-    List<RecentPostDto> recentAllPosts(Long myId);
+    CursorResult<RecentPostDto> recentAllPosts(Long myId, Long cursorId, Pageable page);
 
 }

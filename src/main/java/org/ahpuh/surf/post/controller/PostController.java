@@ -150,10 +150,11 @@ public class PostController {
     }
 
     @GetMapping("/posts/recent")
-    public ResponseEntity<List<RecentPostDto>> recentAllPosts(
-            @AuthenticationPrincipal final JwtAuthentication authentication
+    public ResponseEntity<CursorResult<RecentPostDto>> recentAllPosts(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @RequestParam final Long cursorId
     ) {
-        final List<RecentPostDto> recentAllPosts = postService.recentAllPosts(authentication.userId);
+        final CursorResult<RecentPostDto> recentAllPosts = postService.recentAllPosts(authentication.userId, cursorId, PageRequest.of(0, 10));
         return ResponseEntity.ok().body(recentAllPosts);
     }
 

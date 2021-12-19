@@ -22,16 +22,14 @@ CREATE TABLE users
 
 CREATE TABLE categories
 (
-    category_id   BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id       BIGINT      NOT NULL,
-    name          VARCHAR(30) NOT NULL,
-    is_public     BOOLEAN   DEFAULT true,
-    average_score INT       DEFAULT 0,
-    color_code    VARCHAR(10),
-    recent_score  INT       DEFAULT 0,
-    created_at    TIMESTAMP DEFAULT current_timestamp,
-    updated_at    TIMESTAMP DEFAULT current_timestamp,
-    is_deleted    BOOLEAN   DEFAULT false,
+    category_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id     BIGINT      NOT NULL,
+    name        VARCHAR(30) NOT NULL,
+    is_public   BOOLEAN   DEFAULT true,
+    color_code  VARCHAR(10),
+    created_at  TIMESTAMP DEFAULT current_timestamp,
+    updated_at  TIMESTAMP DEFAULT current_timestamp,
+    is_deleted  BOOLEAN   DEFAULT false,
     CONSTRAINT fk_user_id_for_category FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
