@@ -164,7 +164,6 @@ class UserControllerTest {
 
         // Then
         final User user11 = userRepository.findAll().get(0);
-        System.out.println("말이돼냐 -> " + user11.getProfilePhotoUrl());
         assertAll("afterUpdate",
                 () -> assertThat(user11.getUserName(), is("수정된 name")),
                 () -> assertThat(user11.getUrl(), is("내 블로그 주소")),

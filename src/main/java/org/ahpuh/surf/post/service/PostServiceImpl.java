@@ -13,14 +13,13 @@ import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -215,13 +214,30 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> EntityExceptionHandler.PostNotFound(postId));
     }
 
-    public List<RecentPostDto> recentAllPosts(final Long myId) {
+    public CursorResult<RecentPostDto> recentAllPosts(final Long myId, final Long cursorId, final Pageable page) {
         final User me = userRepository.findById(myId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(myId));
-        return postRepository.findTop100ByIsDeletedIsFalseOrderByCreatedAtDesc(PageRequest.of(0, 100))
-                .stream()
+        final Post findPost = postRepository.findById(cursorId).orElse(null);
+
+        final List<Post> postList = findPost == null
+                ? postRepository.findTop10ByCreatedAtIsLessThanEqualOrderByCreatedAtDesc(LocalDateTime.now(), page)
+                : postRepository.findTop10ByCreatedAtIsLessThanOrderByCreatedAtDesc(findPost.getCreatedAt(), page);
+
+        if (postList.isEmpty()) {
+            return new CursorResult<>(List.of(), false);
+        }
+
+        final List<RecentPostDto> posts = postList.stream()
                 .map(postEntity -> postConverter.toRecentAllPosts(postEntity, me))
-                .collect(Collectors.toList());
+                .toList();
+
+        final Post lastPost = postList.get(postList.size() - 1);
+        final boolean hasNext = !postRepository.findTop10ByCreatedAtIsLessThanOrderByCreatedAtDesc(
+                        lastPost.getCreatedAt(),
+                        page)
+                .isEmpty();
+
+        return new CursorResult<>(posts, hasNext);
     }
 
 }
