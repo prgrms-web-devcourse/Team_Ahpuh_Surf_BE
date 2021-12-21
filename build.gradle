@@ -4,6 +4,7 @@ plugins {
     id 'org.asciidoctor.convert' version '1.5.8'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'java'
+    id 'jacoco'
 }
 
 group = 'org.ahpuh'
@@ -77,9 +78,31 @@ configurations {
 test {
     outputs.dir snippetsDir
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
 }
 
 asciidoctor {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+jacocoTestReport {
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'BUNDLE'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.50
+            }
+
+            excludes = []
+        }
+    }
 }
