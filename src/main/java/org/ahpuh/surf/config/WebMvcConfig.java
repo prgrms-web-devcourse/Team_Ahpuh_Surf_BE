@@ -32,8 +32,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry
-                .addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000")
+                .addMapping("/**")
+                .allowedOrigins(
+                        "https://surf-jhvkmp9am-kimyeim.vercel.app",
+                        "https://team-ahpuh-surf-fe.vercel.app",
+                        "http://localhost:3000")
+                .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600)
                 .allowedMethods(
