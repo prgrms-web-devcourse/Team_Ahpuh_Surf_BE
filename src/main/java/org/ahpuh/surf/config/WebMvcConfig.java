@@ -34,8 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry
                 .addMapping("/**")
                 .allowedOrigins(
-                        "https://surf-jhvkmp9am-kimyeim.vercel.app",
-                        "https://team-ahpuh-surf-fe.vercel.app",
+                        "https://surf-livid.vercel.app",
                         "http://localhost:3000")
                 .allowedHeaders("*")
                 .allowCredentials(true)
