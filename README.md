@@ -47,8 +47,7 @@
 
 **CI/CD**
 
-- Github action
-- Jenkins
+- **Jenkins**
 
 **Dependencies**
 
