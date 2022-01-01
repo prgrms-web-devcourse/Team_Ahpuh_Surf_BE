@@ -35,5 +35,5 @@ cloud:
       auto: false
 logging:
   slack:
-    webhook-uri: https://hooks.slack.com/services/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  # SLACK_WEBHOOK_URI 추가
+    webhook-uri: ${SLACK_WEBHOOK_URI}
   config: classpath:logback-slack.xml
