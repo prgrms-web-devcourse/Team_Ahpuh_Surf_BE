@@ -32,8 +32,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry
-                .addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000")
+                .addMapping("/**")
+                .allowedOrigins(
+                        "https://surf-livid.vercel.app",
+                        "http://localhost:3000")
+                .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600)
                 .allowedMethods(
@@ -41,7 +44,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         HttpMethod.GET.name(),
                         HttpMethod.DELETE.name(),
                         HttpMethod.PATCH.name(),
-                        HttpMethod.PUT.name());
+                        HttpMethod.PUT.name(),
+                        HttpMethod.OPTIONS.name());
     }
 
 }

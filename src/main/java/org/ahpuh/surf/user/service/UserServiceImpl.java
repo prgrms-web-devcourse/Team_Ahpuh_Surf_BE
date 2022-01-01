@@ -26,12 +26,10 @@ import static org.ahpuh.surf.common.exception.EntityExceptionHandler.UserNotFoun
 public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
-
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-
     private final UserConverter userConverter;
 
     public UserLoginResponseDto authenticate(final String email, final String password) {
