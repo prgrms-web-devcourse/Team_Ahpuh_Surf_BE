@@ -12,6 +12,9 @@ spring:
       use-new-id-generator-mappings: false
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  profiles:
+    include:
+      - slack-logging
 server:
   port: 8080
 jwt:
@@ -30,3 +33,7 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+logging:
+  slack:
+    webhook-uri: https://hooks.slack.com/services/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  # SLACK_WEBHOOK_URI 추가
+  config: classpath:logback-slack.xml
