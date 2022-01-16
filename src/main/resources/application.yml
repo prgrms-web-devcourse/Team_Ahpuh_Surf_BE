@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PW}
+  jpa:
+    open-in-view: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  profiles:
+    include:
+      - slack-logging
+server:
+  port: 8080
+jwt:
+  header: token
+  issuer: ahpuh
+  client-secret: ${JWT_CLIENT_SECRET}
+  expiry-seconds: 2592000
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: ${AWS_S3_BUCKET_NAME}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+logging:
+  slack:
+    webhook-uri: ${SLACK_WEBHOOK_URI}
+  config: classpath:logback-slack.xml

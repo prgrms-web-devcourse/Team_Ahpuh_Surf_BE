@@ -2,7 +2,9 @@ plugins {
     id 'org.springframework.boot' version '2.6.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.asciidoctor.convert' version '1.5.8'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'java'
+    id 'jacoco'
 }
 
 group = 'org.ahpuh'
@@ -27,7 +29,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'com.google.guava:guava:23.0'
+    implementation 'com.auth0:java-jwt:3.18.2'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    implementation 'com.querydsl:querydsl-apt:5.0.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.122'
+    implementation 'ch.qos.logback:logback-classic:1.2.8'
+    implementation 'ch.qos.logback:logback-core:1.2.8'
+    implementation 'com.github.maricn:logback-slack-appender:1.4.0'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
@@ -35,14 +47,63 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
+
+// QueryDsl 설정
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+// -----
 
 test {
     outputs.dir snippetsDir
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
 }
 
 asciidoctor {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+jacocoTestReport {
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'BUNDLE'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.50
+            }
+
+            excludes = []
+        }
+    }
 }

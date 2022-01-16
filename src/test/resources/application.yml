@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: surf
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    database: h2
+    open-in-view: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+server:
+  port: 8080
+jwt:
+  header: token
+  issuer: ahpuh
+  client-secret: ${JWT_CLIENT_SECRET}
+  expiry-seconds: 2592000
+cloud:
+  aws:
+    credentials:
+      accessKey: mock
+      secretKey: mock
+    s3:
+      bucket: mock
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
