@@ -26,33 +26,41 @@ ext {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'com.google.guava:guava:23.0'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.auth0:java-jwt:3.18.2'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    testImplementation 'org.springframework.security:spring-security-test'
+
     implementation 'com.querydsl:querydsl-jpa:5.0.0'
     implementation 'com.querydsl:querydsl-apt:5.0.0'
+
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.122'
+
     implementation 'ch.qos.logback:logback-classic:1.2.8'
     implementation 'ch.qos.logback:logback-core:1.2.8'
     implementation 'com.github.maricn:logback-slack-appender:1.4.0'
+
+    implementation 'com.google.guava:guava:23.0'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation 'org.springframework.security:spring-security-test'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
-// QueryDsl 설정
+// QueryDsl 설정 시작
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
@@ -74,7 +82,7 @@ configurations {
     }
     querydsl.extendsFrom compileClasspath
 }
-// -----
+//  QueryDsl 설정 끝
 
 test {
     outputs.dir snippetsDir

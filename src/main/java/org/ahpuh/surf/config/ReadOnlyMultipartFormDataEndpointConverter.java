@@ -19,7 +19,6 @@ public class ReadOnlyMultipartFormDataEndpointConverter extends MappingJackson2H
 
     @Override
     public boolean canRead(final Type type, final Class<?> contextClass, final MediaType mediaType) {
-        // When a rest client(e.g. RestTemplate#getForObject) reads a request, 'RequestAttributes' can be null.
         final RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             return false;
@@ -33,7 +32,6 @@ public class ReadOnlyMultipartFormDataEndpointConverter extends MappingJackson2H
         if (requestMapping == null) {
             return false;
         }
-        // This converter reads data only when the mapped controller method consumes just 'MediaType.MULTIPART_FORM_DATA_VALUE'.
         if (requestMapping.consumes().length != 1
                 || !MediaType.MULTIPART_FORM_DATA_VALUE.equals(requestMapping.consumes()[0])) {
             return false;
@@ -43,7 +41,6 @@ public class ReadOnlyMultipartFormDataEndpointConverter extends MappingJackson2H
 
     @Override
     protected boolean canWrite(final MediaType mediaType) {
-        // This converter is only be used for requests.
         return false;
     }
 
