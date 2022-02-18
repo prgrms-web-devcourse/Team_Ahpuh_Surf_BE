@@ -1,0 +1,47 @@
+<configuration>
+    <property name="LOG_PATH" value="./logs"/>
+    <property name="LOG_FILE_NAME" value="surf"/>
+
+    <springProfile name ="http-console-logging">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%n###### HTTP Request ######%n%fullRequest%n###### HTTP Response ######%n%fullResponse%n%n
+                </pattern>
+            </encoder>
+        </appender>
+        <appender name="STDOUT-async" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="STDOUT" />
+            <queueSize>256</queueSize>
+            <discardingThreshold>20</discardingThreshold>
+            <includeCallerData>false</includeCallerData>
+            <neverBlock>true</neverBlock>
+            <maxFlushTime>3000</maxFlushTime>
+        </appender>
+        <appender-ref ref="STDOUT-async"/>
+    </springProfile>
+
+    <springProfile name ="http-file-logging">
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+            <encoder>
+                <pattern>%n###### HTTP Request ######%n%fullRequest%n###### HTTP Response ######%n%fullResponse%n%n</pattern>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.zip</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>100MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>3</maxHistory>
+            </rollingPolicy>
+        </appender>
+        <appender name="FILE-async" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="FILE" />
+            <queueSize>256</queueSize>
+            <discardingThreshold>20</discardingThreshold>
+            <includeCallerData>false</includeCallerData>
+            <neverBlock>true</neverBlock>
+            <maxFlushTime>3000</maxFlushTime>
+        </appender>
+        <appender-ref ref="FILE-async" />
+    </springProfile>
+</configuration>
