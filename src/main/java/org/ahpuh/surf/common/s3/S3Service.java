@@ -16,8 +16,4 @@ public interface S3Service {
 
     boolean exist(final MultipartFile file);
 
-    boolean invalidImageExtension(final String extension);
-
-    boolean invalidFileExtension(final String extension);
-
 }
