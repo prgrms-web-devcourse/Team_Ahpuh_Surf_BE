@@ -1,7 +1,6 @@
 package org.ahpuh.surf.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.ahpuh.surf.config.MockAwsS3Service;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
@@ -13,9 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -31,9 +30,9 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(MockAwsS3Service.class)
 @AutoConfigureMockMvc
 @SpringBootTest
+@ActiveProfiles("test")
 class UserControllerTest {
 
     User user1;
@@ -169,7 +168,7 @@ class UserControllerTest {
                 () -> assertThat(user11.getUrl(), is("내 블로그 주소")),
                 () -> assertThat(user11.getAboutMe(), is("수정된 소개글")),
                 () -> assertThat(user11.getAccountPublic(), is(false)),
-                () -> assertThat(user11.getProfilePhotoUrl(), is("mock"))
+                () -> assertThat(user11.getProfilePhotoUrl(), is("mock upload"))
         );
 
         // file을 첨부하지 않으면 파일 url을 변경하지 않음
@@ -179,7 +178,7 @@ class UserControllerTest {
                         .header("token", token))
                 .andExpect(status().isOk())
                 .andDo(print());
-        assertThat(user1.getProfilePhotoUrl(), is("mock"));
+        assertThat(user1.getProfilePhotoUrl(), is("mock upload"));
 
     }
 
