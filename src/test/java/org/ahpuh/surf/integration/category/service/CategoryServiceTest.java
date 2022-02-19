@@ -11,7 +11,6 @@ import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,8 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
@@ -70,10 +68,10 @@ class CategoryServiceTest {
 
         // then
         assertAll(
-                () -> Assertions.assertThat(categoryRepository.findAll().size()).isEqualTo(2),
-                () -> Assertions.assertThat(categoryRepository.findAll().get(1).getName()).isEqualTo(createRequestDto.getName()),
-                () -> Assertions.assertThat(categoryRepository.findAll().get(1).getIsPublic()).isTrue(),
-                () -> Assertions.assertThat(categoryRepository.findAll().get(1).getColorCode()).isEqualTo(createRequestDto.getColorCode())
+                () -> assertThat(categoryRepository.findAll().size()).isEqualTo(2),
+                () -> assertThat(categoryRepository.findAll().get(1).getName()).isEqualTo(createRequestDto.getName()),
+                () -> assertThat(categoryRepository.findAll().get(1).getIsPublic()).isTrue(),
+                () -> assertThat(categoryRepository.findAll().get(1).getColorCode()).isEqualTo(createRequestDto.getColorCode())
         );
     }
 
@@ -92,9 +90,9 @@ class CategoryServiceTest {
 
         // then
         assertAll(
-                () -> Assertions.assertThat(categoryRepository.findAll().get(0).getName()).isEqualTo(updateRequestDto.getName()),
-                () -> Assertions.assertThat(categoryRepository.findAll().get(0).getIsPublic()).isFalse(),
-                () -> Assertions.assertThat(categoryRepository.findAll().get(0).getColorCode()).isEqualTo(updateRequestDto.getColorCode())
+                () -> assertThat(categoryRepository.findAll().get(0).getName()).isEqualTo(updateRequestDto.getName()),
+                () -> assertThat(categoryRepository.findAll().get(0).getIsPublic()).isFalse(),
+                () -> assertThat(categoryRepository.findAll().get(0).getColorCode()).isEqualTo(updateRequestDto.getColorCode())
         );
     }
 
@@ -108,7 +106,7 @@ class CategoryServiceTest {
         categoryService.deleteCategory(id);
 
         // then
-        assertThat(categoryRepository.findAll().size(), is(0));
+        assertThat(categoryRepository.findAll().size()).isEqualTo(0);
     }
 
     @Test
@@ -127,9 +125,9 @@ class CategoryServiceTest {
 
         // then
         assertAll(
-                () -> Assertions.assertThat(categories.size()).isEqualTo(2),
-                () -> Assertions.assertThat(categories.get(0).getCategoryId()).isEqualTo(category.getCategoryId()),
-                () -> Assertions.assertThat(categories.get(1).getCategoryId()).isEqualTo(newCategory.getCategoryId())
+                () -> assertThat(categories.size()).isEqualTo(2),
+                () -> assertThat(categories.get(0).getCategoryId()).isEqualTo(category.getCategoryId()),
+                () -> assertThat(categories.get(1).getCategoryId()).isEqualTo(newCategory.getCategoryId())
         );
     }
 
@@ -143,18 +141,19 @@ class CategoryServiceTest {
                 .colorCode("#e7f5df")
                 .build());
 
-        final Post post1 = postRepository.save(Post.builder()
-                .content("post1")
+        postRepository.save(Post.builder()
+                .user(user)
+                .category(newCategory)
                 .selectedDate(LocalDate.now())
+                .content("post1")
                 .score(88).build());
 
-        final Post post2 = postRepository.save(Post.builder()
-                .content("post2")
+        postRepository.save(Post.builder()
+                .user(user)
+                .category(newCategory)
                 .selectedDate(LocalDate.now())
+                .content("post2")
                 .score(43).build());
-
-        newCategory.addPost(post1);
-        newCategory.addPost(post2);
 
         final Long id = user.getUserId();
 
@@ -163,12 +162,12 @@ class CategoryServiceTest {
 
         // then
         assertAll(
-                () -> Assertions.assertThat(categories.size()).isEqualTo(2),
-                () -> Assertions.assertThat(categories.get(0).getPostCount()).isZero(),
-                () -> Assertions.assertThat(categories.get(0).getAverageScore()).isZero()
-//                테스트 통과x post가 생성될 때 post, user에 모두 추가되지 않음 !
-//                () -> Assertions.assertThat(categories.get(1).getPostCount()).isEqualTo(2),
-//                () -> Assertions.assertThat(categories.get(1).getAverageScore()).isEqualTo(65)
+                () -> assertThat(categories.size()).isEqualTo(2),
+                () -> assertThat(categories.get(0).getPostCount()).isZero(),
+                () -> assertThat(categories.get(0).getAverageScore()).isZero(),
+//                TODO : 테스트 통과x 양방향 매핑이 안됨, @Formula 안먹음
+//                () -> assertThat(categories.get(1).getPostCount()).isEqualTo(2),
+                () -> assertThat(categories.get(1).getAverageScore()).isEqualTo(65)
         );
     }
 }
