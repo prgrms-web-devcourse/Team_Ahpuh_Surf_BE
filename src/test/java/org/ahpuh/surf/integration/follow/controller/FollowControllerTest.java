@@ -19,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -46,7 +45,6 @@ class FollowControllerTest {
     private User user3;
     private Long userId1;
     private Long userId2;
-    private Long userId3;
     private String token;
 
     @BeforeEach
@@ -68,7 +66,6 @@ class FollowControllerTest {
                 .userName("name")
                 .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                 .build());
-        userId3 = user3.getUserId();
 
         final UserLoginRequestDto userJoinRequest = UserLoginRequestDto.builder()
                 .email("user1@naver.com")
@@ -94,9 +91,9 @@ class FollowControllerTest {
         // Then
         final List<Follow> allFollow = followRepository.findAll();
         assertAll("afterFollow",
-                () -> assertThat(allFollow.size(), is(1)),
-                () -> assertThat(allFollow.get(0).getUser(), is(user1)),
-                () -> assertThat(allFollow.get(0).getFollowedUser(), is(user2))
+                () -> assertThat(allFollow.size()).isEqualTo(1),
+                () -> assertThat(allFollow.get(0).getUser()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(0).getFollowedUser()).isEqualTo(user2)
         );
     }
 
@@ -112,9 +109,9 @@ class FollowControllerTest {
 
         final List<Follow> follows = followRepository.findAll();
         assertAll("beforeUnfollow",
-                () -> assertThat(follows.size(), is(1)),
-                () -> assertThat(follows.get(0).getUser(), is(user1)),
-                () -> assertThat(follows.get(0).getFollowedUser(), is(user2))
+                () -> assertThat(follows.size()).isEqualTo(1),
+                () -> assertThat(follows.get(0).getUser()).isEqualTo(user1),
+                () -> assertThat(follows.get(0).getFollowedUser()).isEqualTo(user2)
         );
 
         // When
@@ -125,7 +122,7 @@ class FollowControllerTest {
                 .andDo(print());
 
         // Then
-        assertThat(followRepository.findAll().size(), is(0));
+        assertThat(followRepository.findAll().size()).isEqualTo(0);
     }
 
     @Test
@@ -144,11 +141,11 @@ class FollowControllerTest {
 
         final List<Follow> allFollow = followRepository.findAll();
         assertAll("user1이 user2, user3을 팔로우",
-                () -> assertThat(allFollow.size(), is(2)),
-                () -> assertThat(allFollow.get(0).getUser(), is(user1)),
-                () -> assertThat(allFollow.get(0).getFollowedUser(), is(user2)),
-                () -> assertThat(allFollow.get(1).getUser(), is(user1)),
-                () -> assertThat(allFollow.get(1).getFollowedUser(), is(user3))
+                () -> assertThat(allFollow.size()).isEqualTo(2),
+                () -> assertThat(allFollow.get(0).getUser()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(0).getFollowedUser()).isEqualTo(user2),
+                () -> assertThat(allFollow.get(1).getUser()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(1).getFollowedUser()).isEqualTo(user3)
         );
 
         // When, Then
@@ -174,11 +171,11 @@ class FollowControllerTest {
 
         final List<Follow> allFollow = followRepository.findAll();
         assertAll("user1이 user2, user3을 팔로우",
-                () -> assertThat(allFollow.size(), is(2)),
-                () -> assertThat(allFollow.get(0).getUser(), is(user1)),
-                () -> assertThat(allFollow.get(0).getFollowedUser(), is(user2)),
-                () -> assertThat(allFollow.get(1).getUser(), is(user1)),
-                () -> assertThat(allFollow.get(1).getFollowedUser(), is(user3))
+                () -> assertThat(allFollow.size()).isEqualTo(2),
+                () -> assertThat(allFollow.get(0).getUser()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(0).getFollowedUser()).isEqualTo(user2),
+                () -> assertThat(allFollow.get(1).getUser()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(1).getFollowedUser()).isEqualTo(user3)
         );
 
         // When, Then

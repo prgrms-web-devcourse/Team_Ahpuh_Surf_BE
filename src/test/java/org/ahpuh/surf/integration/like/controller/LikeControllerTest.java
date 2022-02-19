@@ -23,8 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -35,13 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class LikeControllerTest {
 
-    User user1;
-    User user2;
-    Long userId1;
-    Long userId2;
-    String userToken1;
-    Post post1;
-    Long postId1;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -55,6 +47,12 @@ class LikeControllerTest {
     @Autowired
     private LikeRepository likeRepository;
 
+    private User user1;
+    private User user2;
+    private String userToken1;
+    private Post post1;
+    private Long postId1;
+
     @BeforeEach
     void setUp() {
         // user1, user2 회원가입 후 userId 반환
@@ -63,13 +61,11 @@ class LikeControllerTest {
                 .userName("name")
                 .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                 .build());
-        userId1 = user1.getUserId();
         user2 = userRepository.save(User.builder()
                 .email("user2@naver.com")
                 .userName("name")
                 .password("$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG") // testpw
                 .build());
-        userId2 = user2.getUserId();
 
         // user1 로그인 후 토큰 발급
         userToken1 = userController.login(UserLoginRequestDto.builder()
@@ -102,7 +98,7 @@ class LikeControllerTest {
     @Transactional
     void testLike() throws Exception {
         // Given
-        assertThat(likeRepository.findAll().size(), is(0));
+        assertThat(likeRepository.findAll().size()).isEqualTo(0);
 
         // When
         mockMvc.perform(post("/api/v1/posts/{postId}/like", postId1)
@@ -114,9 +110,9 @@ class LikeControllerTest {
         // Then
         final List<Like> likes = likeRepository.findAll();
         assertAll("afterLikePost",
-                () -> assertThat(likes.size(), is(1)),
-                () -> assertThat(likes.get(0).getUser(), is(user1)),
-                () -> assertThat(likes.get(0).getPost().getPostId(), is(postId1))
+                () -> assertThat(likes.size()).isEqualTo(1),
+                () -> assertThat(likes.get(0).getUser()).isEqualTo(user1),
+                () -> assertThat(likes.get(0).getPost().getPostId()).isEqualTo(postId1)
         );
 
     }
@@ -133,9 +129,9 @@ class LikeControllerTest {
 
         final List<Like> likes = likeRepository.findAll();
         assertAll("beforeUnlikePost",
-                () -> assertThat(likes.size(), is(1)),
-                () -> assertThat(likes.get(0).getUser(), is(user1)),
-                () -> assertThat(likes.get(0).getPost(), is(post1))
+                () -> assertThat(likes.size()).isEqualTo(1),
+                () -> assertThat(likes.get(0).getUser()).isEqualTo(user1),
+                () -> assertThat(likes.get(0).getPost()).isEqualTo(post1)
         );
 
         // When
@@ -146,7 +142,7 @@ class LikeControllerTest {
                 .andDo(print());
 
         // Then
-        assertThat(likeRepository.findAll().size(), is(0));
+        assertThat(likeRepository.findAll().size()).isEqualTo(0);
     }
 
 }

@@ -1,6 +1,5 @@
 package org.ahpuh.surf.integration.category.service;
 
-import org.ahpuh.surf.category.converter.CategoryConverter;
 import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.CategoryDetailResponseDto;
 import org.ahpuh.surf.category.dto.CategoryResponseDto;
@@ -32,23 +31,16 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class CategoryServiceTest {
 
     @Autowired
-    CategoryService categoryService;
-
+    private CategoryService categoryService;
     @Autowired
-    CategoryRepository categoryRepository;
-
+    private CategoryRepository categoryRepository;
     @Autowired
-    UserRepository userRepository;
-
+    private UserRepository userRepository;
     @Autowired
-    PostRepository postRepository;
+    private PostRepository postRepository;
 
-    @Autowired
-    CategoryConverter categoryConverter;
-
-    Category category;
-
-    User user;
+    private Category category;
+    private User user;
 
     @BeforeEach
     void setUp() {

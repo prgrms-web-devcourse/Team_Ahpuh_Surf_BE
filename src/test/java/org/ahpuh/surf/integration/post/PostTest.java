@@ -27,11 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PostTest {
 
-    private Long userId2;
-    private Category category2;
-    private Category category3;
-    private int year;
-
     @Autowired
     private UserController userController;
     @Autowired
@@ -42,6 +37,11 @@ public class PostTest {
     private PostRepository postRepository;
     @Autowired
     private PostService postService;
+
+    private Long userId2;
+    private Category category2;
+    private Category category3;
+    private int year;
 
     @BeforeEach
     void setUp() {
