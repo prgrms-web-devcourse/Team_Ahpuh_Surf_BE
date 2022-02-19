@@ -1,4 +1,4 @@
-package org.ahpuh.surf.category.service;
+package org.ahpuh.surf.integration.category.service;
 
 import org.ahpuh.surf.category.converter.CategoryConverter;
 import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
@@ -7,6 +7,7 @@ import org.ahpuh.surf.category.dto.CategoryResponseDto;
 import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
+import org.ahpuh.surf.category.service.CategoryService;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;

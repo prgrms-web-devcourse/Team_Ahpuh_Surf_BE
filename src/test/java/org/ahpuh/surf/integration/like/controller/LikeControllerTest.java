@@ -1,4 +1,4 @@
-package org.ahpuh.surf.like.controller;
+package org.ahpuh.surf.integration.like.controller;
 
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;

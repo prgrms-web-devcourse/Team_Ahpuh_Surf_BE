@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post;
+package org.ahpuh.surf.integration.post;
 
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;

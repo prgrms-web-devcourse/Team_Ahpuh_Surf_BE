@@ -1,6 +1,7 @@
-package org.ahpuh.surf.user.controller;
+package org.ahpuh.surf.integration.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.ahpuh.surf.user.controller.UserController;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.UserUpdateRequestDto;

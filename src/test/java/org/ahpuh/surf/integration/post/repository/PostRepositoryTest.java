@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.repository;
+package org.ahpuh.surf.integration.post.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.ahpuh.surf.category.entity.Category;
@@ -8,6 +8,7 @@ import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.QExploreDto;
 import org.ahpuh.surf.post.entity.Post;
+import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.controller.UserController;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.UserLoginRequestDto;

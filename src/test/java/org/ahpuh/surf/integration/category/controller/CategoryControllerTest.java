@@ -1,4 +1,4 @@
-package org.ahpuh.surf.category.controller;
+package org.ahpuh.surf.integration.category.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
