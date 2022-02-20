@@ -1,9 +1,3 @@
-DROP TABLE IF EXISTS likes CASCADE;
-DROP TABLE IF EXISTS follow CASCADE;
-DROP TABLE IF EXISTS posts CASCADE;
-DROP TABLE IF EXISTS categories CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-
 CREATE TABLE users
 (
     user_id           BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -13,11 +7,11 @@ CREATE TABLE users
     profile_photo_url TEXT,
     url               VARCHAR(255),
     about_me          VARCHAR(255),
-    account_public    BOOLEAN     DEFAULT true,
-    permission        VARCHAR(20) DEFAULT "ROLE_USER",
-    created_at        TIMESTAMP   DEFAULT current_timestamp,
-    updated_at        TIMESTAMP   DEFAULT current_timestamp,
-    is_deleted        BOOLEAN     DEFAULT false
+    account_public    BOOLEAN   DEFAULT true,
+    permission        VARCHAR(20),
+    created_at        TIMESTAMP DEFAULT current_timestamp,
+    updated_at        TIMESTAMP DEFAULT current_timestamp,
+    is_deleted        BOOLEAN   DEFAULT false
 );
 
 CREATE TABLE categories
