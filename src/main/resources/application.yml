@@ -33,7 +33,3 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
-logging:
-  slack:
-    webhook-uri: ${SLACK_WEBHOOK_URI}
-  config: classpath:logback-slack.xml
