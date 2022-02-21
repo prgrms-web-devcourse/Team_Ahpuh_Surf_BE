@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -36,6 +37,8 @@ class CategoryServiceTest {
     private UserRepository userRepository;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private EntityManager entityManager;
 
     private Category category;
     private User user;
@@ -159,14 +162,16 @@ class CategoryServiceTest {
 
         // when
         final List<CategoryDetailResponseDto> categories = categoryService.getCategoryDashboard(id);
+        entityManager.clear();
 
         // then
         assertAll(
                 () -> assertThat(categories.size()).isEqualTo(2),
                 () -> assertThat(categories.get(0).getPostCount()).isZero(),
                 () -> assertThat(categories.get(0).getAverageScore()).isZero(),
-//                TODO : 테스트 통과x 양방향 매핑이 안됨, @Formula 안먹음
+//                TODO : 테스트 통과x @Formula count가 안됨
 //                () -> assertThat(categories.get(1).getPostCount()).isEqualTo(2),
+                () -> assertThat(categoryRepository.findAll().get(1).getPosts().size()).isEqualTo(2),
                 () -> assertThat(categories.get(1).getAverageScore()).isEqualTo(65)
         );
     }
