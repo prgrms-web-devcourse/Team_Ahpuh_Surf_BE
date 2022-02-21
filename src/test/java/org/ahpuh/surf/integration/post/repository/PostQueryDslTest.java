@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.repository;
+package org.ahpuh.surf.integration.post.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.ahpuh.surf.category.entity.Category;
@@ -8,11 +8,10 @@ import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.QExploreDto;
 import org.ahpuh.surf.post.entity.Post;
-import org.ahpuh.surf.user.controller.UserController;
-import org.ahpuh.surf.user.dto.UserJoinRequestDto;
-import org.ahpuh.surf.user.dto.UserLoginRequestDto;
+import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +25,12 @@ import java.util.List;
 
 import static org.ahpuh.surf.follow.entity.QFollow.follow;
 import static org.ahpuh.surf.post.entity.QPost.post;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
-class PostRepositoryTest {
+class PostQueryDslTest {
 
-    User user1;
-    Long userId1;
-    Long userId2;
-    Long userId3;
-    String userToken1;
-    @Autowired
-    private UserController userController;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -51,35 +42,32 @@ class PostRepositoryTest {
     @Autowired
     private EntityManager entityManager;
 
+    private User user1;
+    private Long userId1;
+    private Long userId2;
+    private Long userId3;
+
     @BeforeEach
     void setUp() {
         // user1, user2, user3 회원가입 후 userId 반환
-        userId1 = userController.join(UserJoinRequestDto.builder()
+        userId1 = userRepository.save(User.builder()
                         .email("test1@naver.com")
                         .password("test1")
                         .userName("name")
                         .build())
-                .getBody();
-        userId2 = userController.join(UserJoinRequestDto.builder()
+                .getUserId();
+        userId2 = userRepository.save(User.builder()
                         .email("test2@naver.com")
                         .password("test2")
                         .userName("name")
                         .build())
-                .getBody();
-        userId3 = userController.join(UserJoinRequestDto.builder()
+                .getUserId();
+        userId3 = userRepository.save(User.builder()
                         .email("test3@naver.com")
                         .password("test3")
                         .userName("name")
                         .build())
-                .getBody();
-
-        // user1 로그인 후 토큰 발급
-        userToken1 = userController.login(UserLoginRequestDto.builder()
-                        .email("test1@naver.com")
-                        .password("test1")
-                        .build())
-                .getBody()
-                .getToken();
+                .getUserId();
 
         user1 = userRepository.getById(userId1);
         final User user2 = userRepository.getById(userId2);
@@ -165,17 +153,15 @@ class PostRepositoryTest {
                 .fetch();
 
         assertAll("follow한 사용자의 모든 posts by querydsl",
-                () -> assertThat(posts.size(), is(3)),
-                () -> assertThat(posts.get(0).getContent(), is("content1")),
-                () -> assertThat(posts.get(0).getUserId(), is(userId2)),
-                () -> assertThat(posts.get(1).getContent(), is("content3")),
-                () -> assertThat(posts.get(1).getUserId(), is(userId2)),
-                () -> assertThat(posts.get(2).getContent(), is("content2")),
-                () -> assertThat(posts.get(2).getUserId(), is(userId3)),
-                () -> assertThat(postRepository.findFollowingPosts(userId1, page).size(), is(3))
+                () -> Assertions.assertThat(posts.size()).isEqualTo(3),
+                () -> assertThat(posts.get(0).getContent()).isEqualTo("content1"),
+                () -> assertThat(posts.get(0).getUserId()).isEqualTo(userId2),
+                () -> assertThat(posts.get(1).getContent()).isEqualTo("content3"),
+                () -> assertThat(posts.get(1).getUserId()).isEqualTo(userId2),
+                () -> assertThat(posts.get(2).getContent()).isEqualTo("content2"),
+                () -> assertThat(posts.get(2).getUserId()).isEqualTo(userId3),
+                () -> assertThat(postRepository.findFollowingPosts(userId1, page).size()).isEqualTo(3)
         );
-
-        ;
     }
 
 }

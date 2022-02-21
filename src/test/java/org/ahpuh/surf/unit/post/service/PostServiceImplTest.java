@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.service;
+package org.ahpuh.surf.unit.post.service;
 
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
@@ -6,6 +6,7 @@ import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
+import org.ahpuh.surf.post.service.PostServiceImpl;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

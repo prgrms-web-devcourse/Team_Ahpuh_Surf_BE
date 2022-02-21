@@ -27,7 +27,7 @@ public class CategoryConverter {
                 .build();
     }
 
-    public CategoryDetailResponseDto toCategoryDetailResponseDto(final Category category, int averageScore) {
+    public CategoryDetailResponseDto toCategoryDetailResponseDto(final Category category, final int averageScore) {
         return CategoryDetailResponseDto.builder()
                 .categoryId(category.getCategoryId())
                 .name(category.getName())

@@ -1,4 +1,4 @@
-package org.ahpuh.surf.category.controller;
+package org.ahpuh.surf.integration.category.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
@@ -35,10 +35,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class CategoryControllerTest {
 
-    User user;
-    Category category;
-    Post post;
-    String token;
+    private User user;
+    private Category category;
+    private String token;
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -66,7 +66,7 @@ class CategoryControllerTest {
                 .name("test")
                 .colorCode("#e7f5ff")
                 .build());
-        post = postRepository.save(Post.builder()
+        postRepository.save(Post.builder()
                 .content("post1")
                 .selectedDate(LocalDate.now())
                 .score(88).build());
@@ -114,7 +114,6 @@ class CategoryControllerTest {
         mockMvc.perform(delete("/api/v1/categories/{categoryId}", category.getCategoryId()))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-
     }
 
     @Test
@@ -125,7 +124,6 @@ class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
 
     @Test
@@ -136,6 +134,6 @@ class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
+
 }

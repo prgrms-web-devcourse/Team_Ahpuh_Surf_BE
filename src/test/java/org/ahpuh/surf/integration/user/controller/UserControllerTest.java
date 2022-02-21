@@ -1,11 +1,13 @@
-package org.ahpuh.surf.user.controller;
+package org.ahpuh.surf.integration.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.ahpuh.surf.user.controller.UserController;
 import org.ahpuh.surf.user.dto.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,9 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -35,8 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class UserControllerTest {
 
-    User user1;
-    Long userId1;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -45,6 +43,9 @@ class UserControllerTest {
     private UserRepository userRepository;
     @Autowired
     private UserController userController;
+
+    private User user1;
+    private Long userId1;
 
     @BeforeEach
     void setUp() {
@@ -76,8 +77,8 @@ class UserControllerTest {
 
         // Then
         assertAll("userJoin",
-                () -> assertThat(userRepository.findAll().size(), is(2)),
-                () -> assertThat(userRepository.findAll().get(1).getEmail(), is("test1@naver.com"))
+                () -> Assertions.assertThat(userRepository.findAll().size()).isEqualTo(2),
+                () -> assertThat(userRepository.findAll().get(1).getEmail()).isEqualTo("test1@naver.com")
         );
     }
 
@@ -115,10 +116,10 @@ class UserControllerTest {
     void testUpdateUser() throws Exception {
         // Given
         assertAll("beforeUpdate",
-                () -> assertThat(user1.getUserName(), is("user1")),
-                () -> assertThat(user1.getAboutMe(), is(nullValue())),
-                () -> assertThat(user1.getUrl(), is(nullValue())),
-                () -> assertThat(user1.getAccountPublic(), is(true))
+                () -> assertThat(user1.getUserName()).isEqualTo("user1"),
+                () -> assertThat(user1.getAboutMe()).isNull(),
+                () -> assertThat(user1.getUrl()).isNull(),
+                () -> assertThat(user1.getAccountPublic()).isTrue()
         );
 
         final UserLoginRequestDto loginReq = UserLoginRequestDto.builder()
@@ -164,11 +165,11 @@ class UserControllerTest {
         // Then
         final User user11 = userRepository.findAll().get(0);
         assertAll("afterUpdate",
-                () -> assertThat(user11.getUserName(), is("수정된 name")),
-                () -> assertThat(user11.getUrl(), is("내 블로그 주소")),
-                () -> assertThat(user11.getAboutMe(), is("수정된 소개글")),
-                () -> assertThat(user11.getAccountPublic(), is(false)),
-                () -> assertThat(user11.getProfilePhotoUrl(), is("mock upload"))
+                () -> assertThat(user11.getUserName()).isEqualTo("수정된 name"),
+                () -> assertThat(user11.getUrl()).isEqualTo("내 블로그 주소"),
+                () -> assertThat(user11.getAboutMe()).isEqualTo("수정된 소개글"),
+                () -> assertThat(user11.getAccountPublic()).isFalse(),
+                () -> assertThat(user11.getProfilePhotoUrl()).isEqualTo("mock upload")
         );
 
         // file을 첨부하지 않으면 파일 url을 변경하지 않음
@@ -178,7 +179,7 @@ class UserControllerTest {
                         .header("token", token))
                 .andExpect(status().isOk())
                 .andDo(print());
-        assertThat(user1.getProfilePhotoUrl(), is("mock upload"));
+        assertThat(user1.getProfilePhotoUrl()).isEqualTo("mock upload");
 
     }
 
@@ -201,7 +202,7 @@ class UserControllerTest {
                 .andDo(print());
 
         // Then
-        assertThat(userRepository.findAll().size(), is(0));
+        assertThat(userRepository.findAll().size()).isEqualTo(0);
     }
 
 }
