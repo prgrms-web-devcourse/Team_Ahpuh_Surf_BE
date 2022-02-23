@@ -11,6 +11,7 @@ import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
 import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.user.entity.User;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
+@SQLDelete(sql = "UPDATE posts SET is_deleted = true WHERE post_id = ?")
 @Where(clause = "is_deleted = false")
 @Entity
 @Table(name = "posts")

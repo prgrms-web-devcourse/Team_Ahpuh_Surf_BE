@@ -8,7 +8,6 @@ import org.ahpuh.surf.category.dto.CategoryResponseDto;
 import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
-import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
@@ -57,9 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(final Long categoryId) {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
-        category.delete();
-        category.getPosts()
-                .forEach(BaseEntity::delete);
+        categoryRepository.delete(category);
     }
 
     @Override
