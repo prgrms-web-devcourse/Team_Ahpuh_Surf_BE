@@ -6,7 +6,7 @@ import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
-import org.ahpuh.surf.post.service.PostServiceImpl;
+import org.ahpuh.surf.post.service.PostService;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PostServiceImplTest {
+class PostServiceTest {
 
     @Mock
     private PostConverter postConverter;
@@ -42,7 +42,7 @@ class PostServiceImplTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    private PostServiceImpl postService;
+    private PostService postService;
 
     private Post post;
     private Category category;
