@@ -2,7 +2,7 @@ package org.ahpuh.surf.user.converter;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.user.dto.UserDto;
-import org.ahpuh.surf.user.dto.UserJoinRequestDto;
+import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.entity.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

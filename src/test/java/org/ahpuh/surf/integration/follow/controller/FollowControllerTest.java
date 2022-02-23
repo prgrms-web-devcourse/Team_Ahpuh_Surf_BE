@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.follow.entity.Follow;
 import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.user.controller.UserController;
-import org.ahpuh.surf.user.dto.UserLoginRequestDto;
+import org.ahpuh.surf.user.dto.request.UserLoginRequestDto;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
