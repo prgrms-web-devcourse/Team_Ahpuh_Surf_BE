@@ -79,11 +79,7 @@ public class UserServiceImpl implements UserService {
     public void delete(final Long userId) {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        userEntity.delete();
-        userEntity.getCategories()
-                .forEach(BaseEntity::delete);
-        userEntity.getPosts()
-                .forEach(BaseEntity::delete);
+        userRepository.delete(userEntity);
     }
 
 }

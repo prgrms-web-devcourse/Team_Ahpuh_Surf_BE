@@ -57,9 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(final Long categoryId) {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
-        category.delete();
-        category.getPosts()
-                .forEach(BaseEntity::delete);
+        categoryRepository.delete(category);
     }
 
     @Override

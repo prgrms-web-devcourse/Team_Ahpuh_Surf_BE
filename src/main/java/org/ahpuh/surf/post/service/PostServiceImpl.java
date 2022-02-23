@@ -61,7 +61,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public void delete(final Long postId) {
         final Post post = getPostById(postId);
-        post.delete();
+        postRepository.delete(post);
     }
 
     @Transactional
