@@ -8,7 +8,7 @@ import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.post.service.PostService;
 import org.ahpuh.surf.user.controller.UserController;
-import org.ahpuh.surf.user.dto.UserJoinRequestDto;
+import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

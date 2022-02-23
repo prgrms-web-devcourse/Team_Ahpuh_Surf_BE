@@ -2,9 +2,9 @@ package org.ahpuh.surf.integration.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.user.controller.UserController;
-import org.ahpuh.surf.user.dto.UserJoinRequestDto;
-import org.ahpuh.surf.user.dto.UserLoginRequestDto;
-import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
+import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
+import org.ahpuh.surf.user.dto.request.UserLoginRequestDto;
+import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;

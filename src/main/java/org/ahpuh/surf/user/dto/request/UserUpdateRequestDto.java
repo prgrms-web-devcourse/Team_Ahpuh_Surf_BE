@@ -1,25 +1,28 @@
-package org.ahpuh.surf.user.dto;
+package org.ahpuh.surf.user.dto.request;
 
 import lombok.*;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
-public class UserJoinRequestDto {
-
-    @Email(message = "Invalid email.")
-    private String email;
-
-    @NotBlank(message = "Password must be provided.")
-    private String password;
+public class UserUpdateRequestDto {
 
     @NotBlank(message = "UserName must be provided.")
     @Size(max = 20, message = "UserName length must within 20.")
     private String userName;
+
+    private String password;
+
+    private String url;
+
+    private String aboutMe;
+
+    @NotNull
+    private Boolean accountPublic;
 
 }

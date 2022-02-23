@@ -7,7 +7,7 @@ import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
-import org.ahpuh.surf.user.dto.UserLoginResponseDto;
+import org.ahpuh.surf.user.dto.response.UserLoginResponseDto;
 import org.ahpuh.surf.user.entity.Permission;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
