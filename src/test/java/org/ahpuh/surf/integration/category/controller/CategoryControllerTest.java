@@ -1,8 +1,8 @@
 package org.ahpuh.surf.integration.category.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
-import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
+import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
+import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.post.entity.Post;

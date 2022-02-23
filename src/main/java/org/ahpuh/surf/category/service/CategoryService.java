@@ -2,10 +2,10 @@ package org.ahpuh.surf.category.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.converter.CategoryConverter;
-import org.ahpuh.surf.category.dto.CategoryCreateRequestDto;
-import org.ahpuh.surf.category.dto.CategoryDetailResponseDto;
-import org.ahpuh.surf.category.dto.CategoryResponseDto;
-import org.ahpuh.surf.category.dto.CategoryUpdateRequestDto;
+import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
+import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
+import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
+import org.ahpuh.surf.category.dto.response.CategoryResponseDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;

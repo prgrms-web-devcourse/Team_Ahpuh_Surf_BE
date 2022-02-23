@@ -1,4 +1,4 @@
-package org.ahpuh.surf.category.dto;
+package org.ahpuh.surf.category.dto.response;
 
 import lombok.*;
 
