@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.dto;
+package org.ahpuh.surf.post.dto.request;
 
 import lombok.*;
 
