@@ -8,6 +8,7 @@ import org.ahpuh.surf.follow.entity.Follow;
 import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.dto.UserUpdateRequestDto;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,6 +22,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder
+@SQLDelete(sql = "UPDATE users SET is_deleted = 1 WHERE user_id = ?")
 @Where(clause = "is_deleted = false")
 public class User extends BaseEntity {
 

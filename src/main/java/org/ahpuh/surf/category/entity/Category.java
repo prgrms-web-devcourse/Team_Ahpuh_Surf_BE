@@ -9,6 +9,7 @@ import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.entity.User;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ import java.util.List;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE categories SET is_deleted = true WHERE category_id = ?")
 @Where(clause = "is_deleted = false")
 public class Category extends BaseEntity {
 
