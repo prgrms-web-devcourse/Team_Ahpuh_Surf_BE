@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.follow.converter.FollowConverter;
 import org.ahpuh.surf.follow.dto.FollowUserDto;
+import org.ahpuh.surf.follow.dto.response.FollowResponseDto;
 import org.ahpuh.surf.follow.entity.Follow;
 import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.user.entity.User;
@@ -25,14 +26,16 @@ public class FollowService {
     private final FollowConverter followConverter;
 
     @Transactional
-    public Long follow(final Long userId, final Long followUserId) {
+    public FollowResponseDto follow(final Long userId, final Long followUserId) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
         final User followedUser = userRepository.findById(followUserId)
                 .orElseThrow(() -> UserNotFound(followUserId));
 
-        return followRepository.save(followConverter.toEntity(user, followedUser))
+        final Long followId = followRepository.save(followConverter.toEntity(user, followedUser))
                 .getFollowId();
+
+        return new FollowResponseDto(followId);
     }
 
     @Transactional

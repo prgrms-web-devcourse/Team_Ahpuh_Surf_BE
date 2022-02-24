@@ -1,4 +1,4 @@
-package org.ahpuh.surf.user.dto;
+package org.ahpuh.surf.user.dto.response;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class UserFindInfoResponseDto {
 
     private Long userId;
 

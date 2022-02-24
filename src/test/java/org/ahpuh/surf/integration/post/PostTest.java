@@ -124,7 +124,8 @@ public class PostTest {
                         .password(pw)
                         .userName("name")
                         .build())
-                .getBody();
+                .getBody()
+                .getUserId();
     }
 
     private Category saveCategory(final User user, final String categoryName) {

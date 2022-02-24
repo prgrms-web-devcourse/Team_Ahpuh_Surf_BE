@@ -1,4 +1,4 @@
-package org.ahpuh.surf.user.dto.response;
+package org.ahpuh.surf.category.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class UserJoinResponseDto {
+public class CategoryCreateResponseDto {
 
-    private Long userId;
-
+    private Long categoryId;
+    
 }

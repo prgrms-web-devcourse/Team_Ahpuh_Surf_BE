@@ -2,6 +2,7 @@ package org.ahpuh.surf.like.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.jwt.JwtAuthentication;
+import org.ahpuh.surf.like.dto.response.LikeResponseDto;
 import org.ahpuh.surf.like.service.LikeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,12 +16,12 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping("/like")
-    public ResponseEntity<Long> like(
+    public ResponseEntity<LikeResponseDto> like(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
     ) {
-        final Long likeId = likeService.like(authentication.userId, postId);
-        return ResponseEntity.ok().body(likeId);
+        final LikeResponseDto response = likeService.like(authentication.userId, postId);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/unlike/{likeId}")
@@ -31,5 +32,4 @@ public class LikeController {
         likeService.unlike(postId, likeId);
         return ResponseEntity.noContent().build();
     }
-
 }

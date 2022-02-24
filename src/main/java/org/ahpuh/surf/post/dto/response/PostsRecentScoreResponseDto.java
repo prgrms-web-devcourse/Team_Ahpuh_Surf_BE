@@ -1,4 +1,4 @@
-package org.ahpuh.surf.user.dto.response;
+package org.ahpuh.surf.post.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class UserJoinResponseDto {
+public class PostsRecentScoreResponseDto {
 
-    private Long userId;
+    private Integer recentScore;
 
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class UserJoinResponseDto {
+public class UserUpdateResponseDto {
 
     private Long userId;
 
