@@ -3,6 +3,7 @@ package org.ahpuh.surf.like.service;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.like.converter.LikeConverter;
+import org.ahpuh.surf.like.dto.response.LikeResponseDto;
 import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.entity.Post;
@@ -24,13 +25,16 @@ public class LikeService {
     private final PostRepository postRepository;
     private final LikeConverter likeConverter;
 
-    public Long like(final Long userId, final Long postId) {
+    public LikeResponseDto like(final Long userId, final Long postId) {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
         final Post postEntity = postRepository.findById(postId)
                 .orElseThrow(() -> EntityExceptionHandler.PostNotFound(postId));
-        return likeRepository.save(likeConverter.toEntity(userEntity, postEntity))
+
+        final Long likeId = likeRepository.save(likeConverter.toEntity(userEntity, postEntity))
                 .getLikeId();
+
+        return new LikeResponseDto(likeId);
     }
 
     public void unlike(final Long postId, final Long likeId) {
