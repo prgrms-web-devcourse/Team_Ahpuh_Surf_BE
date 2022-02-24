@@ -2,6 +2,7 @@ package org.ahpuh.surf.follow.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.follow.dto.FollowUserDto;
+import org.ahpuh.surf.follow.dto.response.FollowResponseDto;
 import org.ahpuh.surf.follow.service.FollowService;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,13 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/follow")
-    public ResponseEntity<Long> follow(
+    public ResponseEntity<FollowResponseDto> follow(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestBody final Long followUserId
     ) {
-        final Long followId = followService.follow(authentication.userId, followUserId);
+        final FollowResponseDto response = followService.follow(authentication.userId, followUserId);
         return ResponseEntity.created(URI.create("/api/v1/users/" + authentication.userId + "/following"))
-                .body(followId);
+                .body(response);
     }
 
     @DeleteMapping("/follow/{userId}")
@@ -52,5 +53,4 @@ public class FollowController {
         final List<FollowUserDto> response = followService.findFollowingList(userId);
         return ResponseEntity.ok().body(response);
     }
-
 }
