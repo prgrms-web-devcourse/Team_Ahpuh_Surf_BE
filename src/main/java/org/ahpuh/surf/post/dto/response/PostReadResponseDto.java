@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.dto;
+package org.ahpuh.surf.post.dto.response;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class PostDto {
+public class PostReadResponseDto {
 
     private Long postId;
 

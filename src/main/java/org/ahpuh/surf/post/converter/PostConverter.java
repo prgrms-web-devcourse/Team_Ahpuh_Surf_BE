@@ -4,12 +4,12 @@ import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
-import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.PostScoreDto;
 import org.ahpuh.surf.post.dto.RecentPostDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
 import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
+import org.ahpuh.surf.post.dto.response.PostReadResponseDto;
 import org.ahpuh.surf.post.dto.response.PostResponseDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.entity.User;
@@ -37,8 +37,8 @@ public class PostConverter {
         return postEntity;
     }
 
-    public PostDto toDto(final Post post, final Long myId) {
-        final PostDto dto = PostDto.builder()
+    public PostReadResponseDto toPostReadResponseDto(final Post post, final Long myId) {
+        final PostReadResponseDto dto = PostReadResponseDto.builder()
                 .postId(post.getPostId())
                 .userId(post.getUser().getUserId())
                 .categoryId(post.getCategory().getCategoryId())
@@ -151,5 +151,4 @@ public class PostConverter {
         }
         return recentPostDto;
     }
-
 }

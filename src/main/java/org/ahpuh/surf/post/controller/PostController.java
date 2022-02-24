@@ -8,11 +8,9 @@ import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.PostCountDto;
-import org.ahpuh.surf.post.dto.PostDto;
 import org.ahpuh.surf.post.dto.RecentPostDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
-import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
-import org.ahpuh.surf.post.dto.response.PostResponseDto;
+import org.ahpuh.surf.post.dto.response.*;
 import org.ahpuh.surf.post.service.PostService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -32,39 +30,40 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-
     private final S3Service s3Service;
 
     @PostMapping(value = "/posts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Long> createPost(
+    public ResponseEntity<PostCreateResponseDto> createPost(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @Valid @RequestPart(value = "request") final PostRequestDto request,
             @RequestPart(value = "file", required = false) final MultipartFile file
     ) throws IOException {
         final FileStatus fileStatus = s3Service.uploadPostFile(file);
-        final Long postId = postService.create(authentication.userId, request, fileStatus);
-        return ResponseEntity.created(URI.create("/api/v1/posts/" + postId))
-                .body(postId);
+        final PostCreateResponseDto response = postService.create(authentication.userId, request, fileStatus);
+
+        return ResponseEntity.created(URI.create("/api/v1/posts/" + response))
+                .body(response);
     }
 
     @PutMapping(value = "/posts/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Long> updatePost(
+    public ResponseEntity<PostUpdateResponseDto> updatePost(
             @PathVariable final Long postId,
             @Valid @RequestPart(value = "request") final PostRequestDto request,
             @RequestPart(value = "file", required = false) final MultipartFile file
     ) throws IOException {
         final FileStatus fileStatus = s3Service.uploadPostFile(file);
-        final Long responsePostId = postService.update(postId, request, fileStatus);
-        return ResponseEntity.ok().body(responsePostId);
+        final PostUpdateResponseDto response = postService.update(postId, request, fileStatus);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<PostDto> readPost(
+    public ResponseEntity<PostReadResponseDto> readPost(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
     ) {
-        final PostDto postDto = postService.readOne(authentication.userId, postId);
-        return ResponseEntity.ok().body(postDto);
+        final PostReadResponseDto response = postService.readOne(authentication.userId, postId);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/posts/{postId}")
@@ -93,12 +92,12 @@ public class PostController {
     }
 
     @PostMapping("/posts/{postId}/favorite")
-    public ResponseEntity<Long> makeFavorite(
+    public ResponseEntity<PostFavoriteResponseDto> makeFavorite(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
     ) {
-        final Long responsePostId = postService.clickFavorite(authentication.userId, postId);
-        return ResponseEntity.ok().body(responsePostId);
+        final PostFavoriteResponseDto response = postService.clickFavorite(authentication.userId, postId);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/posts/{postId}/favorite")
@@ -139,7 +138,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<CursorResult<AllPostResponseDto>> getAllPostByCategory(
+    public ResponseEntity<CursorResult<AllPostResponseDto>> getRecentScoreByAllPostsOfCategory(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Long userId,
             @RequestParam final Long categoryId,
@@ -149,10 +148,11 @@ public class PostController {
     }
 
     @GetMapping("/recentscore")
-    public ResponseEntity<Integer> getAllPostByCategory(
+    public ResponseEntity<PostsRecentScoreResponseDto> getRecentScoreByAllPostsOfCategory(
             @RequestParam final Long categoryId
     ) {
-        return ResponseEntity.ok().body(postService.getRecentScore(categoryId));
+        final PostsRecentScoreResponseDto response = postService.getRecentScore(categoryId);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/posts/recent")
@@ -163,5 +163,4 @@ public class PostController {
         final CursorResult<RecentPostDto> recentAllPosts = postService.recentAllPosts(authentication.userId, cursorId, PageRequest.of(0, 10));
         return ResponseEntity.ok().body(recentAllPosts);
     }
-
 }

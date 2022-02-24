@@ -8,10 +8,12 @@ import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.response.CursorResult;
 import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
 import org.ahpuh.surf.post.converter.PostConverter;
-import org.ahpuh.surf.post.dto.*;
+import org.ahpuh.surf.post.dto.ExploreDto;
+import org.ahpuh.surf.post.dto.PostCountDto;
+import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
+import org.ahpuh.surf.post.dto.RecentPostDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
-import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
-import org.ahpuh.surf.post.dto.response.PostResponseDto;
+import org.ahpuh.surf.post.dto.response.*;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
 import org.ahpuh.surf.user.entity.User;
@@ -35,30 +37,32 @@ public class PostService {
     private final PostConverter postConverter;
 
     @Transactional
-    public Long create(final Long userId, final PostRequestDto request, final FileStatus fileStatus) {
+    public PostCreateResponseDto create(final Long userId, final PostRequestDto request, final FileStatus fileStatus) {
         final User user = getUserById(userId);
         final Category category = getCategoryById(request.getCategoryId());
 
         final Post post = postConverter.toEntity(user, category, request, fileStatus);
-        final Post saved = postRepository.save(post);
+        final Long postId = postRepository.save(post)
+                .getPostId();
 
-        return saved.getPostId();
+        return new PostCreateResponseDto(postId);
     }
 
     @Transactional
-    public Long update(final Long postId, final PostRequestDto request, final FileStatus fileStatus) {
+    public PostUpdateResponseDto update(final Long postId, final PostRequestDto request, final FileStatus fileStatus) {
         final Category category = getCategoryById(request.getCategoryId());
         final Post post = getPostById(postId);
+
         post.editPost(category, LocalDate.parse(request.getSelectedDate()), request.getContent(), request.getScore());
         if (fileStatus != null) {
             post.editFile(fileStatus);
         }
 
-        return postId;
+        return new PostUpdateResponseDto(postId);
     }
 
-    public PostDto readOne(final Long myId, final Long postId) {
-        return postConverter.toDto(getPostById(postId), myId);
+    public PostReadResponseDto readOne(final Long myId, final Long postId) {
+        return postConverter.toPostReadResponseDto(getPostById(postId), myId);
     }
 
     @Transactional
@@ -68,10 +72,11 @@ public class PostService {
     }
 
     @Transactional
-    public Long clickFavorite(final Long userId, final Long postId) {
+    public PostFavoriteResponseDto clickFavorite(final Long userId, final Long postId) {
         final Post post = getPostById(postId);
         post.updateFavorite(userId);
-        return post.getPostId();
+
+        return new PostFavoriteResponseDto(postId);
     }
 
     public CursorResult<ExploreDto> followingExplore(final Long myId, final Long cursorId, final Pageable page) {
@@ -195,12 +200,13 @@ public class PostService {
         return new CursorResult<>(posts, hasNext);
     }
 
-    public int getRecentScore(final Long categoryId) {
+    public PostsRecentScoreResponseDto getRecentScore(final Long categoryId) {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
-        final Post post = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category);
+        final Integer recentScore = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category)
+                .getScore();
 
-        return post.getScore();
+        return new PostsRecentScoreResponseDto(recentScore);
     }
 
     private Category getCategoryById(final Long categoryId) {
