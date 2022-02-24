@@ -100,7 +100,7 @@ class PostServiceTest {
                 .thenReturn(post);
 
         // when
-        final Long response = postService.create(userId, request, null);
+        postService.create(userId, request, null);
 
         // then
         assertAll(
