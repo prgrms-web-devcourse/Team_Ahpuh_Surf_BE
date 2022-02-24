@@ -75,35 +75,38 @@
 <br>
 
 ## ⚙시스템 아키텍처
-![최종](https://user-images.githubusercontent.com/55528172/147193318-77fd4086-33a1-4e71-aa46-2f36a474eff1.png)
+
+![아키텍쳐](https://user-images.githubusercontent.com/55528172/147193318-77fd4086-33a1-4e71-aa46-2f36a474eff1.png)
 
 <br>
 
 ## 🏗️설계
-### ERD 설계
-![Untitled](https://user-images.githubusercontent.com/55528172/147193431-1410ff56-67b9-4eee-ba16-1b0a3a60c447.png)
 
+### ERD 설계
+
+![ERD](https://user-images.githubusercontent.com/55528172/147193431-1410ff56-67b9-4eee-ba16-1b0a3a60c447.png)
 
 ### 설계 문서
-[🐄MoSCoW 구경가기](https://www.notion.so/MoSCoW-4f7d9e241bc24e84ac7c8213ef1d2c85)<br>
-[🔍SURF API 설계 구경가기](https://www.notion.so/6785f7446eba4a0b82d384d025cb28a6)<br>
-[📑Postman API 명세서](https://documenter.getpostman.com/view/15409285/UVRAJnUD#50ff4a3f-1d02-4f50-9870-9c0b22fa2a6f)<br>
+
+[🐄MoSCoW 구경가기](https://cse0518.notion.site/MoSCoW-67cf0e794a9f412fa6a9e4a2eec90fc5) <br>
+[🔍SURF API 설계 구경가기](https://backend-devcourse.notion.site/6785f7446eba4a0b82d384d025cb28a6?v=795b2f835da74e47beb075263d466753) <br>
+[📑Postman API 명세서](https://documenter.getpostman.com/view/15409285/UVRAJnUD#50ff4a3f-1d02-4f50-9870-9c0b22fa2a6f) <br>
 
 <br>
 
 ## 🤳데모 화면
-| **로그인** | **메인 화면** - Surf 첫 페이지 | **메인 화면** - 특정 category 선택 |
+
+| **로그인** | **메인 화면** - Surf 첫 페이지 | **메인 화면**<br/>- 특정 category 선택 |
 | :---: | :---: | :---: |
 | ![로그인](https://user-images.githubusercontent.com/55528172/147193938-07d0547f-740b-428c-8ea6-25c8a6e85f3f.gif) | ![메인 페이지 - 첫 화면](https://user-images.githubusercontent.com/55528172/147193958-a062bdb3-a82a-41a2-8d2c-dd4ecd9882ba.gif) | ![메인 페이지 - 카테고리 선택](https://user-images.githubusercontent.com/55528172/147193999-6313d4d4-fe2b-4842-9b07-f3fa86835d56.gif) |
 
-| **게시글 작성** | **무한 스크롤** | **마이 페이지** - 내 정보 수정 |
+| **게시글 작성** | **무한 스크롤** | **마이 페이지**<br/>- 내 정보 수정 |
 | :---: | :---: | :---: |
 | ![포스트 생성](https://user-images.githubusercontent.com/55528172/147194169-b8d17790-bb44-4275-87d1-77156fa48667.gif) | ![무한 스크롤](https://user-images.githubusercontent.com/55528172/147194204-14e4475b-dc85-41b4-8995-8d91b7fe286a.gif) | ![마이 페이지 - 정보 수정](https://user-images.githubusercontent.com/55528172/147194226-f3ae8cf6-1894-4420-88a1-e340d426fd25.gif) |
 
-| **대시보드** | **카드 페이지** | **카드 페이지** - 해당 월별 기록 리스트 |
+| **대시보드** | **카드 페이지** | **카드 페이지**<br/>- 해당 월별 기록 리스트 |
 | :---: | :---: | :---: |
-| ![대시보드](https://user-images.githubusercontent.com/55528172/147194386-80912927-d4a4-4901-aea2-e241f62c775f.gif) | ![카드 페이지](https://user-images.githubusercontent.com/55528172/147194395-060842b6-9ad4-4ef5-a5ba-7d3904906833.gif) | ![카드 페이지 - 월별 리스트](https://user-images.githubusercontent.com/55528172/147194403-0f9236bb-3ce1-445d-aca1-775cb26d8737.gif) |
-| 마이 페이지에서 이동 | 연도별 필터링, 해당 달의 작성 일수 확인 가능 | 카드 선택시 |
+| ![대시보드](https://user-images.githubusercontent.com/55528172/147194386-80912927-d4a4-4901-aea2-e241f62c775f.gif) <br/>마이 페이지에서 이동 | ![카드 페이지](https://user-images.githubusercontent.com/55528172/147194395-060842b6-9ad4-4ef5-a5ba-7d3904906833.gif) <br/>연도별 필터링, <br/>해당 달의 작성 일수 확인 가능 | ![카드 페이지 - 월별 리스트](https://user-images.githubusercontent.com/55528172/147194403-0f9236bb-3ce1-445d-aca1-775cb26d8737.gif) <br/> 카드 선택시 |
 
 ___
 
@@ -113,4 +116,4 @@ ___
 
 ## 🍁팀 노션
 
-[🔍**SURF** 팀 노션 구경가기](https://www.notion.so/8-Ah-puh-Surf-ccc0a5922b8e4f638d6e897b4eb575a6)
+[🔍**SURF** 팀 노션 구경가기](https://cse0518.notion.site/8-Ah-puh-Surf-Application-b26afb9de3884b6a8f4d1cbe02857743)
