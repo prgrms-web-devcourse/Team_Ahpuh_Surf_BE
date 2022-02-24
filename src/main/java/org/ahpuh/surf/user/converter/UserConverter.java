@@ -1,8 +1,9 @@
 package org.ahpuh.surf.user.converter;
 
 import lombok.RequiredArgsConstructor;
-import org.ahpuh.surf.user.dto.UserDto;
 import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
+import org.ahpuh.surf.user.dto.response.UserFindInfoResponseDto;
+import org.ahpuh.surf.user.dto.response.UserJoinResponseDto;
 import org.ahpuh.surf.user.entity.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -21,8 +22,12 @@ public class UserConverter {
                 .build();
     }
 
-    public UserDto toUserDto(final User userEntity, final long followingCount, final long followerCount) {
-        return UserDto.builder()
+    public UserJoinResponseDto toUserJoinResponseDto(final Long userId) {
+        return new UserJoinResponseDto(userId);
+    }
+
+    public UserFindInfoResponseDto toUserFindInfoResponseDto(final User userEntity, final long followingCount, final long followerCount) {
+        return UserFindInfoResponseDto.builder()
                 .userId(userEntity.getUserId())
                 .email(userEntity.getEmail())
                 .userName(userEntity.getUserName())
@@ -34,5 +39,4 @@ public class UserConverter {
                 .accountPublic(userEntity.getAccountPublic())
                 .build();
     }
-
 }
