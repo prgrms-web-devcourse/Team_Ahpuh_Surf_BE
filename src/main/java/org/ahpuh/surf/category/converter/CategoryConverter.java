@@ -1,8 +1,8 @@
 package org.ahpuh.surf.category.converter;
 
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
+import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
-import org.ahpuh.surf.category.dto.response.CategoryResponseDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.user.entity.User;
 import org.springframework.stereotype.Component;
@@ -18,8 +18,8 @@ public class CategoryConverter {
                 .build();
     }
 
-    public CategoryResponseDto toCategoryResponseDto(final Category category) {
-        return CategoryResponseDto.builder()
+    public AllCategoryByUserResponseDto toCategoryResponseDto(final Category category) {
+        return AllCategoryByUserResponseDto.builder()
                 .categoryId(category.getCategoryId())
                 .name(category.getName())
                 .isPublic(category.getIsPublic())
