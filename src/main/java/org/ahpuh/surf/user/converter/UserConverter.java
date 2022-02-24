@@ -3,7 +3,6 @@ package org.ahpuh.surf.user.converter;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.response.UserFindInfoResponseDto;
-import org.ahpuh.surf.user.dto.response.UserJoinResponseDto;
 import org.ahpuh.surf.user.entity.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,10 +19,6 @@ public class UserConverter {
                 .password(bCryptEncoder.encode(dto.getPassword()))
                 .userName(dto.getUserName())
                 .build();
-    }
-
-    public UserJoinResponseDto toUserJoinResponseDto(final Long userId) {
-        return new UserJoinResponseDto(userId);
     }
 
     public UserFindInfoResponseDto toUserFindInfoResponseDto(final User userEntity, final long followingCount, final long followerCount) {

@@ -53,8 +53,9 @@ public class UserService {
         if (userRepository.existsByEmail(joinRequest.getEmail())) {
             throw new IllegalArgumentException(String.format("Email is duplicated. email=%s", joinRequest.getEmail()));
         }
-        final User userEntity = userRepository.save(userConverter.toEntity(joinRequest));
-        return userConverter.toUserJoinResponseDto(userEntity.getUserId());
+        final Long userId = userRepository.save(userConverter.toEntity(joinRequest))
+                .getUserId();
+        return new UserJoinResponseDto(userId);
     }
 
     public UserFindInfoResponseDto findUser(final Long userId) {
