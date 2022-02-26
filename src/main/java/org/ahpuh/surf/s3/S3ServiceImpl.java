@@ -1,4 +1,4 @@
-package org.ahpuh.surf.common.s3;
+package org.ahpuh.surf.s3;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
