@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,24 +21,23 @@ public class MockS3Service implements S3Service {
     private static final List<String> PERMISSION_FILE_EXTENSIONS = List.of("doc", "docx", "xls", "xlsx", "hwp", "pdf", "txt", "md", "ppt", "pptx", "key");
 
     @Transactional
-    public String uploadUserImg(final MultipartFile profilePhoto) {
-        if (exist(profilePhoto)) {
-            return uploadImg(profilePhoto);
-        }
-        return null;
+    public String uploadUserImage(final MultipartFile profilePhoto) throws IOException {
+        return profilePhoto.isEmpty()
+                ? null
+                : uploadImg(profilePhoto);
     }
 
     @Transactional
-    public S3ServiceImpl.FileStatus uploadPostFile(final MultipartFile file) {
-        if (exist(file)) {
+    public FileStatus uploadPostFile(final MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
             String fileUrl = uploadFile(file);
             if (fileUrl != null) {
-                return new S3ServiceImpl.FileStatus(fileUrl, "file");
+                return new FileStatus(fileUrl, "file");
             }
 
             fileUrl = uploadImg(file);
             if (fileUrl != null) {
-                return new S3ServiceImpl.FileStatus(fileUrl, "img");
+                return new FileStatus(fileUrl, "img");
             }
         }
         return null;
@@ -45,27 +45,40 @@ public class MockS3Service implements S3Service {
 
     public String uploadImg(final MultipartFile file) {
         final String fileName = file.getOriginalFilename();
-        final String extension = Objects.requireNonNull(fileName).split("\\.")[1];
+        Objects.requireNonNull(fileName);
+        final String extension = getFileExtension(fileName);
 
-        if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
-            log.info("{}은(는) 지원하지 않는 확장자입니다.", extension);
-            return null;
-        }
-        return "mock upload";
+        return validateImageExtension(extension)
+                ? "mock upload"
+                : null;
     }
 
     public String uploadFile(final MultipartFile file) {
         final String fileName = file.getOriginalFilename();
-        final String extension = Objects.requireNonNull(fileName).split("\\.")[1];
+        Objects.requireNonNull(fileName);
+        final String extension = getFileExtension(fileName);
 
-        if (!PERMISSION_FILE_EXTENSIONS.contains(extension)) {
-            return null;
+        return validateFileExtension(extension)
+                ? "mock upload"
+                : null;
+    }
+
+    private String getFileExtension(final String fileName) {
+        final int index = fileName.lastIndexOf(".");
+        return (index > 0)
+                ? fileName.substring(index + 1)
+                : null;
+    }
+
+    public boolean validateImageExtension(final String extension) {
+        if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
+            log.info("{}은(는) 지원하지 않는 파일 확장자입니다.", extension);
+            return false;
         }
-        return "mock upload";
+        return true;
     }
 
-    public boolean exist(final MultipartFile file) {
-        return !file.isEmpty();
+    public boolean validateFileExtension(final String extension) {
+        return PERMISSION_FILE_EXTENSIONS.contains(extension);
     }
-
 }
