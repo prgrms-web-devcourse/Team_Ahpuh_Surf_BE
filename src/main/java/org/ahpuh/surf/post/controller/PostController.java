@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -30,16 +29,14 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-    private final S3Service s3Service;
 
     @PostMapping(value = "/posts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PostCreateResponseDto> createPost(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @Valid @RequestPart(value = "request") final PostRequestDto request,
             @RequestPart(value = "file", required = false) final MultipartFile file
-    ) throws IOException {
-        final FileStatus fileStatus = s3Service.uploadPostFile(file);
-        final PostCreateResponseDto response = postService.create(authentication.userId, request, fileStatus);
+    ) {
+        final PostCreateResponseDto response = postService.create(authentication.userId, request, file);
 
         return ResponseEntity.created(URI.create("/api/v1/posts/" + response))
                 .body(response);
@@ -50,9 +47,8 @@ public class PostController {
             @PathVariable final Long postId,
             @Valid @RequestPart(value = "request") final PostRequestDto request,
             @RequestPart(value = "file", required = false) final MultipartFile file
-    ) throws IOException {
-        final FileStatus fileStatus = s3Service.uploadPostFile(file);
-        final PostUpdateResponseDto response = postService.update(postId, request, fileStatus);
+    ) {
+        final PostUpdateResponseDto response = postService.update(postId, request, file);
 
         return ResponseEntity.ok().body(response);
     }

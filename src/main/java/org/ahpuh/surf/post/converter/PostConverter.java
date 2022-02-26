@@ -23,18 +23,14 @@ import java.util.stream.Collectors;
 @Component
 public class PostConverter {
 
-    public Post toEntity(final User user, final Category category, final PostRequestDto request, final FileStatus fileStatus) {
-        final Post postEntity = Post.builder()
+    public Post toEntity(final User user, final Category category, final PostRequestDto request) {
+        return Post.builder()
                 .user(user)
                 .category(category)
                 .selectedDate(LocalDate.parse(request.getSelectedDate())) // yyyy-mm-dd
                 .content(request.getContent())
                 .score(request.getScore())
                 .build();
-        if (fileStatus != null) {
-            postEntity.editFile(fileStatus);
-        }
-        return postEntity;
     }
 
     public PostReadResponseDto toPostReadResponseDto(final Post post, final Long myId) {
