@@ -94,7 +94,7 @@ class PostServiceTest {
                 .content(content)
                 .score(score)
                 .build();
-        when(postConverter.toEntity(any(), any(), any(), any()))
+        when(postConverter.toEntity(any(), any(), any()))
                 .thenReturn(post);
         when(postRepository.save(any(Post.class)))
                 .thenReturn(post);

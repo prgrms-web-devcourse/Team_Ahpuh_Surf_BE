@@ -1,12 +1,12 @@
 package org.ahpuh.surf.post.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.common.response.CursorResult;
-import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
 import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.PostCountDto;
@@ -16,16 +16,21 @@ import org.ahpuh.surf.post.dto.request.PostRequestDto;
 import org.ahpuh.surf.post.dto.response.*;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
+import org.ahpuh.surf.s3.FileStatus;
+import org.ahpuh.surf.s3.S3Service;
 import org.ahpuh.surf.user.entity.User;
 import org.ahpuh.surf.user.repository.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -34,14 +39,27 @@ public class PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final S3Service s3Service;
     private final PostConverter postConverter;
 
     @Transactional
-    public PostCreateResponseDto create(final Long userId, final PostRequestDto request, final FileStatus fileStatus) {
+    public PostCreateResponseDto create(final Long userId, final PostRequestDto request, final MultipartFile file) {
+        FileStatus fileStatus = null;
+        if (file != null) {
+            try {
+                fileStatus = s3Service.uploadPostFile(file);
+            } catch (final IOException e) {
+                log.info("파일이 존재하지 않습니다.");
+                e.printStackTrace();
+            }
+        }
         final User user = getUserById(userId);
         final Category category = getCategoryById(request.getCategoryId());
 
-        final Post post = postConverter.toEntity(user, category, request, fileStatus);
+        final Post post = postConverter.toEntity(user, category, request);
+        if (fileStatus != null) {
+            post.editFile(fileStatus);
+        }
         final Long postId = postRepository.save(post)
                 .getPostId();
 
@@ -49,7 +67,16 @@ public class PostService {
     }
 
     @Transactional
-    public PostUpdateResponseDto update(final Long postId, final PostRequestDto request, final FileStatus fileStatus) {
+    public PostUpdateResponseDto update(final Long postId, final PostRequestDto request, final MultipartFile file) {
+        FileStatus fileStatus = null;
+        if (file != null) {
+            try {
+                fileStatus = s3Service.uploadPostFile(file);
+            } catch (final IOException e) {
+                log.info("파일이 존재하지 않습니다.");
+                e.printStackTrace();
+            }
+        }
         final Category category = getCategoryById(request.getCategoryId());
         final Post post = getPostById(postId);
 

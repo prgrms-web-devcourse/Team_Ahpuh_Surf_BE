@@ -1,4 +1,4 @@
-package org.ahpuh.surf.common.s3;
+package org.ahpuh.surf.s3;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -54,16 +54,15 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Transactional
-    public String uploadUserImg(final MultipartFile profilePhoto) throws IOException {
-        if (exist(profilePhoto)) {
-            return uploadImg(profilePhoto);
-        }
-        return null;
+    public String uploadUserImage(final MultipartFile profilePhoto) throws IOException {
+        return profilePhoto.isEmpty()
+                ? null
+                : uploadImg(profilePhoto);
     }
 
     @Transactional
     public FileStatus uploadPostFile(final MultipartFile file) throws IOException {
-        if (exist(file)) {
+        if (file.isEmpty()) {
             String fileUrl = uploadFile(file);
             if (fileUrl != null) {
                 return new FileStatus(fileUrl, "file");
@@ -79,45 +78,46 @@ public class S3ServiceImpl implements S3Service {
 
     public String uploadImg(final MultipartFile file) throws IOException {
         final String fileName = file.getOriginalFilename();
-        final String extension = Objects.requireNonNull(fileName).split("\\.")[1];
+        Objects.requireNonNull(fileName);
+        final String extension = getFileExtension(fileName);
 
-        if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
-            log.info("{}은(는) 지원하지 않는 확장자입니다.", extension);
-            return null;
-        }
-
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-
-        return s3Client.getUrl(bucket, fileName).toString();
+        return validateImageExtension(extension)
+                ? upload(file, fileName)
+                : null;
     }
 
     public String uploadFile(final MultipartFile file) throws IOException {
         final String fileName = file.getOriginalFilename();
-        final String extension = Objects.requireNonNull(fileName).split("\\.")[1];
+        Objects.requireNonNull(fileName);
+        final String extension = getFileExtension(fileName);
 
-        if (!PERMISSION_FILE_EXTENSIONS.contains(extension)) {
-            return null;
-        }
+        return validateFileExtension(extension)
+                ? upload(file, fileName)
+                : null;
+    }
 
+    private String upload(final MultipartFile file, final String fileName) throws IOException {
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-
         return s3Client.getUrl(bucket, fileName).toString();
     }
 
-    public boolean exist(final MultipartFile file) {
-        return !file.isEmpty();
+    private String getFileExtension(final String fileName) {
+        final int index = fileName.lastIndexOf(".");
+        return (index > 0)
+                ? fileName.substring(index + 1)
+                : null;
     }
 
-    public static class FileStatus {
-        public String fileUrl;
-        public String fileType;
-
-        public FileStatus(final String fileUrl, final String fileType) {
-            this.fileUrl = fileUrl;
-            this.fileType = fileType;
+    public boolean validateImageExtension(final String extension) {
+        if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
+            log.info("{}은(는) 지원하지 않는 파일 확장자입니다.", extension);
+            return false;
         }
+        return true;
     }
 
+    public boolean validateFileExtension(final String extension) {
+        return PERMISSION_FILE_EXTENSIONS.contains(extension);
+    }
 }

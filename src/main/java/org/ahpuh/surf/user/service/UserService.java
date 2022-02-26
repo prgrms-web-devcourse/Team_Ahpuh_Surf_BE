@@ -1,9 +1,11 @@
 package org.ahpuh.surf.user.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.follow.repository.FollowRepository;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
+import org.ahpuh.surf.s3.S3Service;
 import org.ahpuh.surf.user.converter.UserConverter;
 import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
@@ -18,9 +20,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static org.ahpuh.surf.common.exception.EntityExceptionHandler.UserNotFound;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -31,6 +37,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final S3Service s3Service;
     private final UserConverter userConverter;
 
     public UserLoginResponseDto authenticate(final String email, final String password) {
@@ -67,7 +74,16 @@ public class UserService {
     }
 
     @Transactional
-    public UserUpdateResponseDto update(final Long userId, final UserUpdateRequestDto updateDto, final String profilePhotoUrl) {
+    public UserUpdateResponseDto update(final Long userId, final UserUpdateRequestDto updateDto, final MultipartFile profilePhoto) {
+        String profilePhotoUrl = null;
+        if (profilePhoto != null) {
+            try {
+                profilePhotoUrl = s3Service.uploadUserImage(profilePhoto);
+            } catch (final IOException e) {
+                log.info("파일이 존재하지 않습니다.");
+                e.printStackTrace();
+            }
+        }
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
         userEntity.update(passwordEncoder, updateDto, profilePhotoUrl);
