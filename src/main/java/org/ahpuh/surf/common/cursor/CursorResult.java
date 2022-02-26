@@ -1,4 +1,4 @@
-package org.ahpuh.surf.common.response;
+package org.ahpuh.surf.common.cursor;
 
 import java.util.List;
 
