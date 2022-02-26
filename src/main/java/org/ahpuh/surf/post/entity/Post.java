@@ -84,12 +84,12 @@ public class Post extends BaseEntity {
     }
 
     public Post editFile(final FileStatus fileStatus) {
-        if (fileStatus.fileType.equals("img")) {
-            this.imageUrl = fileStatus.fileUrl;
+        if (fileStatus.fileType().equals("img")) {
+            this.imageUrl = fileStatus.fileUrl();
             this.fileUrl = null;
         }
-        if (fileStatus.fileType.equals("file")) {
-            this.fileUrl = fileStatus.fileUrl;
+        if (fileStatus.fileType().equals("file")) {
+            this.fileUrl = fileStatus.fileUrl();
             this.imageUrl = null;
         }
         return this;
