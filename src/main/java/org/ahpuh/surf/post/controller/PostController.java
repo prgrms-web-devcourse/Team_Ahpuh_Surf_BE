@@ -3,8 +3,6 @@ package org.ahpuh.surf.post.controller;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.response.CursorResult;
-import org.ahpuh.surf.common.s3.S3Service;
-import org.ahpuh.surf.common.s3.S3ServiceImpl.FileStatus;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.PostCountDto;
