@@ -2,10 +2,10 @@ package org.ahpuh.surf.like.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
-import org.ahpuh.surf.like.converter.LikeConverter;
+import org.ahpuh.surf.like.domain.Like;
+import org.ahpuh.surf.like.domain.LikeConverter;
+import org.ahpuh.surf.like.domain.LikeRepository;
 import org.ahpuh.surf.like.dto.response.LikeResponseDto;
-import org.ahpuh.surf.like.entity.Like;
-import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.user.domain.User;

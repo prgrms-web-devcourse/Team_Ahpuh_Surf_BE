@@ -1,6 +1,5 @@
-package org.ahpuh.surf.like.converter;
+package org.ahpuh.surf.like.domain;
 
-import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 import org.springframework.stereotype.Component;

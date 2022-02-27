@@ -1,4 +1,4 @@
-package org.ahpuh.surf.like.entity;
+package org.ahpuh.surf.like.domain;
 
 import lombok.*;
 import org.ahpuh.surf.post.domain.Post;
