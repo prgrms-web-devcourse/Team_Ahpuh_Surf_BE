@@ -3,7 +3,7 @@ package org.ahpuh.surf.post.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.post.dto.*;
-import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.domain.User;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;

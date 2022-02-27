@@ -8,8 +8,8 @@ import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;
-import org.ahpuh.surf.user.entity.User;
-import org.ahpuh.surf.user.repository.UserRepository;
+import org.ahpuh.surf.user.domain.User;
+import org.ahpuh.surf.user.domain.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

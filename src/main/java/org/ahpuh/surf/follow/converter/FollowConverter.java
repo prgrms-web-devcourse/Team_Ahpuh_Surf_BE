@@ -2,7 +2,7 @@ package org.ahpuh.surf.follow.converter;
 
 import org.ahpuh.surf.follow.dto.FollowUserDto;
 import org.ahpuh.surf.follow.entity.Follow;
-import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.domain.User;
 import org.springframework.stereotype.Component;
 
 @Component

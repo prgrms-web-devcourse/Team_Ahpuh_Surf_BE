@@ -1,7 +1,7 @@
 package org.ahpuh.surf.follow.repository;
 
 import org.ahpuh.surf.follow.entity.Follow;
-import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

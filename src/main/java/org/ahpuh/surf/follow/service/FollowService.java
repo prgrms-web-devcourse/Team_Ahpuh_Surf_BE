@@ -7,8 +7,8 @@ import org.ahpuh.surf.follow.dto.FollowUserDto;
 import org.ahpuh.surf.follow.dto.response.FollowResponseDto;
 import org.ahpuh.surf.follow.entity.Follow;
 import org.ahpuh.surf.follow.repository.FollowRepository;
-import org.ahpuh.surf.user.entity.User;
-import org.ahpuh.surf.user.repository.UserRepository;
+import org.ahpuh.surf.user.domain.User;
+import org.ahpuh.surf.user.domain.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -3,8 +3,7 @@ package org.ahpuh.surf.category.domain;
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
-import org.ahpuh.surf.category.entity.Category;
-import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.domain.User;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -11,7 +11,7 @@ import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
 import org.ahpuh.surf.post.dto.response.PostReadResponseDto;
 import org.ahpuh.surf.post.dto.response.PostResponseDto;
 import org.ahpuh.surf.post.entity.Post;
-import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.domain.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

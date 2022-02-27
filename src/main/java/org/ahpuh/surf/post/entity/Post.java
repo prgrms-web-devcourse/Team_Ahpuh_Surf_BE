@@ -10,7 +10,7 @@ import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.s3.FileStatus;
-import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.domain.User;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 

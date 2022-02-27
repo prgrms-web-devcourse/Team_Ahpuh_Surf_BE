@@ -1,6 +1,5 @@
-package org.ahpuh.surf.user.repository;
+package org.ahpuh.surf.user.domain;
 
-import org.ahpuh.surf.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

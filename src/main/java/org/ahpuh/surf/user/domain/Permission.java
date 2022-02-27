@@ -1,4 +1,4 @@
-package org.ahpuh.surf.user.entity;
+package org.ahpuh.surf.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;

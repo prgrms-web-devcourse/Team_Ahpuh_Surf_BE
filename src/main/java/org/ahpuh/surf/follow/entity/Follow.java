@@ -1,7 +1,7 @@
 package org.ahpuh.surf.follow.entity;
 
 import lombok.*;
-import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.domain.User;
 
 import javax.persistence.*;
 
