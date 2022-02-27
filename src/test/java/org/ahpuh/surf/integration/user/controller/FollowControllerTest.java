@@ -1,4 +1,4 @@
-package org.ahpuh.surf.integration.follow.controller;
+package org.ahpuh.surf.integration.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.user.controller.UserController;
