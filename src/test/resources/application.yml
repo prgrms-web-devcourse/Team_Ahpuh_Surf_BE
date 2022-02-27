@@ -17,9 +17,9 @@ spring:
 server:
   port: 8080
 jwt:
-  header: token
+  header: Authorization
   issuer: ahpuh
-  client-secret: ${JWT_CLIENT_SECRET}
+  client-secret: mock
   expiry-seconds: 2592000
 cloud:
   aws:

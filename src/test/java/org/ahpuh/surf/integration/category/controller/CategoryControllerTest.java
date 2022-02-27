@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,7 +86,7 @@ class CategoryControllerTest {
 
         mockMvc.perform(post("/api/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("token", token)
+                        .header(HttpHeaders.AUTHORIZATION, token)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
                 .andDo(print());
@@ -120,7 +121,7 @@ class CategoryControllerTest {
     @DisplayName("유저의 모든 카테고리 정보를 조회할 수 있다.")
     void findAllCategoryByUser() throws Exception {
         mockMvc.perform(get("/api/v1/categories", user.getUserId())
-                        .header("token", token)
+                        .header(HttpHeaders.AUTHORIZATION, token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());

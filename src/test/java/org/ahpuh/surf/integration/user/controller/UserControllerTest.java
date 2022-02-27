@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
@@ -158,7 +159,7 @@ class UserControllerTest {
         mockMvc.perform(builder
                         .file(request)
                         .file(file)
-                        .header("token", token))
+                        .header(HttpHeaders.AUTHORIZATION, token))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -176,7 +177,7 @@ class UserControllerTest {
         mockMvc.perform(builder
                         .file(request)
                         .file(new MockMultipartFile("file", null, null, new byte[0]))
-                        .header("token", token))
+                        .header(HttpHeaders.AUTHORIZATION, token))
                 .andExpect(status().isOk())
                 .andDo(print());
         assertThat(user1.getProfilePhotoUrl()).isEqualTo("mock upload");
@@ -197,7 +198,7 @@ class UserControllerTest {
         // When
         mockMvc.perform(delete("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("token", token))
+                        .header(HttpHeaders.AUTHORIZATION, token))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
