@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.converter;
+package org.ahpuh.surf.post.domain;
 
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
@@ -10,7 +10,6 @@ import org.ahpuh.surf.post.dto.request.PostRequestDto;
 import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
 import org.ahpuh.surf.post.dto.response.PostReadResponseDto;
 import org.ahpuh.surf.post.dto.response.PostResponseDto;
-import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.domain.User;
 import org.springframework.stereotype.Component;
 

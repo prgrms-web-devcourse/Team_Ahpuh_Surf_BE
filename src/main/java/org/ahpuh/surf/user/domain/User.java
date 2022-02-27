@@ -6,7 +6,7 @@ import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.follow.entity.Follow;
 import org.ahpuh.surf.like.entity.Like;
-import org.ahpuh.surf.post.entity.Post;
+import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;

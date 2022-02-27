@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.repository;
+package org.ahpuh.surf.post.domain.repository;
 
 import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.PostCountDto;

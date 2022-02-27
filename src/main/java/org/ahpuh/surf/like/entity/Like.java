@@ -1,7 +1,7 @@
 package org.ahpuh.surf.like.entity;
 
 import lombok.*;
-import org.ahpuh.surf.post.entity.Post;
+import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 
 import javax.persistence.*;

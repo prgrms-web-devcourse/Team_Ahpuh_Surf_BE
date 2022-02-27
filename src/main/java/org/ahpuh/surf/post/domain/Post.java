@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.entity;
+package org.ahpuh.surf.post.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;

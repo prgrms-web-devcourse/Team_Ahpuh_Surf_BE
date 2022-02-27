@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.repository;
+package org.ahpuh.surf.post.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
