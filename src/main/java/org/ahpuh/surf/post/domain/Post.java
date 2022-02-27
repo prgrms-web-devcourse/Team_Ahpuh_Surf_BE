@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
-import org.ahpuh.surf.like.domain.Like;
+import org.ahpuh.surf.post.domain.like.Like;
 import org.ahpuh.surf.s3.FileStatus;
 import org.ahpuh.surf.user.domain.User;
 import org.hibernate.annotations.SQLDelete;

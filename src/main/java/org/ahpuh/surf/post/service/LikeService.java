@@ -1,13 +1,13 @@
-package org.ahpuh.surf.like.service;
+package org.ahpuh.surf.post.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
-import org.ahpuh.surf.like.domain.Like;
-import org.ahpuh.surf.like.domain.LikeConverter;
-import org.ahpuh.surf.like.domain.LikeRepository;
-import org.ahpuh.surf.like.dto.response.LikeResponseDto;
 import org.ahpuh.surf.post.domain.Post;
+import org.ahpuh.surf.post.domain.like.Like;
+import org.ahpuh.surf.post.domain.like.LikeConverter;
+import org.ahpuh.surf.post.domain.like.LikeRepository;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
+import org.ahpuh.surf.post.dto.response.LikeResponseDto;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
 import org.springframework.stereotype.Service;

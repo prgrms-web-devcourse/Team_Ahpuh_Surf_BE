@@ -1,4 +1,4 @@
-package org.ahpuh.surf.like.dto.response;
+package org.ahpuh.surf.post.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
