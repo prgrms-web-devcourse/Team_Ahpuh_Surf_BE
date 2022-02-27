@@ -1,7 +1,7 @@
-package org.ahpuh.surf.follow.domain;
+package org.ahpuh.surf.user.domain.follow;
 
-import org.ahpuh.surf.follow.dto.FollowUserDto;
 import org.ahpuh.surf.user.domain.User;
+import org.ahpuh.surf.user.dto.response.FollowUserResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,8 +14,8 @@ public class FollowConverter {
                 .build();
     }
 
-    public FollowUserDto toFollowUserDto(final User user) {
-        return FollowUserDto.builder()
+    public FollowUserResponseDto toFollowUserDto(final User user) {
+        return FollowUserResponseDto.builder()
                 .userId(user.getUserId())
                 .userName(user.getUserName())
                 .profilePhotoUrl(user.getProfilePhotoUrl())

@@ -1,4 +1,4 @@
-package org.ahpuh.surf.follow.dto.response;
+package org.ahpuh.surf.user.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

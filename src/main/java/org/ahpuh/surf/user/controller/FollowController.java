@@ -1,10 +1,10 @@
-package org.ahpuh.surf.follow.controller;
+package org.ahpuh.surf.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.ahpuh.surf.follow.dto.FollowUserDto;
-import org.ahpuh.surf.follow.dto.response.FollowResponseDto;
-import org.ahpuh.surf.follow.service.FollowService;
 import org.ahpuh.surf.jwt.JwtAuthentication;
+import org.ahpuh.surf.user.dto.response.FollowResponseDto;
+import org.ahpuh.surf.user.dto.response.FollowUserResponseDto;
+import org.ahpuh.surf.user.service.FollowService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -39,18 +39,18 @@ public class FollowController {
     }
 
     @GetMapping("/users/{userId}/followers")
-    public ResponseEntity<List<FollowUserDto>> findFollowersList(
+    public ResponseEntity<List<FollowUserResponseDto>> findFollowersList(
             @PathVariable final Long userId
     ) {
-        final List<FollowUserDto> response = followService.findFollowerList(userId);
+        final List<FollowUserResponseDto> response = followService.findFollowerList(userId);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/users/{userId}/following")
-    public ResponseEntity<List<FollowUserDto>> findFollowingList(
+    public ResponseEntity<List<FollowUserResponseDto>> findFollowingList(
             @PathVariable final Long userId
     ) {
-        final List<FollowUserDto> response = followService.findFollowingList(userId);
+        final List<FollowUserResponseDto> response = followService.findFollowingList(userId);
         return ResponseEntity.ok().body(response);
     }
 }
