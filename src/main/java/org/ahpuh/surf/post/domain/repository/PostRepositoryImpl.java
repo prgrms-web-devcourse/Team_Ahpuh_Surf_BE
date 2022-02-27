@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.ahpuh.surf.follow.entity.QFollow.follow;
-import static org.ahpuh.surf.post.entity.QPost.post;
+import static org.ahpuh.surf.post.domain.QPost.post;
+import static org.ahpuh.surf.user.domain.follow.QFollow.follow;
 
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryQuerydsl {
