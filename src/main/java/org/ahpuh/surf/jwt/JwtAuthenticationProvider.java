@@ -1,7 +1,7 @@
 package org.ahpuh.surf.jwt;
 
 import lombok.RequiredArgsConstructor;
-import org.ahpuh.surf.user.entity.User;
+import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.service.UserService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationProvider;

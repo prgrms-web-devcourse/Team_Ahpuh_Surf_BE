@@ -2,11 +2,11 @@ package org.ahpuh.surf.integration.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.user.controller.UserController;
+import org.ahpuh.surf.user.domain.User;
+import org.ahpuh.surf.user.domain.UserRepository;
 import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.request.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
-import org.ahpuh.surf.user.entity.User;
-import org.ahpuh.surf.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

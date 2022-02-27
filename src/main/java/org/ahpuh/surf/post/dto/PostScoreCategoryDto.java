@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.ahpuh.surf.category.entity.Category;
+import org.ahpuh.surf.category.domain.Category;
 
 import java.time.LocalDate;
 

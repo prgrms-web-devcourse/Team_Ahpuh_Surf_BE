@@ -1,16 +1,16 @@
 package org.ahpuh.surf.integration.category.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.ahpuh.surf.category.domain.Category;
+import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
-import org.ahpuh.surf.category.entity.Category;
-import org.ahpuh.surf.category.repository.CategoryRepository;
-import org.ahpuh.surf.post.entity.Post;
-import org.ahpuh.surf.post.repository.PostRepository;
+import org.ahpuh.surf.post.domain.Post;
+import org.ahpuh.surf.post.domain.repository.PostRepository;
+import org.ahpuh.surf.user.domain.Permission;
+import org.ahpuh.surf.user.domain.User;
+import org.ahpuh.surf.user.domain.UserRepository;
 import org.ahpuh.surf.user.dto.response.UserLoginResponseDto;
-import org.ahpuh.surf.user.entity.Permission;
-import org.ahpuh.surf.user.entity.User;
-import org.ahpuh.surf.user.repository.UserRepository;
 import org.ahpuh.surf.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,15 +1,15 @@
 package org.ahpuh.surf.integration.like.controller;
 
-import org.ahpuh.surf.category.entity.Category;
-import org.ahpuh.surf.category.repository.CategoryRepository;
-import org.ahpuh.surf.like.entity.Like;
-import org.ahpuh.surf.like.repository.LikeRepository;
-import org.ahpuh.surf.post.entity.Post;
-import org.ahpuh.surf.post.repository.PostRepository;
+import org.ahpuh.surf.category.domain.Category;
+import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.post.domain.Post;
+import org.ahpuh.surf.post.domain.like.Like;
+import org.ahpuh.surf.post.domain.like.LikeRepository;
+import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.user.controller.UserController;
+import org.ahpuh.surf.user.domain.User;
+import org.ahpuh.surf.user.domain.UserRepository;
 import org.ahpuh.surf.user.dto.request.UserLoginRequestDto;
-import org.ahpuh.surf.user.entity.User;
-import org.ahpuh.surf.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
