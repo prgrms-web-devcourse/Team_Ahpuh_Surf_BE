@@ -85,9 +85,12 @@ public class User extends BaseEntity {
         this.userName = userName;
     }
 
-    public void checkPassword(final PasswordEncoder passwordEncoder, final String credentials) {
-        if (!passwordEncoder.matches(credentials, password))
-            throw new IllegalArgumentException("Bad credential");
+    public boolean checkPassword(final PasswordEncoder passwordEncoder, final String credentials) {
+        if (!passwordEncoder.matches(credentials, password)) {
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        } else {
+            return true;
+        }
     }
 
     public void setPermission(final Permission permission) {
