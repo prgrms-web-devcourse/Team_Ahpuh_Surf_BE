@@ -1,4 +1,4 @@
-package org.ahpuh.surf.follow.entity;
+package org.ahpuh.surf.follow.domain;
 
 import lombok.*;
 import org.ahpuh.surf.user.domain.User;

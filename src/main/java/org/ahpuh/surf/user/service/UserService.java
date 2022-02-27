@@ -2,7 +2,7 @@ package org.ahpuh.surf.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.ahpuh.surf.follow.repository.FollowRepository;
+import org.ahpuh.surf.follow.domain.FollowRepository;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.s3.S3Service;
