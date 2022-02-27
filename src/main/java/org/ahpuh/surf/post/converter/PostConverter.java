@@ -1,7 +1,7 @@
 package org.ahpuh.surf.post.converter;
 
+import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
-import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.PostScoreDto;

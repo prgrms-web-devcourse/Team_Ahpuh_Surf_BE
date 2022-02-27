@@ -1,8 +1,8 @@
 package org.ahpuh.surf.integration.post;
 
+import org.ahpuh.surf.category.domain.Category;
+import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
-import org.ahpuh.surf.category.entity.Category;
-import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.post.repository.PostRepository;

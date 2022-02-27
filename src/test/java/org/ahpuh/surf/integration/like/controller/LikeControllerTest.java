@@ -1,7 +1,7 @@
 package org.ahpuh.surf.integration.like.controller;
 
-import org.ahpuh.surf.category.entity.Category;
-import org.ahpuh.surf.category.repository.CategoryRepository;
+import org.ahpuh.surf.category.domain.Category;
+import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.like.entity.Like;
 import org.ahpuh.surf.like.repository.LikeRepository;
 import org.ahpuh.surf.post.entity.Post;

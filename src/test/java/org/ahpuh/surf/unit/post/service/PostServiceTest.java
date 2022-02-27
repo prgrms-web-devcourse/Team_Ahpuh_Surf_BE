@@ -1,7 +1,7 @@
 package org.ahpuh.surf.unit.post.service;
 
-import org.ahpuh.surf.category.entity.Category;
-import org.ahpuh.surf.category.repository.CategoryRepository;
+import org.ahpuh.surf.category.domain.Category;
+import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.post.converter.PostConverter;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
 import org.ahpuh.surf.post.entity.Post;

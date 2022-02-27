@@ -1,4 +1,4 @@
-package org.ahpuh.surf.category.converter;
+package org.ahpuh.surf.category.domain;
 
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;

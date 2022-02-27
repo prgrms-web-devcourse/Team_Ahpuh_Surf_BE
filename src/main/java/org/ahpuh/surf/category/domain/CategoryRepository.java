@@ -1,4 +1,4 @@
-package org.ahpuh.surf.category.repository;
+package org.ahpuh.surf.category.domain;
 
 import org.ahpuh.surf.category.entity.Category;
 import org.ahpuh.surf.user.entity.User;

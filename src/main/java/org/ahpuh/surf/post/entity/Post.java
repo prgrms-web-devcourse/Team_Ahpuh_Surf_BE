@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.ahpuh.surf.category.entity.Category;
+import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.entity.BaseEntity;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.like.entity.Like;

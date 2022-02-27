@@ -2,9 +2,9 @@ package org.ahpuh.surf.post.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ahpuh.surf.category.domain.Category;
+import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
-import org.ahpuh.surf.category.entity.Category;
-import org.ahpuh.surf.category.repository.CategoryRepository;
 import org.ahpuh.surf.common.cursor.CursorResult;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.post.converter.PostConverter;

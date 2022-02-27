@@ -1,6 +1,6 @@
 package org.ahpuh.surf.post.repository;
 
-import org.ahpuh.surf.category.entity.Category;
+import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.post.entity.Post;
 import org.ahpuh.surf.user.entity.User;
 import org.springframework.data.domain.Pageable;
