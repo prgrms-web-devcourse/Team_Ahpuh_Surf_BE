@@ -47,6 +47,7 @@ class UserControllerTest {
 
     private User user1;
     private Long userId1;
+    private String TOKEN;
 
     @BeforeEach
     void setUp() {
@@ -56,6 +57,12 @@ class UserControllerTest {
                 .userName("user1")
                 .build());
         userId1 = user1.getUserId();
+
+        final UserLoginRequestDto req = UserLoginRequestDto.builder()
+                .email("test@naver.com")
+                .password("testpw")
+                .build();
+        TOKEN = Objects.requireNonNull(userController.login(req).getBody()).getToken();
     }
 
     @Test
@@ -106,6 +113,7 @@ class UserControllerTest {
     @Transactional
     void testFindUserInfo() throws Exception {
         mockMvc.perform(get("/api/v1/users/{userId}", userId1)
+                        .header(HttpHeaders.AUTHORIZATION, TOKEN)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -122,12 +130,6 @@ class UserControllerTest {
                 () -> assertThat(user1.getUrl()).isNull(),
                 () -> assertThat(user1.getAccountPublic()).isTrue()
         );
-
-        final UserLoginRequestDto loginReq = UserLoginRequestDto.builder()
-                .email("test@naver.com")
-                .password("testpw")
-                .build();
-        final String token = Objects.requireNonNull(userController.login(loginReq).getBody()).getToken();
 
         // When
         final UserUpdateRequestDto updateReq = UserUpdateRequestDto.builder()
@@ -159,7 +161,7 @@ class UserControllerTest {
         mockMvc.perform(builder
                         .file(request)
                         .file(file)
-                        .header(HttpHeaders.AUTHORIZATION, token))
+                        .header(HttpHeaders.AUTHORIZATION, TOKEN))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -177,33 +179,24 @@ class UserControllerTest {
         mockMvc.perform(builder
                         .file(request)
                         .file(new MockMultipartFile("file", null, null, new byte[0]))
-                        .header(HttpHeaders.AUTHORIZATION, token))
+                        .header(HttpHeaders.AUTHORIZATION, TOKEN))
                 .andExpect(status().isOk())
                 .andDo(print());
         assertThat(user1.getProfilePhotoUrl()).isEqualTo("mock upload");
-
     }
 
     @Test
     @DisplayName("회원을 삭제(softDelete) 할 수 있다.")
     @Transactional
     void testDeleteUser() throws Exception {
-        // Given
-        final UserLoginRequestDto req = UserLoginRequestDto.builder()
-                .email("test@naver.com")
-                .password("testpw")
-                .build();
-        final String token = Objects.requireNonNull(userController.login(req).getBody()).getToken();
-
         // When
         mockMvc.perform(delete("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, token))
+                        .header(HttpHeaders.AUTHORIZATION, TOKEN))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
         // Then
         assertThat(userRepository.findAll().size()).isEqualTo(0);
     }
-
 }

@@ -103,6 +103,7 @@ class CategoryControllerTest {
                 .build();
 
         mockMvc.perform(put("/api/v1/categories/{categoryId}", category.getCategoryId())
+                        .header(HttpHeaders.AUTHORIZATION, token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
@@ -112,7 +113,8 @@ class CategoryControllerTest {
     @Test
     @DisplayName("카테고리를 삭제할 수 있다.")
     void deleteCategory() throws Exception {
-        mockMvc.perform(delete("/api/v1/categories/{categoryId}", category.getCategoryId()))
+        mockMvc.perform(delete("/api/v1/categories/{categoryId}", category.getCategoryId())
+                        .header(HttpHeaders.AUTHORIZATION, token))
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }
@@ -132,6 +134,7 @@ class CategoryControllerTest {
     void getCategoryDashboard() throws Exception {
         mockMvc.perform(get("/api/v1/categories/dashboard")
                         .param("userId", String.valueOf(user.getUserId()))
+                        .header(HttpHeaders.AUTHORIZATION, token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());

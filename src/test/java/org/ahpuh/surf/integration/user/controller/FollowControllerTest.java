@@ -151,6 +151,7 @@ class FollowControllerTest {
 
         // When, Then
         mockMvc.perform(get("/api/v1/users/{userId}/followers", userId2)
+                        .header(HttpHeaders.AUTHORIZATION, token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -181,6 +182,7 @@ class FollowControllerTest {
 
         // When, Then
         mockMvc.perform(get("/api/v1/users/{userId}/following", userId1)
+                        .header(HttpHeaders.AUTHORIZATION, token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
