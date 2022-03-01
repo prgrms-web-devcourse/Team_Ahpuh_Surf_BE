@@ -1,4 +1,4 @@
-package org.ahpuh.surf.common.entity;
+package org.ahpuh.surf.common.domain;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

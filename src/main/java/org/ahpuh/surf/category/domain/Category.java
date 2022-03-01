@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.ahpuh.surf.common.entity.BaseEntity;
+import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 import org.hibernate.annotations.Formula;

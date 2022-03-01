@@ -3,7 +3,7 @@ package org.ahpuh.surf.user.domain;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.common.entity.BaseEntity;
+import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.like.Like;
 import org.ahpuh.surf.user.domain.follow.Follow;
