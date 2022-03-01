@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
+import org.ahpuh.surf.common.exception.user.InvalidPasswordException;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.like.Like;
 import org.ahpuh.surf.user.domain.follow.Follow;
@@ -86,8 +87,11 @@ public class User extends BaseEntity {
     }
 
     public boolean checkPassword(final PasswordEncoder passwordEncoder, final String credentials) {
+        if (credentials == null) {
+            throw new InvalidPasswordException();
+        }
         if (!passwordEncoder.matches(credentials, password)) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new InvalidPasswordException();
         } else {
             return true;
         }

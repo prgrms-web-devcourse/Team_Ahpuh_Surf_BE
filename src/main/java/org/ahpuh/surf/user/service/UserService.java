@@ -2,6 +2,8 @@ package org.ahpuh.surf.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ahpuh.surf.common.exception.user.DuplicatedEmailException;
+import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.s3.S3Service;
@@ -23,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
-import static org.ahpuh.surf.common.exception.EntityExceptionHandler.UserNotFound;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -49,16 +49,16 @@ public class UserService {
     }
 
     public User login(final String email, final String password) {
-        final User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> UserNotFound(email));
-        user.checkPassword(passwordEncoder, password);
-        return user;
+        final User userEntity = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+        userEntity.checkPassword(passwordEncoder, password);
+        return userEntity;
     }
 
     @Transactional
     public UserJoinResponseDto join(final UserJoinRequestDto joinRequest) {
         if (userRepository.existsByEmail(joinRequest.getEmail())) {
-            throw new IllegalArgumentException(String.format("Email is duplicated. email=%s", joinRequest.getEmail()));
+            throw new DuplicatedEmailException();
         }
         final Long userId = userRepository.save(userConverter.toEntity(joinRequest))
                 .getUserId();
@@ -66,11 +66,10 @@ public class UserService {
     }
 
     public UserFindInfoResponseDto findUser(final Long userId) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(() -> UserNotFound(userId));
-        final long followingCount = followRepository.countByUser(user);
-        final long followerCount = followRepository.countByFollowedUser(user);
-        return userConverter.toUserFindInfoResponseDto(user, followingCount, followerCount);
+        final User userEntity = getUser(userId);
+        final long followingCount = followRepository.countByUser(userEntity);
+        final long followerCount = followRepository.countByFollowedUser(userEntity);
+        return userConverter.toUserFindInfoResponseDto(userEntity, followingCount, followerCount);
     }
 
     @Transactional
@@ -84,16 +83,19 @@ public class UserService {
                 e.printStackTrace();
             }
         }
-        final User userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> UserNotFound(userId));
+        final User userEntity = getUser(userId);
         userEntity.update(passwordEncoder, updateDto, profilePhotoUrl);
         return new UserUpdateResponseDto(userId);
     }
 
     @Transactional
     public void delete(final Long userId) {
-        final User userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> UserNotFound(userId));
+        final User userEntity = getUser(userId);
         userRepository.delete(userEntity);
+    }
+
+    private User getUser(final Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
     }
 }
