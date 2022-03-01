@@ -12,13 +12,9 @@ import java.util.Date;
 public class Jwt {
 
     private final String issuer;
-
     private final String clientSecret;
-
     private final int expirySeconds;
-
     private final Algorithm algorithm;
-
     private final JWTVerifier jwtVerifier;
 
     public Jwt(final String issuer, final String clientSecret, final int expirySeconds) {
@@ -48,5 +44,4 @@ public class Jwt {
     public Claims verify(final String token) throws JWTVerificationException {
         return new Claims(jwtVerifier.verify(token));
     }
-
 }

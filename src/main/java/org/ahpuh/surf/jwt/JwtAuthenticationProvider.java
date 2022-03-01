@@ -20,7 +20,6 @@ import static org.apache.commons.lang3.ClassUtils.isAssignable;
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final Jwt jwt;
-
     private final UserService userService;
 
     @Override
@@ -59,5 +58,4 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 .toArray(String[]::new);
         return jwt.sign(Claims.from(userId, email, roles));
     }
-
 }

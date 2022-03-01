@@ -11,13 +11,9 @@ import java.util.Date;
 public class Claims {
 
     public Long userId;
-
     public String email;
-
     public String[] roles;
-
     public Date iat;
-
     public Date exp;
 
     public Claims(final DecodedJWT decodedJWT) {
@@ -47,5 +43,4 @@ public class Claims {
         claims.roles = roles;
         return claims;
     }
-
 }
