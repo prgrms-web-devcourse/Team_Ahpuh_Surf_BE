@@ -29,17 +29,10 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final String headerKey;
-
     private final Jwt jwt;
 
     @Override
     public void doFilter(final ServletRequest req, final ServletResponse res, final FilterChain chain) throws IOException, ServletException {
-        /**
-         * HTTP 요청 헤더에 JWT 토큰이 있는지 확인
-         * JWT 토큰이 있다면, 주어진 토큰 디코딩
-         * userId, email, roles 데이터 추출
-         * JwtAuthenticationToken 생성해서 SecurityContext에 넣는다.
-         **/
         final HttpServletRequest request = (HttpServletRequest) req;
         final HttpServletResponse response = (HttpServletResponse) res;
 
@@ -95,5 +88,4 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 ? emptyList()
                 : Arrays.stream(roles).map(SimpleGrantedAuthority::new).collect(toList());
     }
-
 }

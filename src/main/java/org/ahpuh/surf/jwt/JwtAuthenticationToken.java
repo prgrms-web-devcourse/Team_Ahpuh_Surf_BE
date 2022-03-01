@@ -1,6 +1,7 @@
 package org.ahpuh.surf.jwt;
 
 import lombok.Getter;
+import org.ahpuh.surf.common.exception.jwt.UnauthorizedTokenException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -12,7 +13,6 @@ import java.util.Collection;
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private final Object principal;
-
     private String credentials;
 
     public JwtAuthenticationToken(final String principal, final String credentials) {
@@ -33,7 +33,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     public void setAuthenticated(final boolean isAuthenticated) throws IllegalArgumentException {
         if (isAuthenticated) {
-            throw new IllegalArgumentException("Cannot set this token to trusted");
+            throw new UnauthorizedTokenException();
         }
         super.setAuthenticated(false);
     }
