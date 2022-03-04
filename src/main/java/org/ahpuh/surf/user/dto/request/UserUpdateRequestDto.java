@@ -22,7 +22,7 @@ public class UserUpdateRequestDto {
 
     private String aboutMe;
 
-    @NotNull
+    @NotNull(message = "accountPublic must be provided.")
     private Boolean accountPublic;
 
 }
