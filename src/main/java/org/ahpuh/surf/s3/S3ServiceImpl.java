@@ -65,12 +65,12 @@ public class S3ServiceImpl implements S3Service {
         if (file.isEmpty()) {
             String fileUrl = uploadFile(file);
             if (fileUrl != null) {
-                return new FileStatus(fileUrl, "file");
+                return new FileStatus(fileUrl, FileType.FILE);
             }
 
             fileUrl = uploadImg(file);
             if (fileUrl != null) {
-                return new FileStatus(fileUrl, "img");
+                return new FileStatus(fileUrl, FileType.IMG);
             }
         }
         return null;

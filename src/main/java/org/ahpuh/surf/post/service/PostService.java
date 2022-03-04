@@ -58,7 +58,7 @@ public class PostService {
 
         final Post post = postConverter.toEntity(user, category, request);
         if (fileStatus != null) {
-            post.editFile(fileStatus);
+            post.updateFile(fileStatus);
         }
         final Long postId = postRepository.save(post)
                 .getPostId();
@@ -80,9 +80,9 @@ public class PostService {
         final Category category = getCategoryById(request.getCategoryId());
         final Post post = getPostById(postId);
 
-        post.editPost(category, LocalDate.parse(request.getSelectedDate()), request.getContent(), request.getScore());
+        post.updatePost(category, LocalDate.parse(request.getSelectedDate()), request.getContent(), request.getScore());
         if (fileStatus != null) {
-            post.editFile(fileStatus);
+            post.updateFile(fileStatus);
         }
 
         return new PostUpdateResponseDto(postId);

@@ -10,6 +10,7 @@ import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
 import org.ahpuh.surf.post.domain.like.Like;
 import org.ahpuh.surf.s3.FileStatus;
+import org.ahpuh.surf.s3.FileType;
 import org.ahpuh.surf.user.domain.User;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -76,19 +77,19 @@ public class Post extends BaseEntity {
         category.addPost(this);
     }
 
-    public void editPost(final Category category, final LocalDate selectedDate, final String content, final int score) {
+    public void updatePost(final Category category, final LocalDate selectedDate, final String content, final int score) {
         this.category = category;
         this.selectedDate = selectedDate;
         this.content = content;
         this.score = score;
     }
 
-    public Post editFile(final FileStatus fileStatus) {
-        if (fileStatus.fileType().equals("img")) {
+    public Post updateFile(final FileStatus fileStatus) {
+        if (fileStatus.fileType().equals(FileType.IMG)) {
             this.imageUrl = fileStatus.fileUrl();
             this.fileUrl = null;
         }
-        if (fileStatus.fileType().equals("file")) {
+        if (fileStatus.fileType().equals(FileType.FILE)) {
             this.fileUrl = fileStatus.fileUrl();
             this.imageUrl = null;
         }
