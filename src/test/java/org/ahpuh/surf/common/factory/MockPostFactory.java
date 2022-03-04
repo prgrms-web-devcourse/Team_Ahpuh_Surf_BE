@@ -18,4 +18,7 @@ public class MockPostFactory {
                 .build();
     }
 
+    public static Post createMockScoredPost(final User user, final Category category, final int score) {
+        return new Post(user, category, null, null, score);
+    }
 }
