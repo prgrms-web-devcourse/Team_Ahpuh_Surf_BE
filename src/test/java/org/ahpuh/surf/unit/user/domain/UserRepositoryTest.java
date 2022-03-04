@@ -67,9 +67,12 @@ public class UserRepositoryTest {
         @Test
         void saveUserNullCheck() {
             assertAll("null check",
-                    () -> assertThrows(DataIntegrityViolationException.class, () -> userRepository.save(createMockUser(null))),
-                    () -> assertThrows(DataIntegrityViolationException.class, () -> userRepository.save(createMockUser("email", null, "name"))),
-                    () -> assertThrows(DataIntegrityViolationException.class, () -> userRepository.save(createMockUser("email", "pw", null)))
+                    () -> assertThrows(DataIntegrityViolationException.class,
+                            () -> userRepository.save(createMockUser(null))),
+                    () -> assertThrows(DataIntegrityViolationException.class,
+                            () -> userRepository.save(createMockUser("email", null, "name"))),
+                    () -> assertThrows(DataIntegrityViolationException.class,
+                            () -> userRepository.save(createMockUser("email", "pw", null)))
             );
         }
 
@@ -195,26 +198,17 @@ public class UserRepositoryTest {
             final List<Category> allCategory = categoryRepository.findAll();
             final List<Post> allPost = postRepository.findAll();
 
-            assertAll("user, category, post를 save하고 양방향 매핑 확인",
+            assertAll("user, category, post save 확인",
                     () -> assertThat(allUser.size()).isEqualTo(1),
-                    () -> assertThat(allUser.get(0).getCategories().size()).isEqualTo(1),
-                    () -> assertThat(allUser.get(0).getPosts().size()).isEqualTo(2),
                     () -> assertThat(allCategory.size()).isEqualTo(1),
-                    () -> assertThat(allCategory.get(0).getUser())
-                            .isInstanceOf(User.class)
-                            .hasFieldOrPropertyWithValue("userId", savedUser.getUserId()),
-                    () -> assertThat(allCategory.get(0).getPosts().size()).isEqualTo(2),
-                    () -> assertThat(allPost.size()).isEqualTo(2),
-                    () -> assertThat(allPost.get(0).getUser())
-                            .isInstanceOf(User.class)
-                            .hasFieldOrPropertyWithValue("userId", savedUser.getUserId()),
-                    () -> assertThat(allPost.get(0).getCategory()).isSameAs(allCategory.get(0))
+                    () -> assertThat(allPost.size()).isEqualTo(2)
             );
 
             // When
-            final User userEntity = userRepository.getById(1L);
+            final User userEntity = userRepository.getById(savedUser.getUserId());
             userRepository.delete(userEntity);
             testEntityManager.flush();
+            testEntityManager.clear();
 
             // Then
             assertAll("user와 연관된 category, post까지 orphan remove",
