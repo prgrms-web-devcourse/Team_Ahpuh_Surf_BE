@@ -1,5 +1,6 @@
 package org.ahpuh.surf.common.factory;
 
+import org.ahpuh.surf.user.domain.Permission;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.request.UserLoginRequestDto;
@@ -8,6 +9,8 @@ import org.ahpuh.surf.user.dto.response.UserFindInfoResponseDto;
 import org.ahpuh.surf.user.dto.response.UserJoinResponseDto;
 import org.ahpuh.surf.user.dto.response.UserLoginResponseDto;
 import org.ahpuh.surf.user.dto.response.UserUpdateResponseDto;
+
+import java.util.ArrayList;
 
 public class MockUserFactory {
 
@@ -43,13 +46,13 @@ public class MockUserFactory {
                 null,
                 null,
                 null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                true,
+                Permission.ROLE_USER,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
         );
     }
 
@@ -61,13 +64,13 @@ public class MockUserFactory {
                 "profilePhoto",
                 null,
                 null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                true,
+                Permission.ROLE_USER,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
         );
     }
 

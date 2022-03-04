@@ -228,6 +228,8 @@ public class UserControllerTest extends ControllerTest {
                     .delete(anyLong());
 
             perform.andDo(document("user/deleteUser",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
                     requestHeaders(
                             headerWithName(HttpHeaders.AUTHORIZATION).description("token")
                     )));

@@ -16,6 +16,9 @@ spring:
         use_sql_comments: true
 server:
   port: 8080
+  servlet:
+    encoding:
+      force-response: true
 jwt:
   header: Authorization
   issuer: ahpuh
