@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 @Builder
 public class UserJoinRequestDto {
 
+    @NotBlank(message = "Email must be provided.")
     @Email(message = "Invalid email.")
     private String email;
 
