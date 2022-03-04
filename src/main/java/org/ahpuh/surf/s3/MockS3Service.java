@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,23 +20,23 @@ public class MockS3Service implements S3Service {
     private static final List<String> PERMISSION_FILE_EXTENSIONS = List.of("doc", "docx", "xls", "xlsx", "hwp", "pdf", "txt", "md", "ppt", "pptx", "key");
 
     @Transactional
-    public String uploadUserImage(final MultipartFile profilePhoto) throws IOException {
+    public String uploadUserImage(final MultipartFile profilePhoto) {
         return profilePhoto.isEmpty()
                 ? null
                 : uploadImg(profilePhoto);
     }
 
     @Transactional
-    public FileStatus uploadPostFile(final MultipartFile file) throws IOException {
+    public FileStatus uploadPostFile(final MultipartFile file) {
         if (!file.isEmpty()) {
             String fileUrl = uploadFile(file);
             if (fileUrl != null) {
-                return new FileStatus(fileUrl, "file");
+                return new FileStatus(fileUrl, FileType.FILE);
             }
 
             fileUrl = uploadImg(file);
             if (fileUrl != null) {
-                return new FileStatus(fileUrl, "img");
+                return new FileStatus(fileUrl, FileType.IMG);
             }
         }
         return null;
