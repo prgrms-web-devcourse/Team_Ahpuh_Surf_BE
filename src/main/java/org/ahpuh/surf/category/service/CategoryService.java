@@ -10,7 +10,8 @@ import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryCreateResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryUpdateResponseDto;
-import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
+import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.user.domain.User;
@@ -32,8 +33,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryCreateResponseDto createCategory(final Long userId, final CategoryCreateRequestDto categoryDto) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
+        final User user = getUser(userId);
         final Category category = categoryConverter.toEntity(user, categoryDto);
         final Long categoryId = categoryRepository.save(category).getCategoryId();
 
@@ -42,8 +42,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryUpdateResponseDto updateCategory(final Long categoryId, final CategoryUpdateRequestDto categoryDto) {
-        final Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
+        final Category category = getCategory(categoryId);
         category.update(categoryDto.getName(), categoryDto.getIsPublic(), categoryDto.getColorCode());
 
         return new CategoryUpdateResponseDto(categoryId);
@@ -51,14 +50,12 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(final Long categoryId) {
-        final Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
+        final Category category = getCategory(categoryId);
         categoryRepository.delete(category);
     }
 
     public List<AllCategoryByUserResponseDto> findAllCategoryByUser(final Long userId) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
+        final User user = getUser(userId);
         final List<Category> categoryList = categoryRepository.findByUser(user);
 
         return categoryList.stream()
@@ -67,8 +64,7 @@ public class CategoryService {
     }
 
     public List<CategoryDetailResponseDto> getCategoryDashboard(final Long userId) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
+        final User user = getUser(userId);
         final List<Category> categoryList = categoryRepository.findByUser(user);
 
         return categoryList.stream()
@@ -80,5 +76,15 @@ public class CategoryService {
         return postRepository.findByCategory(category).stream()
                 .mapToInt(Post::getScore)
                 .average().orElse(0);
+    }
+
+    private User getUser(final Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    private Category getCategory(final Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryNotFoundException::new);
     }
 }

@@ -30,7 +30,7 @@ public class CategoryController {
             @Valid @RequestBody final CategoryCreateRequestDto request
     ) {
         final CategoryCreateResponseDto response = categoryService.createCategory(authentication.userId, request);
-        return ResponseEntity.created(URI.create("/api/v1/categories" + response)).body(response);
+        return ResponseEntity.created(URI.create("/api/v1/categories/" + response.getCategoryId())).body(response);
     }
 
     @PutMapping("/{categoryId}")
@@ -64,5 +64,4 @@ public class CategoryController {
     ) {
         return ResponseEntity.ok().body(categoryService.getCategoryDashboard(userId));
     }
-
 }
