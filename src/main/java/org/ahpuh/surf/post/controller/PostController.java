@@ -8,7 +8,10 @@ import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.RecentPostDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
-import org.ahpuh.surf.post.dto.response.*;
+import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
+import org.ahpuh.surf.post.dto.response.PostReadResponseDto;
+import org.ahpuh.surf.post.dto.response.PostResponseDto;
+import org.ahpuh.surf.post.dto.response.PostsRecentScoreResponseDto;
 import org.ahpuh.surf.post.service.PostService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -29,26 +32,23 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping(value = "/posts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PostCreateResponseDto> createPost(
+    public ResponseEntity<Void> createPost(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @Valid @RequestPart(value = "request") final PostRequestDto request,
             @RequestPart(value = "file", required = false) final MultipartFile file
     ) {
-        final PostCreateResponseDto response = postService.create(authentication.userId, request, file);
-
-        return ResponseEntity.created(URI.create("/api/v1/posts/" + response))
-                .body(response);
+        final Long postId = postService.create(authentication.userId, request, file);
+        return ResponseEntity.created(URI.create("/api/v1/posts/" + postId)).build();
     }
 
     @PutMapping(value = "/posts/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PostUpdateResponseDto> updatePost(
+    public ResponseEntity<Void> updatePost(
             @PathVariable final Long postId,
             @Valid @RequestPart(value = "request") final PostRequestDto request,
             @RequestPart(value = "file", required = false) final MultipartFile file
     ) {
-        final PostUpdateResponseDto response = postService.update(postId, request, file);
-
-        return ResponseEntity.ok().body(response);
+        postService.update(postId, request, file);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/posts/{postId}")
@@ -86,12 +86,12 @@ public class PostController {
     }
 
     @PostMapping("/posts/{postId}/favorite")
-    public ResponseEntity<PostFavoriteResponseDto> makeFavorite(
+    public ResponseEntity<Void> makeFavorite(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
     ) {
-        final PostFavoriteResponseDto response = postService.clickFavorite(authentication.userId, postId);
-        return ResponseEntity.ok().body(response);
+        postService.makeFavorite(authentication.userId, postId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/posts/{postId}/favorite")
@@ -99,7 +99,7 @@ public class PostController {
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
     ) {
-        postService.clickFavorite(authentication.userId, postId);
+        postService.cancelFavorite(authentication.userId, postId);
         return ResponseEntity.noContent().build();
     }
 
@@ -119,7 +119,7 @@ public class PostController {
             @RequestParam final Integer month
     ) {
         final Long userId = authentication.userId;
-        return ResponseEntity.ok().body(postService.getPost(userId, year, month));
+        return ResponseEntity.ok().body(postService.getPostOfPeriod(userId, year, month));
     }
 
     @GetMapping("/posts/all")

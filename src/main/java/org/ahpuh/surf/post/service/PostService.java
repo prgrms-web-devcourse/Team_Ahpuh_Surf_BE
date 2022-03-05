@@ -15,7 +15,10 @@ import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.RecentPostDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
-import org.ahpuh.surf.post.dto.response.*;
+import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
+import org.ahpuh.surf.post.dto.response.PostReadResponseDto;
+import org.ahpuh.surf.post.dto.response.PostResponseDto;
+import org.ahpuh.surf.post.dto.response.PostsRecentScoreResponseDto;
 import org.ahpuh.surf.s3.FileStatus;
 import org.ahpuh.surf.s3.S3Service;
 import org.ahpuh.surf.user.domain.User;
@@ -43,7 +46,7 @@ public class PostService {
     private final PostConverter postConverter;
 
     @Transactional
-    public PostCreateResponseDto create(final Long userId, final PostRequestDto request, final MultipartFile file) {
+    public Long create(final Long userId, final PostRequestDto request, final MultipartFile file) {
         FileStatus fileStatus = null;
         if (file != null) {
             try {
@@ -60,14 +63,12 @@ public class PostService {
         if (fileStatus != null) {
             post.updateFile(fileStatus);
         }
-        final Long postId = postRepository.save(post)
+        return postRepository.save(post)
                 .getPostId();
-
-        return new PostCreateResponseDto(postId);
     }
 
     @Transactional
-    public PostUpdateResponseDto update(final Long postId, final PostRequestDto request, final MultipartFile file) {
+    public void update(final Long postId, final PostRequestDto request, final MultipartFile file) {
         FileStatus fileStatus = null;
         if (file != null) {
             try {
@@ -84,8 +85,6 @@ public class PostService {
         if (fileStatus != null) {
             post.updateFile(fileStatus);
         }
-
-        return new PostUpdateResponseDto(postId);
     }
 
     public PostReadResponseDto readOne(final Long myId, final Long postId) {
@@ -99,11 +98,15 @@ public class PostService {
     }
 
     @Transactional
-    public PostFavoriteResponseDto clickFavorite(final Long userId, final Long postId) {
+    public void makeFavorite(final Long userId, final Long postId) {
         final Post post = getPostById(postId);
         post.updateFavorite(userId);
+    }
 
-        return new PostFavoriteResponseDto(postId);
+    @Transactional
+    public void cancelFavorite(final Long userId, final Long postId) {
+        final Post post = getPostById(postId);
+        post.updateFavorite(userId);
     }
 
     public CursorResult<ExploreDto> followingExplore(final Long myId, final Long cursorId, final Pageable page) {
@@ -154,7 +157,7 @@ public class PostService {
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
     }
 
-    public List<PostResponseDto> getPost(final Long userId, final Integer year, final Integer month) {
+    public List<PostResponseDto> getPostOfPeriod(final Long userId, final Integer year, final Integer month) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
         final LocalDate start = LocalDate.of(year, month, 1);
