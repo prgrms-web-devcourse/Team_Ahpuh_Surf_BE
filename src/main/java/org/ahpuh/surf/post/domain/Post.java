@@ -4,9 +4,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
+import org.ahpuh.surf.common.exception.post.DuplicatedLikeException;
 import org.ahpuh.surf.common.exception.post.FavoriteInvalidUserException;
 import org.ahpuh.surf.post.domain.like.Like;
 import org.ahpuh.surf.s3.FileStatus;
@@ -22,7 +22,6 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SuperBuilder
 @SQLDelete(sql = "UPDATE posts SET is_deleted = true WHERE post_id = ?")
 @Where(clause = "is_deleted = false")
 @Entity
@@ -58,12 +57,10 @@ public class Post extends BaseEntity {
     private String imageUrl;
 
     @Column(name = "favorite")
-    @Builder.Default
-    private Boolean favorite = false;
+    private Boolean favorite;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true)
-    @Builder.Default
-    private List<Like> likes = new ArrayList<>();
+    private List<Like> likes;
 
     @Builder
     public Post(final User user, final Category category, final LocalDate selectedDate, final String content, final int score) {
@@ -73,6 +70,7 @@ public class Post extends BaseEntity {
         this.content = content;
         this.score = score;
         favorite = false;
+        likes = new ArrayList<>();
         user.addPost(this);
         category.addPost(this);
     }
@@ -102,7 +100,9 @@ public class Post extends BaseEntity {
     }
 
     public void addLike(final Like like) {
+        if (likes.contains(like)) {
+            throw new DuplicatedLikeException();
+        }
         likes.add(like);
     }
-
 }

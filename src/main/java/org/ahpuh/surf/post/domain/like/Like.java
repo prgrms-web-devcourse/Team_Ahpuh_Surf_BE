@@ -1,11 +1,16 @@
 package org.ahpuh.surf.post.domain.like;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 
 import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(
         name = "likes",
@@ -15,9 +20,6 @@ import javax.persistence.*;
                 )
         }
 )
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Like {
 
     @Id
@@ -39,5 +41,4 @@ public class Like {
         this.post = post;
         post.addLike(this);
     }
-
 }

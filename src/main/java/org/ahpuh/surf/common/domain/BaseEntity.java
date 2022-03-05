@@ -1,7 +1,6 @@
 package org.ahpuh.surf.common.domain;
 
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,14 +8,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
 import java.time.LocalDateTime;
 
 @Getter
-@MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@SuperBuilder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@MappedSuperclass
 public abstract class BaseEntity {
 
     @CreatedDate
@@ -28,11 +25,10 @@ public abstract class BaseEntity {
     private LocalDateTime updatedAt;
 
     @Column(name = "is_deleted", columnDefinition = "boolean default false")
-    @Builder.Default
-    private Boolean isDeleted = false;
+    private Boolean isDeleted;
 
-    public void delete() {
-        this.isDeleted = true;
+    @PrePersist
+    private void setIsDeleted() {
+        isDeleted = false;
     }
-
 }
