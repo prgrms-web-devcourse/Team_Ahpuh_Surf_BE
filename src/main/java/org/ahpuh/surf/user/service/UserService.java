@@ -14,9 +14,7 @@ import org.ahpuh.surf.user.domain.follow.FollowRepository;
 import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
 import org.ahpuh.surf.user.dto.response.UserFindInfoResponseDto;
-import org.ahpuh.surf.user.dto.response.UserJoinResponseDto;
 import org.ahpuh.surf.user.dto.response.UserLoginResponseDto;
-import org.ahpuh.surf.user.dto.response.UserUpdateResponseDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,13 +54,12 @@ public class UserService {
     }
 
     @Transactional
-    public UserJoinResponseDto join(final UserJoinRequestDto joinRequest) {
+    public Long join(final UserJoinRequestDto joinRequest) {
         if (userRepository.existsByEmail(joinRequest.getEmail())) {
             throw new DuplicatedEmailException();
         }
-        final Long userId = userRepository.save(userConverter.toEntity(joinRequest))
+        return userRepository.save(userConverter.toEntity(joinRequest))
                 .getUserId();
-        return new UserJoinResponseDto(userId);
     }
 
     public UserFindInfoResponseDto findUser(final Long userId) {
@@ -73,7 +70,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserUpdateResponseDto update(final Long userId, final UserUpdateRequestDto updateDto, final MultipartFile profilePhoto) {
+    public void update(final Long userId, final UserUpdateRequestDto updateDto, final MultipartFile profilePhoto) {
         String profilePhotoUrl = null;
         if (profilePhoto != null) {
             try {
@@ -85,7 +82,6 @@ public class UserService {
         }
         final User userEntity = getUser(userId);
         userEntity.update(passwordEncoder, updateDto, profilePhotoUrl);
-        return new UserUpdateResponseDto(userId);
     }
 
     @Transactional

@@ -47,8 +47,11 @@ public class PostTest {
     void setUp() {
         year = 2021;
 
-        final Long userId1 = saveUser("test1@naver.com", "test1");
-        userId2 = saveUser("test2@naver.com", "test2");
+        saveUser("test1@naver.com", "test1");
+        saveUser("test2@naver.com", "test2");
+        final List<User> allUser = userRepository.findAll();
+        final Long userId1 = allUser.get(0).getUserId();
+        userId2 = allUser.get(1).getUserId();
 
         final User user1 = userRepository.getById(userId1);
         final User user2 = userRepository.getById(userId2);
@@ -118,14 +121,12 @@ public class PostTest {
         );
     }
 
-    private Long saveUser(final String email, final String pw) {
-        return userController.join(UserJoinRequestDto.builder()
-                        .email(email)
-                        .password(pw)
-                        .userName("name")
-                        .build())
-                .getBody()
-                .getUserId();
+    private void saveUser(final String email, final String pw) {
+        userController.join(UserJoinRequestDto.builder()
+                .email(email)
+                .password(pw)
+                .userName("name")
+                .build());
     }
 
     private Category saveCategory(final User user, final String categoryName) {
@@ -145,5 +146,4 @@ public class PostTest {
                 .score(score)
                 .build());
     }
-
 }

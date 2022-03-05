@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
-import org.ahpuh.surf.category.dto.response.CategoryCreateResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
-import org.ahpuh.surf.category.dto.response.CategoryUpdateResponseDto;
 import org.ahpuh.surf.category.service.CategoryService;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.springframework.http.ResponseEntity;
@@ -25,21 +23,21 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<CategoryCreateResponseDto> createCategory(
+    public ResponseEntity<Void> createCategory(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @Valid @RequestBody final CategoryCreateRequestDto request
     ) {
-        final CategoryCreateResponseDto response = categoryService.createCategory(authentication.userId, request);
-        return ResponseEntity.created(URI.create("/api/v1/categories/" + response.getCategoryId())).body(response);
+        final Long categoryId = categoryService.createCategory(authentication.userId, request);
+        return ResponseEntity.created(URI.create("/api/v1/categories/" + categoryId)).build();
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryUpdateResponseDto> updateCategory(
+    public ResponseEntity<Void> updateCategory(
             @PathVariable final Long categoryId,
             @Valid @RequestBody final CategoryUpdateRequestDto request
     ) {
-        final CategoryUpdateResponseDto response = categoryService.updateCategory(categoryId, request);
-        return ResponseEntity.ok().body(response);
+        categoryService.updateCategory(categoryId, request);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{categoryId}")
