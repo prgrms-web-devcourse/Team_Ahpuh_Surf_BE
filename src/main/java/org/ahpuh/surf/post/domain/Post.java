@@ -100,6 +100,9 @@ public class Post extends BaseEntity {
     }
 
     public void addLike(final Like like) {
+        if (likes.contains(like)) {
+            throw new DuplicatedLikeException();
+        }
         likes.add(like);
     }
 }

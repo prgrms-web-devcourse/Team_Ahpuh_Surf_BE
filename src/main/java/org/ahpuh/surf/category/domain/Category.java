@@ -65,6 +65,9 @@ public class Category extends BaseEntity {
     }
 
     public void addPost(final Post post) {
+        if (posts.contains(post)) {
+            throw new DuplicatedPostException();
+        }
         posts.add(post);
     }
 }

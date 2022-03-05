@@ -116,18 +116,30 @@ public class User extends BaseEntity {
     }
 
     public void addCategory(final Category category) {
+        if (categories.contains(category)) {
+            throw new DuplicatedCategoryException();
+        }
         categories.add(category);
     }
 
     public void addPost(final Post post) {
+        if (posts.contains(post)) {
+            throw new DuplicatedPostException();
+        }
         posts.add(post);
     }
 
     public void addFollowing(final Follow followingUser) {
+        if (following.contains(followingUser)) {
+            throw new DuplicatedFollowingException();
+        }
         following.add(followingUser);
     }
 
     public void addFollowers(final Follow follower) {
+        if (followers.contains(follower)) {
+            throw new DuplicatedFollowingException();
+        }
         followers.add(follower);
     }
 }
