@@ -1,4 +1,4 @@
-package org.ahpuh.surf.user.dto.response;
+package org.ahpuh.surf.like.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class FollowResponseDto {
+public class LikeResponseDto {
 
-    private Long followId;
+    private Long likeId;
 
 }

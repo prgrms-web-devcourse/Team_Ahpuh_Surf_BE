@@ -1,9 +1,10 @@
-package org.ahpuh.surf.user.domain.follow;
+package org.ahpuh.surf.like.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 
 import javax.persistence.*;
@@ -12,33 +13,33 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(
-        name = "follow",
+        name = "likes",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        columnNames = {"user_id", "following_id"}
+                        columnNames = {"user_id", "post_id"}
                 )
         }
 )
-public class Follow {
+public class Like {
 
     @Id
-    @Column(name = "follow_id")
+    @Column(name = "like_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long followId;
+    private Long likeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User source;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "following_id", referencedColumnName = "user_id")
-    private User target;
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id")
+    private Post post;
 
     @Builder
-    public Follow(final User source, final User target) {
-        this.source = source;
-        this.target = target;
-        source.addFollowing(this);
-        target.addFollowers(this);
+    public Like(final User user, final Post post) {
+        this.user = user;
+        this.post = post;
+        user.addLike(this);
+        post.addLike(this);
     }
 }

@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.domain.like;
+package org.ahpuh.surf.like.domain;
 
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;

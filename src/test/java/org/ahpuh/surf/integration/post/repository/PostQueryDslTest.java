@@ -3,14 +3,14 @@ package org.ahpuh.surf.integration.post.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.follow.domain.Follow;
+import org.ahpuh.surf.follow.domain.FollowRepository;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.QExploreDto;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
-import org.ahpuh.surf.user.domain.follow.Follow;
-import org.ahpuh.surf.user.domain.follow.FollowRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +23,8 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.ahpuh.surf.follow.domain.QFollow.follow;
 import static org.ahpuh.surf.post.domain.QPost.post;
-import static org.ahpuh.surf.user.domain.follow.QFollow.follow;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

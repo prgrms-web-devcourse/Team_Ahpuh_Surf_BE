@@ -4,12 +4,13 @@ import lombok.*;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.common.exception.category.DuplicatedCategoryException;
+import org.ahpuh.surf.common.exception.post.DuplicatedLikeException;
 import org.ahpuh.surf.common.exception.post.DuplicatedPostException;
 import org.ahpuh.surf.common.exception.user.DuplicatedFollowingException;
 import org.ahpuh.surf.common.exception.user.InvalidPasswordException;
+import org.ahpuh.surf.follow.domain.Follow;
+import org.ahpuh.surf.like.domain.Like;
 import org.ahpuh.surf.post.domain.Post;
-import org.ahpuh.surf.post.domain.like.Like;
-import org.ahpuh.surf.user.domain.follow.Follow;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -141,5 +142,12 @@ public class User extends BaseEntity {
             throw new DuplicatedFollowingException();
         }
         followers.add(follower);
+    }
+
+    public void addLike(final Like like) {
+        if (likes.contains(like)) {
+            throw new DuplicatedLikeException();
+        }
+        likes.add(like);
     }
 }
