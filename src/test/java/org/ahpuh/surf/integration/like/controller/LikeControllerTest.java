@@ -1,10 +1,10 @@
-package org.ahpuh.surf.integration.post.controller;
+package org.ahpuh.surf.integration.like.controller;
 
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.like.domain.Like;
+import org.ahpuh.surf.like.domain.LikeRepository;
 import org.ahpuh.surf.post.domain.Post;
-import org.ahpuh.surf.post.domain.like.Like;
-import org.ahpuh.surf.post.domain.like.LikeRepository;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.user.controller.UserController;
 import org.ahpuh.surf.user.domain.User;
