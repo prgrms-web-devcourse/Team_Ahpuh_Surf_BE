@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.domain.like;
+package org.ahpuh.surf.like.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

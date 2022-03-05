@@ -1,9 +1,9 @@
-package org.ahpuh.surf.post.controller;
+package org.ahpuh.surf.like.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.jwt.JwtAuthentication;
-import org.ahpuh.surf.post.dto.response.LikeResponseDto;
-import org.ahpuh.surf.post.service.LikeService;
+import org.ahpuh.surf.like.dto.response.LikeResponseDto;
+import org.ahpuh.surf.like.service.LikeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

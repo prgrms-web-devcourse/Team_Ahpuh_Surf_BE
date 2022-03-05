@@ -4,6 +4,7 @@ import lombok.*;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.common.exception.category.DuplicatedCategoryException;
+import org.ahpuh.surf.common.exception.post.DuplicatedLikeException;
 import org.ahpuh.surf.common.exception.post.DuplicatedPostException;
 import org.ahpuh.surf.common.exception.user.DuplicatedFollowingException;
 import org.ahpuh.surf.common.exception.user.InvalidPasswordException;
@@ -141,5 +142,12 @@ public class User extends BaseEntity {
             throw new DuplicatedFollowingException();
         }
         followers.add(follower);
+    }
+
+    public void addLike(final Like like) {
+        if (likes.contains(like)) {
+            throw new DuplicatedLikeException();
+        }
+        likes.add(like);
     }
 }
