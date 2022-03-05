@@ -24,5 +24,4 @@ public class PostScoreCategoryDto {
         this.selectedDate = selectedDate;
         this.score = score;
     }
-
 }

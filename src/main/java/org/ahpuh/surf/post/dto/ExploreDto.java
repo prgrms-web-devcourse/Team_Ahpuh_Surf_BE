@@ -75,5 +75,4 @@ public class ExploreDto {
         this.likeId = likeId;
         this.isLiked = true;
     }
-
 }

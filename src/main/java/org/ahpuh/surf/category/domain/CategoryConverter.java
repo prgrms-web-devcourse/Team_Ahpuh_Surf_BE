@@ -36,5 +36,4 @@ public class CategoryConverter {
                 .postCount(category.getPostCount())
                 .build();
     }
-
 }

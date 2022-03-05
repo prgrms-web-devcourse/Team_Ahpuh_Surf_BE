@@ -9,5 +9,4 @@ public class SurfApplication {
     public static void main(final String[] args) {
         SpringApplication.run(SurfApplication.class, args);
     }
-
 }

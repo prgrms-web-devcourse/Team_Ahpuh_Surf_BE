@@ -21,5 +21,4 @@ public class PostScoreDto {
         this.x = selectedDate;
         this.y = score;
     }
-
 }

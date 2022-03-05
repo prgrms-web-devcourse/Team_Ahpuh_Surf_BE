@@ -105,5 +105,4 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .orderBy(post.category.categoryId.asc(), post.selectedDate.asc())
                 .fetch();
     }
-
 }
