@@ -64,8 +64,8 @@ public class UserService {
 
     public UserFindInfoResponseDto findUser(final Long userId) {
         final User userEntity = getUser(userId);
-        final long followingCount = followRepository.countByUser(userEntity);
-        final long followerCount = followRepository.countByFollowedUser(userEntity);
+        final long followingCount = followRepository.countBySource(userEntity);
+        final long followerCount = followRepository.countByTarget(userEntity);
         return userConverter.toUserFindInfoResponseDto(userEntity, followingCount, followerCount);
     }
 

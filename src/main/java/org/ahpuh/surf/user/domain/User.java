@@ -64,10 +64,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "source", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Follow> following; // 내가 팔로잉한
 
-    @OneToMany(mappedBy = "followedUser", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "target", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Follow> followers; // 나를 팔로우한
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)

@@ -28,17 +28,17 @@ public class Follow {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User user;
+    private User source;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_id", referencedColumnName = "user_id")
-    private User followedUser;
+    private User target;
 
     @Builder
-    public Follow(final User user, final User followedUser) {
-        this.user = user;
-        this.followedUser = followedUser;
-        user.addFollowing(this);
-        followedUser.addFollowers(this);
+    public Follow(final User source, final User target) {
+        this.source = source;
+        this.target = target;
+        source.addFollowing(this);
+        target.addFollowers(this);
     }
 }

@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class FollowConverter {
 
-    public Follow toEntity(final User user, final User followedUser) {
+    public Follow toEntity(final User source, final User target) {
         return Follow.builder()
-                .user(user)
-                .followedUser(followedUser)
+                .source(source)
+                .target(target)
                 .build();
     }
 
@@ -21,5 +21,4 @@ public class FollowConverter {
                 .profilePhotoUrl(user.getProfilePhotoUrl())
                 .build();
     }
-
 }

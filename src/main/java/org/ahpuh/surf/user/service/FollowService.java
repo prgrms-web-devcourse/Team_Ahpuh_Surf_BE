@@ -26,37 +26,37 @@ public class FollowService {
     private final FollowConverter followConverter;
 
     @Transactional
-    public FollowResponseDto follow(final Long userId, final Long followUserId) {
-        final User user = userRepository.findById(userId)
+    public FollowResponseDto follow(final Long userId, final Long targetId) {
+        final User source = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        final User followedUser = userRepository.findById(followUserId)
-                .orElseThrow(() -> UserNotFound(followUserId));
+        final User target = userRepository.findById(targetId)
+                .orElseThrow(() -> UserNotFound(targetId));
 
-        final Long followId = followRepository.save(followConverter.toEntity(user, followedUser))
+        final Long followId = followRepository.save(followConverter.toEntity(source, target))
                 .getFollowId();
 
         return new FollowResponseDto(followId);
     }
 
     @Transactional
-    public void unfollow(final Long myId, final Long userId) {
-        final User me = userRepository.findById(myId)
-                .orElseThrow(() -> UserNotFound(myId));
-        final User followedUser = userRepository.findById(userId)
+    public void unfollow(final Long userId, final Long targetId) {
+        final User source = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
+        final User target = userRepository.findById(targetId)
+                .orElseThrow(() -> UserNotFound(targetId));
 
-        final Follow followEntity = followRepository.findByUserAndFollowedUser(me, followedUser)
+        final Follow followEntity = followRepository.findBySourceAndTarget(source, target)
                 .orElseThrow(EntityExceptionHandler::FollowNotFound);
 
         followRepository.delete(followEntity);
     }
 
-    public List<FollowUserResponseDto> findFollowerList(final Long userId) {
-        final User userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> UserNotFound(userId));
-        return followRepository.findByFollowedUser(userEntity)
+    public List<FollowUserResponseDto> findFollowerList(final Long targetId) {
+        final User userEntity = userRepository.findById(targetId)
+                .orElseThrow(() -> UserNotFound(targetId));
+        return followRepository.findByTarget(userEntity)
                 .stream()
-                .map(Follow::getUser)
+                .map(Follow::getSource)
                 .map(followConverter::toFollowUserDto)
                 .toList();
     }
@@ -64,9 +64,9 @@ public class FollowService {
     public List<FollowUserResponseDto> findFollowingList(final Long userId) {
         final User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound(userId));
-        return followRepository.findByUser(userEntity)
+        return followRepository.findBySource(userEntity)
                 .stream()
-                .map(Follow::getFollowedUser)
+                .map(Follow::getTarget)
                 .map(followConverter::toFollowUserDto)
                 .toList();
     }

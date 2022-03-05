@@ -36,9 +36,9 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.createdAt.as("createdAt")
                 ))
                 .from(post)
-                .leftJoin(follow).on(follow.user.userId.eq(userId))
+                .leftJoin(follow).on(follow.source.userId.eq(userId))
                 .where(
-                        follow.followedUser.userId.eq(post.user.userId),
+                        follow.target.userId.eq(post.user.userId),
                         post.isDeleted.eq(false)
                 )
                 .groupBy(post.postId, follow.followId)
@@ -65,9 +65,9 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.createdAt.as("createdAt")
                 ))
                 .from(post)
-                .leftJoin(follow).on(follow.user.userId.eq(userId))
+                .leftJoin(follow).on(follow.source.userId.eq(userId))
                 .where(
-                        follow.followedUser.userId.eq(post.user.userId),
+                        follow.target.userId.eq(post.user.userId),
                         post.isDeleted.eq(false),
                         post.selectedDate.loe(selectedDate),
                         post.createdAt.before(createdAt)
