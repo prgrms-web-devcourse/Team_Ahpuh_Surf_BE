@@ -115,12 +115,12 @@ class PostQueryDslTest {
 
         // Following : user1 -> user2, user3
         followRepository.save(Follow.builder()
-                .user(user1)
-                .followedUser(user2)
+                .source(user1)
+                .target(user2)
                 .build());
         followRepository.save(Follow.builder()
-                .user(user1)
-                .followedUser(user3)
+                .source(user1)
+                .target(user3)
                 .build());
     }
 
@@ -145,8 +145,8 @@ class PostQueryDslTest {
                         post.createdAt.as("createdAt")
                 ))
                 .from(post)
-                .leftJoin(follow).on(follow.user.userId.eq(userId1))
-                .where(follow.followedUser.userId.eq(post.user.userId), post.isDeleted.eq(false))
+                .leftJoin(follow).on(follow.source.userId.eq(userId1))
+                .where(follow.target.userId.eq(post.user.userId), post.isDeleted.eq(false))
                 .groupBy(post.postId, follow.followId)
                 .orderBy(post.selectedDate.desc(), post.createdAt.desc())
                 .limit(page.getPageSize())

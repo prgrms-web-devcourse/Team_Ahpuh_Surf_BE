@@ -140,7 +140,7 @@ public class PostConverter {
         if (post.getUser()
                 .getFollowers()
                 .stream()
-                .anyMatch(follow -> follow.getUser().equals(me))) {
+                .anyMatch(follow -> follow.getSource().equals(me))) {
             recentPostDto.checkFollowed();
         }
         return recentPostDto;

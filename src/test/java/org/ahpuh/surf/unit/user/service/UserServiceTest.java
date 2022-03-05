@@ -186,9 +186,9 @@ public class UserServiceTest {
 
             given(userRepository.findById(anyLong()))
                     .willReturn(Optional.of(mockUser));
-            given(followRepository.countByUser(mockUser))
+            given(followRepository.countBySource(mockUser))
                     .willReturn(0L);
-            given(followRepository.countByFollowedUser(mockUser))
+            given(followRepository.countByTarget(mockUser))
                     .willReturn(0L);
             given(userConverter.toUserFindInfoResponseDto(any(), eq(0L), eq(0L)))
                     .willReturn(mockUserDto);
@@ -201,9 +201,9 @@ public class UserServiceTest {
             verify(userRepository, times(1))
                     .findById(1L);
             verify(followRepository, times(1))
-                    .countByUser(mockUser);
+                    .countBySource(mockUser);
             verify(followRepository, times(1))
-                    .countByFollowedUser(mockUser);
+                    .countByTarget(mockUser);
             verify(userConverter, times(1))
                     .toUserFindInfoResponseDto(mockUser, 0L, 0L);
         }

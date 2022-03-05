@@ -93,8 +93,8 @@ class FollowControllerTest {
         final List<Follow> allFollow = followRepository.findAll();
         assertAll("afterFollow",
                 () -> assertThat(allFollow.size()).isEqualTo(1),
-                () -> assertThat(allFollow.get(0).getUser()).isEqualTo(user1),
-                () -> assertThat(allFollow.get(0).getFollowedUser()).isEqualTo(user2)
+                () -> assertThat(allFollow.get(0).getSource()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(0).getTarget()).isEqualTo(user2)
         );
     }
 
@@ -104,15 +104,15 @@ class FollowControllerTest {
     void testUnfollow() throws Exception {
         // Given
         followRepository.save(Follow.builder()
-                .user(user1)
-                .followedUser(user2)
+                .source(user1)
+                .target(user2)
                 .build());
 
         final List<Follow> follows = followRepository.findAll();
         assertAll("beforeUnfollow",
                 () -> assertThat(follows.size()).isEqualTo(1),
-                () -> assertThat(follows.get(0).getUser()).isEqualTo(user1),
-                () -> assertThat(follows.get(0).getFollowedUser()).isEqualTo(user2)
+                () -> assertThat(follows.get(0).getSource()).isEqualTo(user1),
+                () -> assertThat(follows.get(0).getTarget()).isEqualTo(user2)
         );
 
         // When
@@ -132,21 +132,21 @@ class FollowControllerTest {
     void testFindFollowerList() throws Exception {
         // Given
         followRepository.save(Follow.builder()
-                .user(user1)
-                .followedUser(user2)
+                .source(user1)
+                .target(user2)
                 .build());
         followRepository.save(Follow.builder()
-                .user(user1)
-                .followedUser(user3)
+                .source(user1)
+                .target(user3)
                 .build());
 
         final List<Follow> allFollow = followRepository.findAll();
         assertAll("user1이 user2, user3을 팔로우",
                 () -> assertThat(allFollow.size()).isEqualTo(2),
-                () -> assertThat(allFollow.get(0).getUser()).isEqualTo(user1),
-                () -> assertThat(allFollow.get(0).getFollowedUser()).isEqualTo(user2),
-                () -> assertThat(allFollow.get(1).getUser()).isEqualTo(user1),
-                () -> assertThat(allFollow.get(1).getFollowedUser()).isEqualTo(user3)
+                () -> assertThat(allFollow.get(0).getSource()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(0).getTarget()).isEqualTo(user2),
+                () -> assertThat(allFollow.get(1).getSource()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(1).getTarget()).isEqualTo(user3)
         );
 
         // When, Then
@@ -163,21 +163,21 @@ class FollowControllerTest {
     void testFollowingList() throws Exception {
         // Given
         followRepository.save(Follow.builder()
-                .user(user1)
-                .followedUser(user2)
+                .source(user1)
+                .target(user2)
                 .build());
         followRepository.save(Follow.builder()
-                .user(user1)
-                .followedUser(user3)
+                .source(user1)
+                .target(user3)
                 .build());
 
         final List<Follow> allFollow = followRepository.findAll();
         assertAll("user1이 user2, user3을 팔로우",
                 () -> assertThat(allFollow.size()).isEqualTo(2),
-                () -> assertThat(allFollow.get(0).getUser()).isEqualTo(user1),
-                () -> assertThat(allFollow.get(0).getFollowedUser()).isEqualTo(user2),
-                () -> assertThat(allFollow.get(1).getUser()).isEqualTo(user1),
-                () -> assertThat(allFollow.get(1).getFollowedUser()).isEqualTo(user3)
+                () -> assertThat(allFollow.get(0).getSource()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(0).getTarget()).isEqualTo(user2),
+                () -> assertThat(allFollow.get(1).getSource()).isEqualTo(user1),
+                () -> assertThat(allFollow.get(1).getTarget()).isEqualTo(user3)
         );
 
         // When, Then
@@ -187,5 +187,4 @@ class FollowControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-
 }
