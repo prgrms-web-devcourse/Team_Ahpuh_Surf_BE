@@ -7,9 +7,7 @@ import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.request.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
 import org.ahpuh.surf.user.dto.response.UserFindInfoResponseDto;
-import org.ahpuh.surf.user.dto.response.UserJoinResponseDto;
 import org.ahpuh.surf.user.dto.response.UserLoginResponseDto;
-import org.ahpuh.surf.user.dto.response.UserUpdateResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -110,11 +108,7 @@ public class UserControllerTest extends ControllerTest {
         void updateUserInfo_MultipartFile_Success() throws Exception {
             // Given
             final UserUpdateRequestDto request = createUserUpdateRequestDto();
-            final UserUpdateResponseDto response = createUserUpdateResponseDto();
             final MockMultipartFile file = MockFileFactory.createMultipartFileImage1();
-
-            given(userService.update(anyLong(), any(UserUpdateRequestDto.class), any(MockMultipartFile.class)))
-                    .willReturn(response);
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/users")
@@ -131,14 +125,10 @@ public class UserControllerTest extends ControllerTest {
                     .header(HttpHeaders.AUTHORIZATION, TOKEN));
 
             // Then
-            final String responseBody = perform.andExpect(status().isOk())
-                    .andDo(print())
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
+            perform.andExpect(status().isOk())
+                    .andDo(print());
             verify(userService, times(1))
                     .update(anyLong(), any(UserUpdateRequestDto.class), any(MockMultipartFile.class));
-            assertThat(responseBody).isEqualTo(objectMapper.writeValueAsString(response));
 
             perform.andDo(document("user/updateUserWithImage",
                     preprocessRequest(prettyPrint()),
@@ -155,9 +145,6 @@ public class UserControllerTest extends ControllerTest {
                             fieldWithPath("aboutMe").type(JsonFieldType.STRING).optional()
                                     .description("유저 자기소개 문구"),
                             fieldWithPath("accountPublic").type(JsonFieldType.BOOLEAN).description("계정 공개여부")
-                    ),
-                    responseFields(
-                            fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저 id")
                     )));
         }
 
@@ -166,10 +153,6 @@ public class UserControllerTest extends ControllerTest {
         void updateUserInfo_OnlyDto_Success() throws Exception {
             // Given
             final UserUpdateRequestDto request = createUserUpdateRequestDto();
-            final UserUpdateResponseDto response = createUserUpdateResponseDto();
-
-            given(userService.update(anyLong(), any(UserUpdateRequestDto.class), any()))
-                    .willReturn(response);
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/users")
@@ -185,14 +168,10 @@ public class UserControllerTest extends ControllerTest {
                     .header(HttpHeaders.AUTHORIZATION, TOKEN));
 
             // Then
-            final String responseBody = perform.andExpect(status().isOk())
-                    .andDo(print())
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
+            perform.andExpect(status().isOk())
+                    .andDo(print());
             verify(userService, times(1))
                     .update(anyLong(), any(UserUpdateRequestDto.class), any());
-            assertThat(responseBody).isEqualTo(objectMapper.writeValueAsString(response));
 
             perform.andDo(document("user/updateUserOnlyDto",
                     preprocessRequest(prettyPrint()),
@@ -208,9 +187,6 @@ public class UserControllerTest extends ControllerTest {
                             fieldWithPath("aboutMe").type(JsonFieldType.STRING).optional()
                                     .description("유저 자기소개 문구"),
                             fieldWithPath("accountPublic").type(JsonFieldType.BOOLEAN).description("계정 공개여부")
-                    ),
-                    responseFields(
-                            fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저 id")
                     )));
         }
 
@@ -243,27 +219,17 @@ public class UserControllerTest extends ControllerTest {
         @DisplayName("회원가입을 할 수 있다.")
         @Test
         void join_Success() throws Exception {
-            // Given
-            final UserJoinResponseDto response = createUserJoinResponseDto(1L);
-
-            given(userService.join(any(UserJoinRequestDto.class)))
-                    .willReturn(createUserJoinResponseDto(1L));
-
             // When
             final ResultActions perform = mockMvc.perform(post("/api/v1/users")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(createUserJoinRequestDto())));
 
             // Then
-            final String responseBody = perform.andExpect(status().isCreated())
-                    .andDo(print())
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
+            perform.andExpect(status().isCreated())
+                    .andDo(print());
 
             verify(userService, times(1))
                     .join(any(UserJoinRequestDto.class));
-            assertThat(responseBody).isEqualTo(objectMapper.writeValueAsString(response));
 
             perform.andDo(document("user/join",
                     preprocessRequest(prettyPrint()),
@@ -275,9 +241,6 @@ public class UserControllerTest extends ControllerTest {
                     ),
                     responseHeaders(
                             headerWithName(HttpHeaders.LOCATION).description("location")
-                    ),
-                    responseFields(
-                            fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저 id")
                     )));
         }
 
