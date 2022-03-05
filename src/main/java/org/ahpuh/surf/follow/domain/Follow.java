@@ -1,4 +1,4 @@
-package org.ahpuh.surf.user.domain.follow;
+package org.ahpuh.surf.follow.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;

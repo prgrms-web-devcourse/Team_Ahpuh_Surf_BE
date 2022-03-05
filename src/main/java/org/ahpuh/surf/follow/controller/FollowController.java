@@ -1,10 +1,10 @@
-package org.ahpuh.surf.user.controller;
+package org.ahpuh.surf.follow.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.follow.dto.response.FollowResponseDto;
+import org.ahpuh.surf.follow.dto.response.FollowUserResponseDto;
+import org.ahpuh.surf.follow.service.FollowService;
 import org.ahpuh.surf.jwt.JwtAuthentication;
-import org.ahpuh.surf.user.dto.response.FollowResponseDto;
-import org.ahpuh.surf.user.dto.response.FollowUserResponseDto;
-import org.ahpuh.surf.user.service.FollowService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

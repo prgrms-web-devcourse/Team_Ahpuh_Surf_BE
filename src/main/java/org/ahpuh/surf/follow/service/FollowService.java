@@ -1,14 +1,14 @@
-package org.ahpuh.surf.user.service;
+package org.ahpuh.surf.follow.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.follow.domain.Follow;
+import org.ahpuh.surf.follow.domain.FollowConverter;
+import org.ahpuh.surf.follow.domain.FollowRepository;
+import org.ahpuh.surf.follow.dto.response.FollowResponseDto;
+import org.ahpuh.surf.follow.dto.response.FollowUserResponseDto;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
-import org.ahpuh.surf.user.domain.follow.Follow;
-import org.ahpuh.surf.user.domain.follow.FollowConverter;
-import org.ahpuh.surf.user.domain.follow.FollowRepository;
-import org.ahpuh.surf.user.dto.response.FollowResponseDto;
-import org.ahpuh.surf.user.dto.response.FollowUserResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
