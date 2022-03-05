@@ -34,5 +34,4 @@ public class AllPostResponseDto {
         this.likeId = likeId;
         this.isLiked = true;
     }
-
 }

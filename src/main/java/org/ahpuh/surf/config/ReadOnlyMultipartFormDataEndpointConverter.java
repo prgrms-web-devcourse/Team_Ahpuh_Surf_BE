@@ -43,5 +43,4 @@ public class ReadOnlyMultipartFormDataEndpointConverter extends MappingJackson2H
     protected boolean canWrite(final MediaType mediaType) {
         return false;
     }
-
 }

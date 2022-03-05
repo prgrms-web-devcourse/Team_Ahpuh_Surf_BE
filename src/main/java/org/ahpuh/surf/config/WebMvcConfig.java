@@ -47,5 +47,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         HttpMethod.PUT.name(),
                         HttpMethod.OPTIONS.name());
     }
-
 }

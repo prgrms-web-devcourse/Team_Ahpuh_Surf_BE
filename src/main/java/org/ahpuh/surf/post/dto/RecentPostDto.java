@@ -82,5 +82,4 @@ public class RecentPostDto {
     public void checkFollowed() {
         this.isFollowedUser = true;
     }
-
 }

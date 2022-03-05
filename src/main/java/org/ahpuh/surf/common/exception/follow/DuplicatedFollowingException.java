@@ -1,4 +1,4 @@
-package org.ahpuh.surf.common.exception.user;
+package org.ahpuh.surf.common.exception.follow;
 
 import org.ahpuh.surf.common.exception.ApplicationException;
 import org.ahpuh.surf.common.exception.ExceptionType;
