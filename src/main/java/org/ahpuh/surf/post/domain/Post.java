@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
-import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.common.exception.post.FavoriteInvalidUserException;
 import org.ahpuh.surf.post.domain.like.Like;
 import org.ahpuh.surf.s3.FileStatus;
 import org.ahpuh.surf.s3.FileType;
@@ -84,21 +84,19 @@ public class Post extends BaseEntity {
         this.score = score;
     }
 
-    public Post updateFile(final FileStatus fileStatus) {
+    public void updateFile(final FileStatus fileStatus) {
         if (fileStatus.fileType().equals(FileType.IMG)) {
             this.imageUrl = fileStatus.fileUrl();
             this.fileUrl = null;
-        }
-        if (fileStatus.fileType().equals(FileType.FILE)) {
+        } else if (fileStatus.fileType().equals(FileType.FILE)) {
             this.fileUrl = fileStatus.fileUrl();
             this.imageUrl = null;
         }
-        return this;
     }
 
     public void updateFavorite(final Long userId) {
         if (!user.getUserId().equals(userId)) {
-            throw EntityExceptionHandler.UserNotMatching(user.getUserId(), userId);
+            throw new FavoriteInvalidUserException();
         }
         favorite = !favorite;
     }
