@@ -3,9 +3,7 @@ package org.ahpuh.surf.unit.category.controller;
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
-import org.ahpuh.surf.category.dto.response.CategoryCreateResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
-import org.ahpuh.surf.category.dto.response.CategoryUpdateResponseDto;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.unit.ControllerTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +21,6 @@ import java.util.List;
 
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.*;
 import static org.ahpuh.surf.common.factory.MockJwtFactory.createJwtToken;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
@@ -59,10 +56,6 @@ public class CategoryControllerTest extends ControllerTest {
         void testCreateCategory() throws Exception {
             // Given
             final CategoryCreateRequestDto request = createMockCategoryCreateRequestDto();
-            final CategoryCreateResponseDto response = createMockCategoryCreateResponseDto();
-
-            given(categoryService.createCategory(anyLong(), any(CategoryCreateRequestDto.class)))
-                    .willReturn(response);
 
             // When
             final ResultActions perform = mockMvc.perform(post("/api/v1/categories")
@@ -71,14 +64,10 @@ public class CategoryControllerTest extends ControllerTest {
                     .content(objectMapper.writeValueAsString(request)));
 
             // Then
-            final String responseBody = perform.andExpect(status().isCreated())
-                    .andDo(print())
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
+            perform.andExpect(status().isCreated())
+                    .andDo(print());
             verify(categoryService, times(1))
                     .createCategory(anyLong(), any(CategoryCreateRequestDto.class));
-            assertThat(responseBody).isEqualTo(objectMapper.writeValueAsString(response));
 
             perform.andDo(document("category/create",
                     preprocessRequest(prettyPrint()),
@@ -92,9 +81,6 @@ public class CategoryControllerTest extends ControllerTest {
                     ),
                     responseHeaders(
                             headerWithName(HttpHeaders.LOCATION).description("location")
-                    ),
-                    responseFields(
-                            fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 id")
                     )));
         }
 
@@ -103,10 +89,6 @@ public class CategoryControllerTest extends ControllerTest {
         void testUpdateCategory() throws Exception {
             // Given
             final CategoryUpdateRequestDto request = createMockCategoryUpdateRequestDto();
-            final CategoryUpdateResponseDto response = createMockCategoryUpdateResponseDto();
-
-            given(categoryService.updateCategory(anyLong(), any(CategoryUpdateRequestDto.class)))
-                    .willReturn(response);
 
             // When
             final ResultActions perform = mockMvc.perform(put("/api/v1/categories/{categoryId}", 1L)
@@ -115,14 +97,10 @@ public class CategoryControllerTest extends ControllerTest {
                     .content(objectMapper.writeValueAsString(request)));
 
             // Then
-            final String responseBody = perform.andExpect(status().isOk())
-                    .andDo(print())
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
+            perform.andExpect(status().isOk())
+                    .andDo(print());
             verify(categoryService, times(1))
                     .updateCategory(anyLong(), any(CategoryUpdateRequestDto.class));
-            assertThat(responseBody).isEqualTo(objectMapper.writeValueAsString(response));
 
             perform.andDo(document("category/update",
                     preprocessRequest(prettyPrint()),
@@ -134,9 +112,6 @@ public class CategoryControllerTest extends ControllerTest {
                             fieldWithPath("name").type(JsonFieldType.STRING).description("카테고리명"),
                             fieldWithPath("isPublic").type(JsonFieldType.BOOLEAN).description("카테고리 공개여부"),
                             fieldWithPath("colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                    ),
-                    responseFields(
-                            fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 id")
                     )));
         }
 

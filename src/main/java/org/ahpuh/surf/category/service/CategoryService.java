@@ -7,9 +7,7 @@ import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
-import org.ahpuh.surf.category.dto.response.CategoryCreateResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
-import org.ahpuh.surf.category.dto.response.CategoryUpdateResponseDto;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.post.domain.Post;
@@ -32,20 +30,17 @@ public class CategoryService {
     private final CategoryConverter categoryConverter;
 
     @Transactional
-    public CategoryCreateResponseDto createCategory(final Long userId, final CategoryCreateRequestDto categoryDto) {
+    public Long createCategory(final Long userId, final CategoryCreateRequestDto categoryDto) {
         final User user = getUser(userId);
         final Category category = categoryConverter.toEntity(user, categoryDto);
-        final Long categoryId = categoryRepository.save(category).getCategoryId();
-
-        return new CategoryCreateResponseDto(categoryId);
+        return categoryRepository.save(category)
+                .getCategoryId();
     }
 
     @Transactional
-    public CategoryUpdateResponseDto updateCategory(final Long categoryId, final CategoryUpdateRequestDto categoryDto) {
+    public void updateCategory(final Long categoryId, final CategoryUpdateRequestDto categoryDto) {
         final Category category = getCategory(categoryId);
         category.update(categoryDto.getName(), categoryDto.getIsPublic(), categoryDto.getColorCode());
-
-        return new CategoryUpdateResponseDto(categoryId);
     }
 
     @Transactional

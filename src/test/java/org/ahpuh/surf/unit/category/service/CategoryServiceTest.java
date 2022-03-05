@@ -6,9 +6,7 @@ import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
-import org.ahpuh.surf.category.dto.response.CategoryCreateResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
-import org.ahpuh.surf.category.dto.response.CategoryUpdateResponseDto;
 import org.ahpuh.surf.category.service.CategoryService;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
@@ -76,7 +74,7 @@ public class CategoryServiceTest {
                     .willReturn(1L);
 
             // When
-            final CategoryCreateResponseDto responseDto = categoryService.createCategory(userId, requestDto);
+            final Long categoryId = categoryService.createCategory(userId, requestDto);
 
             // Then
             verify(userRepository, times(1))
@@ -85,7 +83,7 @@ public class CategoryServiceTest {
                     .toEntity(any(User.class), any(CategoryCreateRequestDto.class));
             verify(categoryRepository, times(1))
                     .save(any(Category.class));
-            assertThat(responseDto.getCategoryId()).isEqualTo(1L);
+            assertThat(categoryId).isEqualTo(1L);
         }
 
         @DisplayName("존재하지 않는 유저 아이디가 입력되면 예외가 발생한다.")
@@ -126,14 +124,13 @@ public class CategoryServiceTest {
                     .willReturn(Optional.of(mockCategory));
 
             // When
-            final CategoryUpdateResponseDto responseDto = categoryService.updateCategory(categoryId, requestDto);
+            categoryService.updateCategory(categoryId, requestDto);
 
             // Then
             verify(categoryRepository, times(1))
                     .findById(anyLong());
             verify(mockCategory, times(1))
                     .update(any(), anyBoolean(), any());
-            assertThat(responseDto.getCategoryId()).isEqualTo(1L);
         }
 
         @DisplayName("존재하지 않는 카테고리 아이디가 입력되면 예외가 발생한다.")

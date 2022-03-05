@@ -6,9 +6,7 @@ import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.request.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
 import org.ahpuh.surf.user.dto.response.UserFindInfoResponseDto;
-import org.ahpuh.surf.user.dto.response.UserJoinResponseDto;
 import org.ahpuh.surf.user.dto.response.UserLoginResponseDto;
-import org.ahpuh.surf.user.dto.response.UserUpdateResponseDto;
 
 import java.util.ArrayList;
 
@@ -82,10 +80,6 @@ public class MockUserFactory {
                 .build();
     }
 
-    public static UserJoinResponseDto createUserJoinResponseDto(final Long userId) {
-        return new UserJoinResponseDto(userId);
-    }
-
     public static UserLoginRequestDto createUserLoginRequestDto() {
         return UserLoginRequestDto.builder()
                 .email("test1@naver.com")
@@ -132,9 +126,5 @@ public class MockUserFactory {
                 .aboutMe("update")
                 .accountPublic(false)
                 .build();
-    }
-
-    public static UserUpdateResponseDto createUserUpdateResponseDto() {
-        return new UserUpdateResponseDto(1L);
     }
 }
