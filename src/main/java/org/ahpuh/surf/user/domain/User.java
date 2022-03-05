@@ -1,9 +1,11 @@
 package org.ahpuh.surf.user.domain;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
+import org.ahpuh.surf.common.exception.category.DuplicatedCategoryException;
+import org.ahpuh.surf.common.exception.post.DuplicatedPostException;
+import org.ahpuh.surf.common.exception.user.DuplicatedFollowingException;
 import org.ahpuh.surf.common.exception.user.InvalidPasswordException;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.like.Like;
@@ -17,14 +19,13 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SuperBuilder
 @SQLDelete(sql = "UPDATE users SET is_deleted = 1 WHERE user_id = ?")
 @Where(clause = "is_deleted = false")
+@Entity
+@Table(name = "users")
 public class User extends BaseEntity {
 
     @Id
@@ -51,39 +52,39 @@ public class User extends BaseEntity {
     private String aboutMe;
 
     @Column(name = "account_public", columnDefinition = "boolean default true")
-    @Builder.Default
-    private Boolean accountPublic = true;
+    private Boolean accountPublic;
 
     @Column(name = "permission")
     @Enumerated(value = EnumType.STRING)
-    @Builder.Default
-    private Permission permission = Permission.ROLE_USER;
+    private Permission permission;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    @Builder.Default
-    private List<Category> categories = new ArrayList<>();
+    private List<Category> categories;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    @Builder.Default
-    private List<Post> posts = new ArrayList<>();
+    private List<Post> posts;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    @Builder.Default
-    private List<Follow> following = new ArrayList<>(); // 내가 팔로잉한
+    private List<Follow> following; // 내가 팔로잉한
 
     @OneToMany(mappedBy = "followedUser", fetch = FetchType.LAZY, orphanRemoval = true)
-    @Builder.Default
-    private List<Follow> followers = new ArrayList<>(); // 나를 팔로우한
+    private List<Follow> followers; // 나를 팔로우한
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    @Builder.Default
-    private List<Like> likes = new ArrayList<>();
+    private List<Like> likes;
 
     @Builder
     public User(final String email, final String password, final String userName) {
         this.email = email;
         this.password = password;
         this.userName = userName;
+        accountPublic = true;
+        permission = Permission.ROLE_USER;
+        categories = new ArrayList<>();
+        posts = new ArrayList<>();
+        following = new ArrayList<>();
+        followers = new ArrayList<>();
+        likes = new ArrayList<>();
     }
 
     public boolean checkPassword(final PasswordEncoder passwordEncoder, final String credentials) {
@@ -129,5 +130,4 @@ public class User extends BaseEntity {
     public void addFollowers(final Follow follower) {
         followers.add(follower);
     }
-
 }

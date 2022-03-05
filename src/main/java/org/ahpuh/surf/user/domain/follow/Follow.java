@@ -1,10 +1,15 @@
 package org.ahpuh.surf.user.domain.follow;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.ahpuh.surf.user.domain.User;
 
 import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(
         name = "follow",
@@ -14,9 +19,6 @@ import javax.persistence.*;
                 )
         }
 )
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Follow {
 
     @Id
@@ -39,5 +41,4 @@ public class Follow {
         user.addFollowing(this);
         followedUser.addFollowers(this);
     }
-
 }

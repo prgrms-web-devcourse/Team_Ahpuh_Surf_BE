@@ -162,6 +162,7 @@ class CategoryServiceTest {
 
         // when
         final List<CategoryDetailResponseDto> categories = categoryService.getCategoryDashboard(id);
+        entityManager.flush();
         entityManager.clear();
 
         // then

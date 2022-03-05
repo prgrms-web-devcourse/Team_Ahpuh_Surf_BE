@@ -68,6 +68,8 @@ class CategoryControllerTest {
                 .colorCode("#e7f5ff")
                 .build());
         postRepository.save(Post.builder()
+                .user(user)
+                .category(category)
                 .content("post1")
                 .selectedDate(LocalDate.now())
                 .score(88).build());
@@ -139,5 +141,4 @@ class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-
 }
