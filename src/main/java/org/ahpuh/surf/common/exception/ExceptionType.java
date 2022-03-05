@@ -19,7 +19,9 @@ public enum ExceptionType {
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다."),
 
     // POST
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 게시글을 찾을 수 없습니다.");
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 게시글을 찾을 수 없습니다."),
+    FAVORITE_INVALID_USER(HttpStatus.BAD_REQUEST, "즐겨찾기를 등록 또는 취소할 수 없습니다.(내 게시글만 등록 가능)"),
+    FAVORITE_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "이미 실행된 요청입니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;
