@@ -1,10 +1,14 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   jpa:
-    database: h2
+    hibernate:
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration, classpath:db/seed
+    url: jdbc:h2:tcp://localhost/~/surf;MODE=MYSQL
+    user: sa
+    password:
