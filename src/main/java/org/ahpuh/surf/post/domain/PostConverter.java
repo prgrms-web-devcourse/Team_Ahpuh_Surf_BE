@@ -2,7 +2,7 @@ package org.ahpuh.surf.post.domain;
 
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
-import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.PostScoreDto;
 import org.ahpuh.surf.post.dto.RecentPostDto;
@@ -106,12 +106,10 @@ public class PostConverter {
                                 .add(PostScoreDto.builder()
                                         .x(postScoreCategoryDto.getSelectedDate())
                                         .y(postScoreCategoryDto.getScore())
-                                        .build())
-                        );
+                                        .build()));
             } else {
-                throw EntityExceptionHandler.CategoryNotFound(category.getCategoryId());
+                throw new CategoryNotFoundException();
             }
-
         });
 
         categorySimpleDtos.removeIf(categorySimpleDto -> categorySimpleDto.getPostScores().size() == 0);
