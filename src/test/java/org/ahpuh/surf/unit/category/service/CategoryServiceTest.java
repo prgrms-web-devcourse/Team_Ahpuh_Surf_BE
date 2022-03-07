@@ -11,7 +11,6 @@ import org.ahpuh.surf.category.service.CategoryService;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.post.domain.Post;
-import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -45,9 +44,6 @@ public class CategoryServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private PostRepository postRepository;
 
     @Mock
     private CategoryConverter categoryConverter;
@@ -286,8 +282,6 @@ public class CategoryServiceTest {
                     .willReturn(Optional.of(mockUser));
             given(categoryRepository.findByUser(mockUser))
                     .willReturn(List.of(mockCategory, mockCategory));
-            given(postRepository.findByCategory(any()))
-                    .willReturn(List.of(post));
             given(categoryConverter.toCategoryDetailResponseDto(any(Category.class), anyInt()))
                     .willReturn(mock(CategoryDetailResponseDto.class));
 
@@ -299,8 +293,6 @@ public class CategoryServiceTest {
                     .findById(anyLong());
             verify(categoryRepository, times(1))
                     .findByUser(any(User.class));
-            verify(postRepository, times(2))
-                    .findByCategory(any(Category.class));
             verify(categoryConverter, times(2))
                     .toCategoryDetailResponseDto(any(), isA(Integer.class));
         }
@@ -363,11 +355,11 @@ public class CategoryServiceTest {
             final Category category = mock(Category.class);
             final Post post1 = new Post(user, category, null, null, 95);
             final Post post2 = new Post(user, category, null, null, 85);
-            given(postRepository.findByCategory(any(Category.class)))
+            given(category.getPosts())
                     .willReturn(List.of(post1, post2));
 
             // When
-            final double average = postRepository.findByCategory(category)
+            final double average = category.getPosts()
                     .stream()
                     .mapToInt(Post::getScore)
                     .average()
@@ -381,11 +373,12 @@ public class CategoryServiceTest {
         @Test
         void getAverageScore_NoPost_ReturnZero() {
             // Given
-            given(postRepository.findByCategory(any(Category.class)))
+            final Category category = mock(Category.class);
+            given(category.getPosts())
                     .willReturn(List.of());
 
             // When
-            final double average = postRepository.findByCategory(mock(Category.class))
+            final double average = category.getPosts()
                     .stream()
                     .mapToInt(Post::getScore)
                     .average()
