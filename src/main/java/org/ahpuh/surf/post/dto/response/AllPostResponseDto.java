@@ -15,7 +15,7 @@ public class AllPostResponseDto {
     private String colorCode;
     private Long postId;
     private String content;
-    private int score;
+    private Integer score;
     private String imageUrl;
     private String fileUrl;
     private LocalDate selectedDate;
@@ -23,7 +23,15 @@ public class AllPostResponseDto {
     private Boolean isLiked;
 
     @QueryProjection
-    public AllPostResponseDto(final String categoryName, final String colorCode, final Long postId, final String content, final int score, final String imageUrl, final String fileUrl, final LocalDate selectedDate, final Long likeId) {
+    public AllPostResponseDto(final String categoryName,
+                              final String colorCode,
+                              final Long postId,
+                              final String content,
+                              final Integer score,
+                              final String imageUrl,
+                              final String fileUrl,
+                              final LocalDate selectedDate,
+                              final Long likeId) {
         this.categoryName = categoryName;
         this.colorCode = colorCode;
         this.postId = postId;

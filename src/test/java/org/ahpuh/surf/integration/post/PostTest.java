@@ -5,7 +5,7 @@ import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
-import org.ahpuh.surf.post.dto.PostCountDto;
+import org.ahpuh.surf.post.dto.response.PostCountResponseDto;
 import org.ahpuh.surf.post.service.PostService;
 import org.ahpuh.surf.user.controller.UserController;
 import org.ahpuh.surf.user.domain.User;
@@ -78,7 +78,7 @@ public class PostTest {
     @Transactional
     void getCountsPerDayWithYear() {
         // when
-        final List<PostCountDto> response = postService.getCountsPerDayWithYear(year, userId2);
+        final List<PostCountResponseDto> response = postService.getCountsPerDayWithYear(year, userId2);
 
         // then
         assertAll(
@@ -97,7 +97,7 @@ public class PostTest {
     @Transactional
     void getScoresWithCategoryByUserId() {
         // when
-        final List<CategorySimpleDto> response = postService.getScoresWithCategoryByUserId(userId2);
+        final List<CategorySimpleDto> response = postService.getScoresOfCategoryByUser(userId2);
 
         final CategorySimpleDto categorySimpleDto1 = response.get(0);
         final CategorySimpleDto categorySimpleDto2 = response.get(1);

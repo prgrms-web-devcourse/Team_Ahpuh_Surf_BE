@@ -2,9 +2,9 @@ package org.ahpuh.surf.post.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.ahpuh.surf.post.dto.*;
-import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
-import org.ahpuh.surf.post.dto.response.QAllPostResponseDto;
+import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
+import org.ahpuh.surf.post.dto.QPostScoreCategoryDto;
+import org.ahpuh.surf.post.dto.response.*;
 import org.ahpuh.surf.user.domain.User;
 import org.springframework.data.domain.Pageable;
 
