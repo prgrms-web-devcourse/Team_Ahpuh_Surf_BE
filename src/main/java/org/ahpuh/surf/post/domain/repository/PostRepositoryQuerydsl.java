@@ -3,6 +3,7 @@ package org.ahpuh.surf.post.domain.repository;
 import org.ahpuh.surf.post.dto.ExploreDto;
 import org.ahpuh.surf.post.dto.PostCountDto;
 import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
+import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
 import org.ahpuh.surf.user.domain.User;
 import org.springframework.data.domain.Pageable;
 
@@ -19,5 +20,9 @@ public interface PostRepositoryQuerydsl {
     List<PostCountDto> findAllDateAndCountBetween(int year, User user);
 
     List<PostScoreCategoryDto> findAllScoreWithCategoryByUser(User user);
+
+    List<AllPostResponseDto> findAllPostResponse(Long userId, Long postUserId, Pageable page);
+
+    List<AllPostResponseDto> findAllPostResponseByCursor(Long userId, Long postUserId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
 
 }
