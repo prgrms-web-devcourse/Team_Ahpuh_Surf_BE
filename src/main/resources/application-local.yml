@@ -1,7 +1,13 @@
 spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/surf;MODE=MYSQL
+    username: sa
+    password:
   jpa:
+    database: h2
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
@@ -12,3 +18,6 @@ spring:
     url: jdbc:h2:tcp://localhost/~/surf;MODE=MYSQL
     user: sa
     password:
+logging:
+  level:
+    root: info
