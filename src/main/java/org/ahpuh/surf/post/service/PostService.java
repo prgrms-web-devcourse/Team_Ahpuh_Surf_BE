@@ -6,7 +6,9 @@ import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.cursor.CursorResult;
-import org.ahpuh.surf.common.exception.EntityExceptionHandler;
+import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
+import org.ahpuh.surf.common.exception.post.PostNotFoundException;
+import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.PostConverter;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
@@ -111,7 +113,7 @@ public class PostService {
 
     public CursorResult<ExploreDto> followingExplore(final Long myId, final Long cursorId, final Pageable page) {
         final User me = userRepository.findById(myId)
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(myId));
+                .orElseThrow(UserNotFoundException::new);
         if (me.getFollowing().isEmpty()) {
             return new CursorResult<>(List.of(), false);
         }
@@ -154,12 +156,12 @@ public class PostService {
 
     private User getUserById(final Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public List<PostResponseDto> getPostOfPeriod(final Long userId, final Integer year, final Integer month) {
         final User user = userRepository.findById(userId)
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
+                .orElseThrow(UserNotFoundException::new);
         final LocalDate start = LocalDate.of(year, month, 1);
         final LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
         final List<Post> postList = postRepository.findAllByUserAndSelectedDateBetweenOrderBySelectedDate(user, start, end);
@@ -171,7 +173,7 @@ public class PostService {
 
     public CursorResult<AllPostResponseDto> getAllPost(final Long myId, final Long userId, final Long cursorId, final Pageable page) {
         final User user = userRepository.findById(userId)
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
+                .orElseThrow(UserNotFoundException::new);
 
         final Post findPost = postRepository.findById(cursorId).orElse(null);
 
@@ -200,9 +202,9 @@ public class PostService {
 
     public CursorResult<AllPostResponseDto> getAllPostByCategory(final Long myId, final Long userId, final Long categoryId, final Long cursorId, final Pageable page) {
         final User user = userRepository.findById(userId)
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(userId));
+                .orElseThrow(UserNotFoundException::new);
         final Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
+                .orElseThrow(CategoryNotFoundException::new);
 
         final Post findPost = postRepository.findById(cursorId).orElse(null);
 
@@ -232,7 +234,7 @@ public class PostService {
 
     public PostsRecentScoreResponseDto getRecentScore(final Long categoryId) {
         final Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
+                .orElseThrow(CategoryNotFoundException::new);
         final Integer recentScore = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category)
                 .getScore();
 
@@ -241,17 +243,17 @@ public class PostService {
 
     private Category getCategoryById(final Long categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> EntityExceptionHandler.CategoryNotFound(categoryId));
+                .orElseThrow(CategoryNotFoundException::new);
     }
 
     private Post getPostById(final Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> EntityExceptionHandler.PostNotFound(postId));
+                .orElseThrow(PostNotFoundException::new);
     }
 
     public CursorResult<RecentPostDto> recentAllPosts(final Long myId, final Long cursorId, final Pageable page) {
         final User me = userRepository.findById(myId)
-                .orElseThrow(() -> EntityExceptionHandler.UserNotFound(myId));
+                .orElseThrow(UserNotFoundException::new);
         final Post findPost = postRepository.findById(cursorId).orElse(null);
 
         final List<Post> postList = findPost == null

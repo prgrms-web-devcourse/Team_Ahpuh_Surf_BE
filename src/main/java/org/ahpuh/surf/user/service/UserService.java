@@ -2,6 +2,7 @@ package org.ahpuh.surf.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ahpuh.surf.common.exception.s3.UploadFailException;
 import org.ahpuh.surf.common.exception.user.DuplicatedEmailException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.follow.domain.FollowRepository;
@@ -78,6 +79,8 @@ public class UserService {
             } catch (final IOException e) {
                 log.info("파일이 존재하지 않습니다.");
                 e.printStackTrace();
+            } catch (final Exception e) {
+                throw new UploadFailException();
             }
         }
         final User userEntity = getUser(userId);
