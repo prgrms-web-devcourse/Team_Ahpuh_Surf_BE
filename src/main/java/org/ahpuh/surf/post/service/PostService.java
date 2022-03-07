@@ -47,65 +47,60 @@ public class PostService {
 
     @Transactional
     public Long create(final Long userId, final PostRequestDto request, final MultipartFile file) {
-        FileStatus fileStatus = null;
-        if (file != null) {
-            try {
-                fileStatus = s3Service.uploadPostFile(file);
-            } catch (final IOException e) {
-                log.info("파일이 존재하지 않습니다.");
-                e.printStackTrace();
-            }
-        }
-        final User user = getUserById(userId);
-        final Category category = getCategoryById(request.getCategoryId());
+        final FileStatus fileStatus = fileUpload(file);
+        final User user = getUser(userId);
+        final Category category = user.getCategories()
+                .stream()
+                .filter(categoryFromUser -> categoryFromUser.getCategoryId().equals(request.getCategoryId()))
+                .findFirst()
+                .orElseThrow(NoCategoryFromUserException::new);
 
         final Post post = postConverter.toEntity(user, category, request);
-        if (fileStatus != null) {
-            post.updateFile(fileStatus);
-        }
+        updateFileInfo(fileStatus, post);
+
         return postRepository.save(post)
                 .getPostId();
     }
 
     @Transactional
     public void update(final Long postId, final PostRequestDto request, final MultipartFile file) {
-        FileStatus fileStatus = null;
-        if (file != null) {
-            try {
-                fileStatus = s3Service.uploadPostFile(file);
-            } catch (final IOException e) {
-                log.info("파일이 존재하지 않습니다.");
-                e.printStackTrace();
-            }
-        }
-        final Category category = getCategoryById(request.getCategoryId());
-        final Post post = getPostById(postId);
-
+        final Category category = getCategory(request.getCategoryId());
+        final Post post = getPost(postId);
         post.updatePost(category, LocalDate.parse(request.getSelectedDate()), request.getContent(), request.getScore());
-        if (fileStatus != null) {
-            post.updateFile(fileStatus);
-        }
+
+        final FileStatus fileStatus = fileUpload(file);
+        updateFileInfo(fileStatus, post);
     }
 
-    public PostReadResponseDto readOne(final Long myId, final Long postId) {
-        return postConverter.toPostReadResponseDto(getPostById(postId), myId);
+    public PostReadResponseDto readOne(final Long userId, final Long postId) {
+        final Post post = getPost(postId);
+        return postConverter.toPostReadResponseDto(post, userId);
     }
 
     @Transactional
-    public void delete(final Long postId) {
-        final Post post = getPostById(postId);
+    public void delete(final Long userId, final Long postId) {
+        final Post post = getPost(postId);
+        if (!post.getUser().getUserId().equals(userId)) {
+            throw new NotMatchingPostByUserException();
+        }
         postRepository.delete(post);
     }
 
     @Transactional
     public void makeFavorite(final Long userId, final Long postId) {
-        final Post post = getPostById(postId);
+        final Post post = getPost(postId);
+        if (post.getFavorite()) {
+            throw new MakeFavoriteFailException();
+        }
         post.updateFavorite(userId);
     }
 
     @Transactional
     public void cancelFavorite(final Long userId, final Long postId) {
-        final Post post = getPostById(postId);
+        final Post post = getPost(postId);
+        if (!post.getFavorite()) {
+            throw new CancelFavoriteFailException();
+        }
         post.updateFavorite(userId);
     }
 
@@ -273,5 +268,50 @@ public class PostService {
                 .isEmpty();
 
         return new CursorResult<>(posts, hasNext);
+    }
+
+    private User getUser(final Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    private Category getCategory(final Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryNotFoundException::new);
+    }
+
+    private Post getPost(final Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+    }
+
+    private boolean hasNextCheck(final List<?> postList) {
+        boolean hasNext = false;
+        if (postList.size() == 11) {
+            hasNext = true;
+            postList.remove(10);
+        }
+        return hasNext;
+    }
+
+    private void updateFileInfo(final FileStatus fileStatus, final Post post) {
+        if (fileStatus != null) {
+            post.updateFile(fileStatus);
+        }
+    }
+
+    private FileStatus fileUpload(final MultipartFile file) {
+        FileStatus fileStatus = null;
+        if (file != null) {
+            try {
+                fileStatus = s3Service.uploadPostFile(file);
+            } catch (final IOException e) {
+                log.info("파일이 존재하지 않습니다.");
+                e.printStackTrace();
+            } catch (final Exception e) {
+                throw new UploadFailException();
+            }
+        }
+        return fileStatus;
     }
 }
