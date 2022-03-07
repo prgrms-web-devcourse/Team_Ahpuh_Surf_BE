@@ -14,16 +14,24 @@ import java.util.List;
 
 public interface PostRepositoryQuerydsl {
 
-    List<ExploreDto> findFollowingPosts(Long userId, Pageable page);
-
-    List<ExploreDto> findNextFollowingPosts(Long userId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
-
-    List<PostCountDto> findAllDateAndCountBetween(int year, User user);
+    List<PostCountResponseDto> findAllDateAndCountBetween(int year, User user);
 
     List<PostScoreCategoryDto> findAllScoreWithCategoryByUser(User user);
 
-    List<AllPostResponseDto> findAllPostResponse(Long userId, Long postUserId, Pageable page);
+    List<RecentPostResponseDto> findAllRecentPost(Long userId, Pageable page);
 
-    List<AllPostResponseDto> findAllPostResponseByCursor(Long userId, Long postUserId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+    List<RecentPostResponseDto> findAllRecentPostByCursor(Long userId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+
+    List<ExploreResponseDto> findFollowingPosts(Long userId, Pageable page);
+
+    List<ExploreResponseDto> findFollowingPostsByCursor(Long userId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+
+    List<AllPostResponseDto> findAllPostOfUser(Long userId, Long postUserId, Pageable page);
+
+    List<AllPostResponseDto> findAllPostOfUserByCursor(Long userId, Long postUserId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+
+    List<AllPostResponseDto> findAllPostOfCategory(Long userId, Long categoryId, Pageable page);
+
+    List<AllPostResponseDto> findAllPostOfCategoryByCursor(Long userId, Long categoryId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
 
 }

@@ -22,69 +22,9 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ExploreDto> findFollowingPosts(final Long userId, final Pageable page) {
+    public List<PostCountResponseDto> findAllDateAndCountBetween(final int year, final User user) {
         return queryFactory
-                .select(new QExploreDto(
-                        post.user.userId.as("userId"),
-                        post.user.userName.as("userName"),
-                        post.user.profilePhotoUrl.as("profilePhotoUrl"),
-                        post.category.name.as("categoryName"),
-                        post.category.colorCode.as("colorCode"),
-                        post.postId.as("postId"),
-                        post.content.as("content"),
-                        post.score.as("score"),
-                        post.imageUrl.as("imageUrl"),
-                        post.fileUrl.as("fileUrl"),
-                        post.selectedDate,
-                        post.createdAt.as("createdAt")
-                ))
-                .from(post)
-                .leftJoin(follow).on(follow.source.userId.eq(userId))
-                .where(
-                        follow.target.userId.eq(post.user.userId),
-                        post.isDeleted.eq(false)
-                )
-                .groupBy(post.postId, follow.followId)
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
-                .limit(page.getPageSize())
-                .fetch();
-    }
-
-    @Override
-    public List<ExploreDto> findNextFollowingPosts(final Long userId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
-        return queryFactory
-                .select(new QExploreDto(
-                        post.user.userId.as("userId"),
-                        post.user.userName.as("userName"),
-                        post.user.profilePhotoUrl.as("profilePhotoUrl"),
-                        post.category.name.as("categoryName"),
-                        post.category.colorCode.as("colorCode"),
-                        post.postId.as("postId"),
-                        post.content.as("content"),
-                        post.score.as("score"),
-                        post.imageUrl.as("imageUrl"),
-                        post.fileUrl.as("fileUrl"),
-                        post.selectedDate,
-                        post.createdAt.as("createdAt")
-                ))
-                .from(post)
-                .leftJoin(follow).on(follow.source.userId.eq(userId))
-                .where(
-                        follow.target.userId.eq(post.user.userId),
-                        post.isDeleted.eq(false),
-                        post.selectedDate.loe(selectedDate),
-                        post.createdAt.before(createdAt)
-                )
-                .groupBy(post.postId, follow.followId)
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
-                .limit(page.getPageSize())
-                .fetch();
-    }
-
-    @Override
-    public List<PostCountDto> findAllDateAndCountBetween(final int year, final User user) {
-        return queryFactory
-                .select(new QPostCountDto(
+                .select(new QPostCountResponseDto(
                         post.selectedDate.as("date"),
                         post.selectedDate.count().as("count")))
                 .from(post)
@@ -111,7 +51,165 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     }
 
     @Override
-    public List<AllPostResponseDto> findAllPostResponse(final Long userId, final Long postUserId, final Pageable page) {
+    public List<RecentPostResponseDto> findAllRecentPost(final Long userId, final Pageable page) {
+        return queryFactory
+                .select(new QRecentPostResponseDto(
+                        post.user.userId.as("userId"),
+                        post.user.userName.as("userName"),
+                        post.user.profilePhotoUrl.as("profilePhotoUrl"),
+                        follow.followId.as("followId"),
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate.as("selectedDate"),
+                        post.createdAt.as("createdAt"),
+                        like.likeId.as("likeId")
+                ))
+                .from(post)
+                .leftJoin(follow).on(follow.source.userId.eq(userId).and(follow.target.userId.eq(post.user.userId)))
+                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .limit(page.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<RecentPostResponseDto> findAllRecentPostByCursor(final Long userId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+        return queryFactory
+                .select(new QRecentPostResponseDto(
+                        post.user.userId.as("userId"),
+                        post.user.userName.as("userName"),
+                        post.user.profilePhotoUrl.as("profilePhotoUrl"),
+                        follow.followId.as("followId"),
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate,
+                        post.createdAt.as("createdAt"),
+                        like.likeId.as("likeId")
+                ))
+                .from(post)
+                .leftJoin(follow).on(follow.source.userId.eq(userId).and(follow.target.userId.eq(post.user.userId)))
+                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
+                .where((post.selectedDate.before(selectedDate))
+                        .or(post.selectedDate.eq(selectedDate).and(post.createdAt.before(createdAt))))
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .limit(page.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<ExploreResponseDto> findFollowingPosts(final Long userId, final Pageable page) {
+        return queryFactory
+                .select(new QExploreResponseDto(
+                        post.user.userId.as("userId"),
+                        post.user.userName.as("userName"),
+                        post.user.profilePhotoUrl.as("profilePhotoUrl"),
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate.as("selectedDate"),
+                        post.createdAt.as("createdAt"),
+                        like.likeId.as("likeId")
+                ))
+                .from(post)
+                .leftJoin(follow).on(follow.source.userId.eq(userId))
+                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
+                .where(follow.target.userId.eq(post.user.userId))
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .limit(page.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<ExploreResponseDto> findFollowingPostsByCursor(final Long userId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+        return queryFactory
+                .select(new QExploreResponseDto(
+                        post.user.userId.as("userId"),
+                        post.user.userName.as("userName"),
+                        post.user.profilePhotoUrl.as("profilePhotoUrl"),
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate,
+                        post.createdAt.as("createdAt"),
+                        like.likeId.as("likeId")
+                ))
+                .from(post)
+                .leftJoin(follow).on(follow.source.userId.eq(userId))
+                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
+                .where(follow.target.userId.eq(post.user.userId)
+                        .and(post.selectedDate.before(selectedDate))
+                        .or(post.selectedDate.eq(selectedDate).and(post.createdAt.before(createdAt))))
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .limit(page.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<AllPostResponseDto> findAllPostOfCategory(final Long userId, final Long categoryId, final Pageable page) {
+        return queryFactory
+                .select(new QAllPostResponseDto(
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate.as("selectedDate"),
+                        like.likeId.as("likeId")
+                ))
+                .from(post)
+                .where(post.category.categoryId.eq(categoryId))
+                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .limit(page.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<AllPostResponseDto> findAllPostOfCategoryByCursor(final Long userId, final Long categoryId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+        return queryFactory
+                .select(new QAllPostResponseDto(
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate.as("selectedDate"),
+                        like.likeId.as("likeId")
+                ))
+                .from(post)
+                .where(post.category.categoryId.eq(categoryId)
+                        .and(post.selectedDate.before(selectedDate))
+                        .or(post.selectedDate.eq(selectedDate).and(post.createdAt.before(createdAt))))
+                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .limit(page.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<AllPostResponseDto> findAllPostOfUser(final Long userId, final Long postUserId, final Pageable page) {
         return queryFactory
                 .select(new QAllPostResponseDto(
                         post.category.name.as("categoryName"),
@@ -133,7 +231,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     }
 
     @Override
-    public List<AllPostResponseDto> findAllPostResponseByCursor(final Long userId, final Long postUserId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+    public List<AllPostResponseDto> findAllPostOfUserByCursor(final Long userId, final Long postUserId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
         return queryFactory
                 .select(new QAllPostResponseDto(
                         post.category.name.as("categoryName"),

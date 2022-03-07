@@ -107,18 +107,6 @@ public class PostService {
         post.updateFavorite(userId);
     }
 
-    public List<PostCountDto> getCountsPerDayWithYear(final int year, final Long userId) {
-        final User user = getUser(userId);
-        return postRepository.findAllDateAndCountBetween(year, user);
-    }
-
-    public List<CategorySimpleDto> getScoresWithCategoryByUser(final Long userId) {
-        final User user = getUser(userId);
-        final List<PostScoreCategoryDto> posts = postRepository.findAllScoreWithCategoryByUser(user);
-        final List<Category> categories = categoryRepository.findByUser(user);
-        return postConverter.sortPostScoresByCategory(posts, categories);
-    }
-
     public List<PostResponseDto> getPostOfPeriod(final Long userId, final Integer year, final Integer month) {
         final User user = getUser(userId);
         final LocalDate start = LocalDate.of(year, month, 1);
@@ -138,81 +126,69 @@ public class PostService {
         return new PostsRecentScoreResponseDto(recentScore);
     }
 
-    public CursorResult<ExploreDto> followingExplore(final Long userId, final Long cursorId) {
+    public List<PostCountResponseDto> getCountsPerDayWithYear(final int year, final Long userId) {
+        final User user = getUser(userId);
+        return postRepository.findAllDateAndCountBetween(year, user);
+    }
+
+    public List<CategorySimpleDto> getScoresOfCategoryByUser(final Long userId) {
+        final User user = getUser(userId);
+        final List<PostScoreCategoryDto> posts = postRepository.findAllScoreWithCategoryByUser(user);
+        final List<Category> categories = categoryRepository.findByUser(user);
+        return postConverter.sortPostScoresByCategory(posts, categories);
+    }
+
+    public CursorResult<RecentPostResponseDto> recentAllPosts(final Long userId, final Long cursorId) {
+        final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
+        final List<RecentPostResponseDto> postDtos = findPost == null
+                ? postRepository.findAllRecentPost(userId, PAGE)
+                : postRepository.findAllRecentPostByCursor(userId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
+
+        final boolean hasNext = hasNextCheck(postDtos);
+        postDtos.forEach(RecentPostResponseDto::likeCheck);
+
+        return new CursorResult<>(postDtos, hasNext);
+    }
+
+    public CursorResult<ExploreResponseDto> followExplore(final Long userId, final Long cursorId) {
         final User user = getUser(userId);
         if (user.getFollowing().isEmpty()) {
             return new CursorResult<>(List.of(), false);
         }
 
-        final Post findPost = postRepository.findById(cursorId).orElse(null);
-
-        final List<ExploreDto> exploreDtos = findPost == null
+        final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
+        final List<ExploreResponseDto> exploreDtos = findPost == null
                 ? postRepository.findFollowingPosts(userId, PAGE)
-                : postRepository.findNextFollowingPosts(userId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
-        if (exploreDtos.isEmpty()) {
-            return new CursorResult<>(List.of(), false);
-        }
-        final boolean hasNext = hasNextCheck(exploreDtos);
+                : postRepository.findFollowingPostsByCursor(userId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
 
-        for (final ExploreDto dto : exploreDtos) {
-            user.getLikes()
-                    .stream()
-                    .filter(like -> like.getPost().getPostId().equals(dto.getPostId()))
-                    .findFirst()
-                    .ifPresent(like -> dto.setLiked(like.getLikeId()));
-        }
+        final boolean hasNext = hasNextCheck(exploreDtos);
+        exploreDtos.forEach(ExploreResponseDto::likeCheck);
+
         return new CursorResult<>(exploreDtos, hasNext);
     }
 
     public CursorResult<AllPostResponseDto> getAllPostByUser(final Long userId, final Long postUserId, final Long cursorId) {
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
+        final List<AllPostResponseDto> postDtos = findPost == null
+                ? postRepository.findAllPostOfUser(userId, postUserId, PAGE)
+                : postRepository.findAllPostOfUserByCursor(userId, postUserId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
 
-        final List<AllPostResponseDto> postList = findPost == null
-                ? postRepository.findAllPostResponse(userId, postUserId, PAGE)
-                : postRepository.findAllPostResponseByCursor(userId, postUserId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
+        final boolean hasNext = hasNextCheck(postDtos);
+        postDtos.forEach(AllPostResponseDto::likeCheck);
 
-        final boolean hasNext = hasNextCheck(postList);
-        postList.forEach(AllPostResponseDto::likeCheck);
-
-        return new CursorResult<>(postList, hasNext);
+        return new CursorResult<>(postDtos, hasNext);
     }
 
-    public CursorResult<AllPostResponseDto> getAllPostByCategory(final Long myId, final Long categoryId, final Long cursorId) {
-        final Category category = getCategory(categoryId);
-        final Post findPost = postRepository.findById(cursorId).orElse(null);
+    public CursorResult<AllPostResponseDto> getAllPostByCategory(final Long userId, final Long categoryId, final Long cursorId) {
+        final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
+        final List<AllPostResponseDto> postDtos = findPost == null
+                ? postRepository.findAllPostOfCategory(userId, categoryId, PAGE)
+                : postRepository.findAllPostOfCategoryByCursor(userId, categoryId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
 
-        final List<Post> postList = findPost == null
-                ? postRepository.findAllByCategoryOrderBySelectedDateDesc(category, PAGE)
-                : postRepository.findByCategoryAndSelectedDateLessThanEqualAndCreatedAtLessThanOrderBySelectedDateDesc(category, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
-        if (postList.isEmpty()) {
-            return new CursorResult<>(List.of(), false);
-        }
+        final boolean hasNext = hasNextCheck(postDtos);
+        postDtos.forEach(AllPostResponseDto::likeCheck);
 
-        final boolean hasNext = hasNextCheck(postList);
-        final List<AllPostResponseDto> posts = postList.stream()
-                .map(post -> postConverter.toAllPostResponseDto(post, myId))
-                .toList();
-
-        return new CursorResult<>(posts, hasNext);
-    }
-
-    public CursorResult<RecentPostDto> recentAllPosts(final Long myId, final Long cursorId) {
-        final User me = getUser(myId);
-        final Post findPost = postRepository.findById(cursorId).orElse(null);
-
-        final List<Post> postList = findPost == null
-                ? postRepository.findTop10ByCreatedAtIsLessThanEqualOrderByCreatedAtDesc(LocalDateTime.now(), PAGE)
-                : postRepository.findTop10ByCreatedAtIsLessThanOrderByCreatedAtDesc(findPost.getCreatedAt(), PAGE);
-        if (postList.isEmpty()) {
-            return new CursorResult<>(List.of(), false);
-        }
-        final boolean hasNext = hasNextCheck(postList);
-
-        final List<RecentPostDto> posts = postList.stream()
-                .map(postEntity -> postConverter.toRecentAllPosts(postEntity, me))
-                .toList();
-
-        return new CursorResult<>(posts, hasNext);
+        return new CursorResult<>(postDtos, hasNext);
     }
 
     private User getUser(final Long userId) {
@@ -232,9 +208,9 @@ public class PostService {
 
     private boolean hasNextCheck(final List<?> postList) {
         boolean hasNext = false;
-        if (postList.size() == 11) {
+        if (postList.size() == PAGE.getPageSize()) {
             hasNext = true;
-            postList.remove(10);
+            postList.remove(PAGE.getPageSize() - 1);
         }
         return hasNext;
     }
