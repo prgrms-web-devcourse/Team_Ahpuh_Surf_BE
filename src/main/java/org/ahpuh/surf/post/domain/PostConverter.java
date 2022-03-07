@@ -5,9 +5,7 @@ import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.PostScoreDto;
-import org.ahpuh.surf.post.dto.RecentPostDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
-import org.ahpuh.surf.post.dto.response.AllPostResponseDto;
 import org.ahpuh.surf.post.dto.response.PostReadResponseDto;
 import org.ahpuh.surf.post.dto.response.PostResponseDto;
 import org.ahpuh.surf.user.domain.User;
@@ -65,25 +63,6 @@ public class PostConverter {
                 .build();
     }
 
-    public AllPostResponseDto toAllPostResponseDto(final Post post, final Long myId) {
-        final AllPostResponseDto allPostResponseDto = AllPostResponseDto.builder()
-                .categoryName(post.getCategory().getName())
-                .colorCode(post.getCategory().getColorCode())
-                .postId(post.getPostId())
-                .content(post.getContent())
-                .score(post.getScore())
-                .imageUrl(post.getImageUrl())
-                .fileUrl(post.getFileUrl())
-                .selectedDate(post.getSelectedDate().toString())
-                .build();
-        post.getLikes()
-                .stream()
-                .filter(like -> like.getUser().getUserId().equals(myId))
-                .findFirst()
-                .ifPresent(likeEntity -> allPostResponseDto.setLiked(likeEntity.getLikeId()));
-        return allPostResponseDto;
-    }
-
     public List<CategorySimpleDto> sortPostScoresByCategory(
             final List<PostScoreCategoryDto> posts,
             final List<Category> categories) {
@@ -112,35 +91,6 @@ public class PostConverter {
             }
         });
 
-        categorySimpleDtos.removeIf(categorySimpleDto -> categorySimpleDto.getPostScores().size() == 0);
-
         return categorySimpleDtos;
-    }
-
-    public RecentPostDto toRecentAllPosts(final Post post, final User me) {
-        final RecentPostDto recentPostDto = RecentPostDto.builder()
-                .userId(post.getUser().getUserId())
-                .userName(post.getUser().getUserName())
-                .profilePhotoUrl(post.getUser().getProfilePhotoUrl())
-                .categoryName(post.getCategory().getName())
-                .colorCode(post.getCategory().getColorCode())
-                .postId(post.getPostId())
-                .content(post.getContent())
-                .score(post.getScore())
-                .selectedDate(post.getSelectedDate())
-                .createdAt(post.getCreatedAt())
-                .build();
-        post.getLikes()
-                .stream()
-                .filter(like -> like.getUser().equals(me))
-                .findFirst()
-                .ifPresent(like -> recentPostDto.setLiked(like.getLikeId()));
-        if (post.getUser()
-                .getFollowers()
-                .stream()
-                .anyMatch(follow -> follow.getSource().equals(me))) {
-            recentPostDto.checkFollowed();
-        }
-        return recentPostDto;
     }
 }

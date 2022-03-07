@@ -1,4 +1,4 @@
-package org.ahpuh.surf.post.dto;
+package org.ahpuh.surf.post.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
@@ -11,13 +11,13 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PostCountDto {
+public class PostCountResponseDto {
 
     private LocalDate date;
     private Long count;
 
     @QueryProjection
-    public PostCountDto(final LocalDate date, final Long count) {
+    public PostCountResponseDto(final LocalDate date, final Long count) {
         this.date = date;
         this.count = count;
     }
