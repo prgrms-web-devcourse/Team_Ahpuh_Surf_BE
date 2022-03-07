@@ -13,7 +13,6 @@ import org.ahpuh.surf.post.dto.response.PostReadResponseDto;
 import org.ahpuh.surf.post.dto.response.PostResponseDto;
 import org.ahpuh.surf.post.dto.response.PostsRecentScoreResponseDto;
 import org.ahpuh.surf.post.service.PostService;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -62,14 +61,15 @@ public class PostController {
 
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<Void> deletePost(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
     ) {
-        postService.delete(postId);
+        postService.delete(authentication.userId, postId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/posts/calendarGraph")
-    public ResponseEntity<List<PostCountDto>> getCounts(
+    public ResponseEntity<List<PostCountDto>> getPostCountOfYear(
             @RequestParam final int year,
             @RequestParam final Long userId
     ) {
@@ -81,7 +81,7 @@ public class PostController {
     public ResponseEntity<List<CategorySimpleDto>> getScores(
             @RequestParam final Long userId
     ) {
-        final List<CategorySimpleDto> categorySimpleDtos = postService.getScoresWithCategoryByUserId(userId);
+        final List<CategorySimpleDto> categorySimpleDtos = postService.getScoresWithCategoryByUser(userId);
         return ResponseEntity.ok().body(categorySimpleDtos);
     }
 
@@ -108,12 +108,12 @@ public class PostController {
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Long cursorId
     ) {
-        final CursorResult<ExploreDto> followingPostDtos = postService.followingExplore(authentication.userId, cursorId, PageRequest.of(0, 10));
+        final CursorResult<ExploreDto> followingPostDtos = postService.followingExplore(authentication.userId, cursorId);
         return ResponseEntity.ok().body(followingPostDtos);
     }
 
     @GetMapping("/posts/month")
-    public ResponseEntity<List<PostResponseDto>> getPost(
+    public ResponseEntity<List<PostResponseDto>> getPostOfPeriod(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Integer year,
             @RequestParam final Integer month
@@ -123,22 +123,21 @@ public class PostController {
     }
 
     @GetMapping("/posts/all")
-    public ResponseEntity<CursorResult<AllPostResponseDto>> getAllPost(
+    public ResponseEntity<CursorResult<AllPostResponseDto>> getAllPostByUser(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Long userId,
             @RequestParam final Long cursorId
     ) {
-        return ResponseEntity.ok().body(postService.getAllPost(authentication.userId, userId, cursorId, PageRequest.of(0, 10)));
+        return ResponseEntity.ok().body(postService.getAllPostByUser(authentication.userId, userId, cursorId));
     }
 
     @GetMapping("/posts")
     public ResponseEntity<CursorResult<AllPostResponseDto>> getRecentScoreByAllPostsOfCategory(
             @AuthenticationPrincipal final JwtAuthentication authentication,
-            @RequestParam final Long userId,
             @RequestParam final Long categoryId,
             @RequestParam final Long cursorId
     ) {
-        return ResponseEntity.ok().body(postService.getAllPostByCategory(authentication.userId, userId, categoryId, cursorId, PageRequest.of(0, 10)));
+        return ResponseEntity.ok().body(postService.getAllPostByCategory(authentication.userId, categoryId, cursorId));
     }
 
     @GetMapping("/recentscore")
@@ -154,7 +153,7 @@ public class PostController {
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Long cursorId
     ) {
-        final CursorResult<RecentPostDto> recentAllPosts = postService.recentAllPosts(authentication.userId, cursorId, PageRequest.of(0, 10));
+        final CursorResult<RecentPostDto> recentAllPosts = postService.recentAllPosts(authentication.userId, cursorId);
         return ResponseEntity.ok().body(recentAllPosts);
     }
 }

@@ -14,17 +14,13 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
     List<Post> findAllByUserOrderBySelectedDateDesc(User user, Pageable page);
 
-    List<Post> findAllByUserAndCategoryOrderBySelectedDateDesc(User user, Category category, Pageable page);
+    List<Post> findAllByCategoryOrderBySelectedDateDesc(Category category, Pageable page);
+
+    List<Post> findByCategoryAndSelectedDateLessThanEqualAndCreatedAtLessThanOrderBySelectedDateDesc(Category category, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
 
     List<Post> findAllByUserAndSelectedDateBetweenOrderBySelectedDate(User user, LocalDate start, LocalDate end);
 
-    List<Post> findByUserAndSelectedDateIsLessThanEqualAndCreatedAtLessThanOrderBySelectedDateDesc(User user, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
-
-    List<Post> findByUserAndCategoryAndSelectedDateLessThanEqualAndCreatedAtLessThanOrderBySelectedDateDesc(User user, Category category, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
-
     Post findTop1ByCategoryOrderBySelectedDateDesc(Category category);
-
-    List<Post> findByCategory(Category category);
 
     List<Post> findTop10ByCreatedAtIsLessThanEqualOrderByCreatedAtDesc(LocalDateTime createdAt, Pageable page);
 

@@ -11,7 +11,6 @@ import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.post.domain.Post;
-import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import java.util.List;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CategoryConverter categoryConverter;
 
@@ -68,7 +66,8 @@ public class CategoryService {
     }
 
     private double getAverageScore(final Category category) {
-        return postRepository.findByCategory(category).stream()
+        return category.getPosts()
+                .stream()
                 .mapToInt(Post::getScore)
                 .average().orElse(0);
     }
