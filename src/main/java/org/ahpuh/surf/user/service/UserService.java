@@ -46,10 +46,10 @@ public class UserService {
     }
 
     public User login(final String email, final String password) {
-        final User userEntity = userRepository.findByEmail(email)
+        final User user = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
-        userEntity.checkPassword(passwordEncoder, password);
-        return userEntity;
+        user.checkPassword(passwordEncoder, password);
+        return user;
     }
 
     @Transactional
@@ -61,9 +61,9 @@ public class UserService {
                 .getUserId();
     }
 
-    public UserFindInfoResponseDto findUser(final Long userId) {
-        final User userEntity = getUser(userId);
-        return userConverter.toUserFindInfoResponseDto(userEntity, userEntity.getFollowing().size(), userEntity.getFollowers().size());
+    public UserFindInfoResponseDto getUserInfo(final Long userId) {
+        final User user = getUser(userId);
+        return userConverter.toUserFindInfoResponseDto(user, user.getFollowingCount(), user.getFollowerCount());
     }
 
     @Transactional

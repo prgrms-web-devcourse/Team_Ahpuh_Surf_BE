@@ -61,7 +61,7 @@ public class UserControllerTest extends ControllerTest {
             // Given
             final UserFindInfoResponseDto response = createUserFindInfoDto();
 
-            given(userService.findUser(anyLong()))
+            given(userService.getUserInfo(anyLong()))
                     .willReturn(response);
 
             // When
@@ -75,7 +75,7 @@ public class UserControllerTest extends ControllerTest {
                     .getResponse()
                     .getContentAsString();
             verify(userService, times(1))
-                    .findUser(anyLong());
+                    .getUserInfo(anyLong());
             assertThat(responseBody).isEqualTo(objectMapper.writeValueAsString(response));
 
             perform.andDo(document("user/findUserInfo",
@@ -294,7 +294,7 @@ public class UserControllerTest extends ControllerTest {
             perform.andExpect(status().isForbidden())
                     .andDo(print());
             verify(userService, times(0))
-                    .findUser(anyLong());
+                    .getUserInfo(anyLong());
         }
 
         @DisplayName("내 회원정보를 수정할 수 없다.")

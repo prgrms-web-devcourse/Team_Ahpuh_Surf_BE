@@ -12,6 +12,7 @@ import org.ahpuh.surf.follow.domain.Follow;
 import org.ahpuh.surf.like.domain.Like;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,6 +74,12 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Like> likes;
+
+    @Formula("(select count(1) from follow f where f.user_id = user_id)")
+    private int followingCount;
+
+    @Formula("(select count(1) from follow f where f.following_id = user_id)")
+    private int followerCount;
 
     @Builder
     public User(final String email, final String password, final String userName) {
