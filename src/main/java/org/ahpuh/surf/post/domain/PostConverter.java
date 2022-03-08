@@ -6,7 +6,6 @@ import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.PostScoreDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
-import org.ahpuh.surf.post.dto.response.PostResponseDto;
 import org.ahpuh.surf.user.domain.User;
 import org.springframework.stereotype.Component;
 
@@ -25,19 +24,6 @@ public class PostConverter {
                 .selectedDate(LocalDate.parse(request.getSelectedDate())) // yyyy-mm-dd
                 .content(request.getContent())
                 .score(request.getScore())
-                .build();
-    }
-
-    public PostResponseDto toPostResponseDto(final Post post, final Category category) {
-        return PostResponseDto.builder()
-                .categoryName(category.getName())
-                .colorCode(category.getColorCode())
-                .postId(post.getPostId())
-                .content(post.getContent())
-                .score(post.getScore())
-                .imageUrl(post.getImageUrl())
-                .fileUrl(post.getFileUrl())
-                .selectedDate(post.getSelectedDate().toString())
                 .build();
     }
 

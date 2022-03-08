@@ -8,10 +8,7 @@ import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.cursor.CursorResult;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.common.exception.category.NoCategoryFromUserException;
-import org.ahpuh.surf.common.exception.post.CancelFavoriteFailException;
-import org.ahpuh.surf.common.exception.post.MakeFavoriteFailException;
-import org.ahpuh.surf.common.exception.post.NotMatchingPostByUserException;
-import org.ahpuh.surf.common.exception.post.PostNotFoundException;
+import org.ahpuh.surf.common.exception.post.*;
 import org.ahpuh.surf.common.exception.s3.UploadFailException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.post.domain.Post;
@@ -108,15 +105,16 @@ public class PostService {
         post.updateFavorite(userId);
     }
 
-    public List<PostResponseDto> getPostOfPeriod(final Long userId, final Integer year, final Integer month) {
-        final User user = getUser(userId);
-        final LocalDate start = LocalDate.of(year, month, 1);
-        final LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
-        final List<Post> postList = postRepository.findAllByUserAndSelectedDateBetweenOrderBySelectedDate(user, start, end);
+    public List<PostsOfMonthResponseDto> getPostsOfMonth(final Long userId, final Integer year, final Integer month) {
+        if (year == null | month == null) {
+            throw new InvalidPeriodException();
+        } else if (year < 1900 | month > 12 | month < 1) {
+            throw new InvalidPeriodException();
+        }
+        final LocalDate startDate = LocalDate.of(year, month, 1);
+        final LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-        return postList.stream()
-                .map((Post post) -> postConverter.toPostResponseDto(post, post.getCategory()))
-                .toList();
+        return postRepository.findPostsOfMonth(userId, startDate, endDate);
     }
 
     public PostsRecentScoreResponseDto getRecentScore(final Long categoryId) {
@@ -129,7 +127,7 @@ public class PostService {
 
     public List<PostCountResponseDto> getPostCountsOfYear(final int year, final Long userId) {
         final User user = getUser(userId);
-        return postRepository.findAllDateAndCountBetween(year, user);
+        return postRepository.findEachDateAndCountOfYearByUser(year, user);
     }
 
     public List<CategorySimpleDto> getScoresOfCategoryByUser(final Long userId) {

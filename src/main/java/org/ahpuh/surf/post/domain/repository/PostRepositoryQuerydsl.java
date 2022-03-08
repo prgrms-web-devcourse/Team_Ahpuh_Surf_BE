@@ -14,7 +14,9 @@ public interface PostRepositoryQuerydsl {
 
     Optional<PostReadResponseDto> findPost(Long postId, Long userId);
 
-    List<PostCountResponseDto> findAllDateAndCountBetween(int year, User user);
+    List<PostsOfMonthResponseDto> findPostsOfMonth(Long userId, LocalDate startDate, LocalDate endDate);
+
+    List<PostCountResponseDto> findEachDateAndCountOfYearByUser(int year, User user);
 
     List<PostScoreCategoryDto> findAllScoreWithCategoryByUser(User user);
 
