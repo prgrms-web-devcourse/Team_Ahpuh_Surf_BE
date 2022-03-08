@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.ahpuh.surf.follow.domain.QFollow.follow;
 import static org.ahpuh.surf.like.domain.QLike.like;
@@ -22,15 +23,37 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     private final JPAQueryFactory queryFactory;
 
     @Override
+    public Optional<PostReadResponseDto> findPost(final Long postId, final Long userId) {
+        return Optional.ofNullable(queryFactory
+                .select(new QPostReadResponseDto(
+                        post.postId.as("postId"),
+                        post.user.userId.as("userId"),
+                        post.category.categoryId.as("categoryId"),
+                        post.selectedDate.as("selectedDate"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.createdAt.as("createdAt"),
+                        post.favorite.as("favorite"),
+                        like.likeId.as("likeId")
+                ))
+                .from(post)
+                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
+                .where(post.postId.eq(postId))
+                .fetchOne());
+    }
+
+    @Override
     public List<PostCountResponseDto> findAllDateAndCountBetween(final int year, final User user) {
         return queryFactory
                 .select(new QPostCountResponseDto(
                         post.selectedDate.as("date"),
-                        post.selectedDate.count().as("count")))
+                        post.selectedDate.count().as("count")
+                ))
                 .from(post)
                 .where(post.selectedDate.between(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31)),
-                        post.user.eq(user),
-                        post.isDeleted.eq(false))
+                        post.user.eq(user))
                 .groupBy(post.selectedDate)
                 .orderBy(post.selectedDate.asc())
                 .fetch();
@@ -45,7 +68,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.score.as("score")
                 ))
                 .from(post)
-                .where(post.user.eq(user), post.isDeleted.eq(false))
+                .where(post.user.eq(user))
                 .orderBy(post.category.categoryId.asc(), post.selectedDate.asc())
                 .fetch();
     }

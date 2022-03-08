@@ -75,9 +75,10 @@ public class PostService {
         updateFileInfo(fileStatus, post);
     }
 
-    public PostReadResponseDto readOne(final Long userId, final Long postId) {
-        final Post post = getPost(postId);
-        return postConverter.toPostReadResponseDto(post, userId);
+    public PostReadResponseDto readPost(final Long userId, final Long postId) {
+        final PostReadResponseDto responseDto = postRepository.findPost(postId, userId)
+                .orElseThrow(PostNotFoundException::new);
+        return responseDto.likeCheck();
     }
 
     @Transactional
@@ -126,7 +127,7 @@ public class PostService {
         return new PostsRecentScoreResponseDto(recentScore);
     }
 
-    public List<PostCountResponseDto> getCountsPerDayWithYear(final int year, final Long userId) {
+    public List<PostCountResponseDto> getPostCountsOfYear(final int year, final Long userId) {
         final User user = getUser(userId);
         return postRepository.findAllDateAndCountBetween(year, user);
     }

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.common.exception.s3.UploadFailException;
 import org.ahpuh.surf.common.exception.user.DuplicatedEmailException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
-import org.ahpuh.surf.follow.domain.FollowRepository;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.s3.S3Service;
@@ -35,7 +34,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
-    private final FollowRepository followRepository;
     private final S3Service s3Service;
     private final UserConverter userConverter;
 
@@ -65,9 +63,7 @@ public class UserService {
 
     public UserFindInfoResponseDto findUser(final Long userId) {
         final User userEntity = getUser(userId);
-        final long followingCount = followRepository.countBySource(userEntity);
-        final long followerCount = followRepository.countByTarget(userEntity);
-        return userConverter.toUserFindInfoResponseDto(userEntity, followingCount, followerCount);
+        return userConverter.toUserFindInfoResponseDto(userEntity, userEntity.getFollowing().size(), userEntity.getFollowers().size());
     }
 
     @Transactional

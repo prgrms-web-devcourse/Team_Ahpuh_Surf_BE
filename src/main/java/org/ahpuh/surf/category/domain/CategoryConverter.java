@@ -30,10 +30,10 @@ public class CategoryConverter {
         return CategoryDetailResponseDto.builder()
                 .categoryId(category.getCategoryId())
                 .name(category.getName())
-                .averageScore(averageScore)
                 .isPublic(category.getIsPublic())
                 .colorCode(category.getColorCode())
                 .postCount(category.getPostCount())
+                .averageScore(averageScore)
                 .build();
     }
 }

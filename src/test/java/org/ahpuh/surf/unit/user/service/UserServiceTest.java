@@ -7,7 +7,6 @@ import org.ahpuh.surf.s3.S3Service;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserConverter;
 import org.ahpuh.surf.user.domain.UserRepository;
-import org.ahpuh.surf.follow.domain.FollowRepository;
 import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
 import org.ahpuh.surf.user.dto.response.UserFindInfoResponseDto;
@@ -43,9 +42,6 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private FollowRepository followRepository;
 
     @Mock
     private S3Service s3Service;
@@ -186,10 +182,6 @@ public class UserServiceTest {
 
             given(userRepository.findById(anyLong()))
                     .willReturn(Optional.of(mockUser));
-            given(followRepository.countBySource(mockUser))
-                    .willReturn(0L);
-            given(followRepository.countByTarget(mockUser))
-                    .willReturn(0L);
             given(userConverter.toUserFindInfoResponseDto(any(), eq(0L), eq(0L)))
                     .willReturn(mockUserDto);
 
@@ -200,10 +192,6 @@ public class UserServiceTest {
             assertThat(returnDto).isSameAs(mockUserDto);
             verify(userRepository, times(1))
                     .findById(1L);
-            verify(followRepository, times(1))
-                    .countBySource(mockUser);
-            verify(followRepository, times(1))
-                    .countByTarget(mockUser);
             verify(userConverter, times(1))
                     .toUserFindInfoResponseDto(mockUser, 0L, 0L);
         }

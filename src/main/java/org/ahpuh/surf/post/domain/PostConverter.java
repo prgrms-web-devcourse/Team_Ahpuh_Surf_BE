@@ -6,7 +6,6 @@ import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.PostScoreDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
-import org.ahpuh.surf.post.dto.response.PostReadResponseDto;
 import org.ahpuh.surf.post.dto.response.PostResponseDto;
 import org.ahpuh.surf.user.domain.User;
 import org.springframework.stereotype.Component;
@@ -27,27 +26,6 @@ public class PostConverter {
                 .content(request.getContent())
                 .score(request.getScore())
                 .build();
-    }
-
-    public PostReadResponseDto toPostReadResponseDto(final Post post, final Long myId) {
-        final PostReadResponseDto dto = PostReadResponseDto.builder()
-                .postId(post.getPostId())
-                .userId(post.getUser().getUserId())
-                .categoryId(post.getCategory().getCategoryId())
-                .selectedDate(post.getSelectedDate().toString())
-                .content(post.getContent())
-                .score(post.getScore())
-                .imageUrl(post.getImageUrl())
-                .fileUrl(post.getFileUrl())
-                .favorite(post.getFavorite())
-                .createdAt(post.getCreatedAt().toString())
-                .build();
-        post.getLikes()
-                .stream()
-                .filter(like -> like.getUser().getUserId().equals(myId))
-                .findFirst()
-                .ifPresent(likeEntity -> dto.setLiked(likeEntity.getLikeId()));
-        return dto;
     }
 
     public PostResponseDto toPostResponseDto(final Post post, final Category category) {

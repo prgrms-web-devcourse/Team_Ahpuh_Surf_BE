@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryQuerydsl {
@@ -16,14 +15,8 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
     List<Post> findAllByCategoryOrderBySelectedDateDesc(Category category, Pageable page);
 
-    List<Post> findByCategoryAndSelectedDateLessThanEqualAndCreatedAtLessThanOrderBySelectedDateDesc(Category category, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
-
     List<Post> findAllByUserAndSelectedDateBetweenOrderBySelectedDate(User user, LocalDate start, LocalDate end);
 
     Post findTop1ByCategoryOrderBySelectedDateDesc(Category category);
-
-    List<Post> findTop10ByCreatedAtIsLessThanEqualOrderByCreatedAtDesc(LocalDateTime createdAt, Pageable page);
-
-    List<Post> findTop10ByCreatedAtIsLessThanOrderByCreatedAtDesc(LocalDateTime createdAt, Pageable page);
 
 }
