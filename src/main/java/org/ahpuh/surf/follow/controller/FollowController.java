@@ -22,9 +22,9 @@ public class FollowController {
     @PostMapping("/follow")
     public ResponseEntity<FollowResponseDto> follow(
             @AuthenticationPrincipal final JwtAuthentication authentication,
-            @RequestBody final Long followUserId
+            @RequestBody final Long targetUserId
     ) {
-        final FollowResponseDto response = followService.follow(authentication.userId, followUserId);
+        final FollowResponseDto response = followService.follow(authentication.userId, targetUserId);
         return ResponseEntity.created(URI.create("/api/v1/users/" + authentication.userId + "/following"))
                 .body(response);
     }
