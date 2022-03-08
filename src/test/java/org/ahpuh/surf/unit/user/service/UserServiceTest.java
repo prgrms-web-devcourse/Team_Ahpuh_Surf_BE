@@ -169,9 +169,9 @@ public class UserServiceTest {
         }
     }
 
-    @DisplayName("findUser 메소드는")
+    @DisplayName("getUserInfo 메소드는")
     @Nested
-    class FindUserMethod {
+    class GetUserInfoMethod {
 
         @DisplayName("유효한 userId로 유저Dto를 반환할 수 있다.")
         @Test
@@ -186,7 +186,7 @@ public class UserServiceTest {
                     .willReturn(mockUserDto);
 
             // When
-            final UserFindInfoResponseDto returnDto = userService.findUser(1L);
+            final UserFindInfoResponseDto returnDto = userService.getUserInfo(1L);
 
             // Then
             assertThat(returnDto).isSameAs(mockUserDto);
@@ -204,7 +204,7 @@ public class UserServiceTest {
                     .willReturn(Optional.empty());
 
             // When
-            assertThatThrownBy(() -> userService.findUser(1L))
+            assertThatThrownBy(() -> userService.getUserInfo(1L))
                     .isInstanceOf(UserNotFoundException.class)
                     .hasMessage("해당 유저를 찾을 수 없습니다.");
 

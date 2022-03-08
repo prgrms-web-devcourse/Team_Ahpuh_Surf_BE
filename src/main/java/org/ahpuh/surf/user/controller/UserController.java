@@ -41,10 +41,10 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserFindInfoResponseDto> findUserInfo(
+    public ResponseEntity<UserFindInfoResponseDto> getUserInfo(
             @PathVariable final Long userId
     ) {
-        final UserFindInfoResponseDto response = userService.findUser(userId);
+        final UserFindInfoResponseDto response = userService.getUserInfo(userId);
         return ResponseEntity.ok().body(response);
     }
 
