@@ -42,17 +42,12 @@ jobs:
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
-        if: ${{ always() }}  # 테스트가 실패해도 Report를 보기 위해 always로 설정
+        if: ${{ always() }}
         with:
-          files: build/test-results/**/*.xml # Report 저장 경로
+          files: build/test-results/**/*.xml
 
       - name: Cleanup Gradle Cache
         if: ${{ always() }}
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
-
-### Test를 통과해야만 merge 가능하게 설정 방법 ###
-# Settings -> Branches -> Add rule
-# Branch name pattern (Branch name) 설정
-# Require status checks to pass before merging 설정
