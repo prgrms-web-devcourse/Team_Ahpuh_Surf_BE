@@ -49,7 +49,7 @@ public class PostController {
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @PathVariable final Long postId
     ) {
-        final PostReadResponseDto response = postService.readOne(authentication.userId, postId);
+        final PostReadResponseDto response = postService.readPost(authentication.userId, postId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -60,23 +60,6 @@ public class PostController {
     ) {
         postService.delete(authentication.userId, postId);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/posts/calendarGraph")
-    public ResponseEntity<List<PostCountResponseDto>> getPostCountOfYear(
-            @RequestParam final int year,
-            @RequestParam final Long userId
-    ) {
-        final List<PostCountResponseDto> postCountDtos = postService.getCountsPerDayWithYear(year, userId);
-        return ResponseEntity.ok().body(postCountDtos);
-    }
-
-    @GetMapping("/posts/score")
-    public ResponseEntity<List<CategorySimpleDto>> getScoresOfCategory(
-            @RequestParam final Long userId
-    ) {
-        final List<CategorySimpleDto> categorySimpleDtos = postService.getScoresOfCategoryByUser(userId);
-        return ResponseEntity.ok().body(categorySimpleDtos);
     }
 
     @PostMapping("/posts/{postId}/favorite")
@@ -97,15 +80,6 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/follow/posts")
-    public ResponseEntity<CursorResult<ExploreResponseDto>> followExplore(
-            @AuthenticationPrincipal final JwtAuthentication authentication,
-            @RequestParam final Long cursorId
-    ) {
-        final CursorResult<ExploreResponseDto> followingPostDtos = postService.followExplore(authentication.userId, cursorId);
-        return ResponseEntity.ok().body(followingPostDtos);
-    }
-
     @GetMapping("/posts/month")
     public ResponseEntity<List<PostResponseDto>> getPostOfPeriod(
             @AuthenticationPrincipal final JwtAuthentication authentication,
@@ -114,6 +88,49 @@ public class PostController {
     ) {
         final Long userId = authentication.userId;
         return ResponseEntity.ok().body(postService.getPostOfPeriod(userId, year, month));
+    }
+
+    @GetMapping("/recentscore")
+    public ResponseEntity<PostsRecentScoreResponseDto> getRecentScoreByAllPostsOfCategory(
+            @RequestParam final Long categoryId
+    ) {
+        final PostsRecentScoreResponseDto response = postService.getRecentScore(categoryId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/posts/calendarGraph")
+    public ResponseEntity<List<PostCountResponseDto>> getPostCountsOfYear(
+            @RequestParam final int year,
+            @RequestParam final Long userId
+    ) {
+        final List<PostCountResponseDto> postCountDtos = postService.getPostCountsOfYear(year, userId);
+        return ResponseEntity.ok().body(postCountDtos);
+    }
+
+    @GetMapping("/posts/score")
+    public ResponseEntity<List<CategorySimpleDto>> getScoresOfCategory(
+            @RequestParam final Long userId
+    ) {
+        final List<CategorySimpleDto> categorySimpleDtos = postService.getScoresOfCategoryByUser(userId);
+        return ResponseEntity.ok().body(categorySimpleDtos);
+    }
+
+    @GetMapping("/posts/recent")
+    public ResponseEntity<CursorResult<RecentPostResponseDto>> recentAllPosts(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @RequestParam final Long cursorId
+    ) {
+        final CursorResult<RecentPostResponseDto> recentAllPosts = postService.recentAllPosts(authentication.userId, cursorId);
+        return ResponseEntity.ok().body(recentAllPosts);
+    }
+
+    @GetMapping("/follow/posts")
+    public ResponseEntity<CursorResult<ExploreResponseDto>> followExplore(
+            @AuthenticationPrincipal final JwtAuthentication authentication,
+            @RequestParam final Long cursorId
+    ) {
+        final CursorResult<ExploreResponseDto> followingPostDtos = postService.followExplore(authentication.userId, cursorId);
+        return ResponseEntity.ok().body(followingPostDtos);
     }
 
     @GetMapping("/posts/all")
@@ -132,22 +149,5 @@ public class PostController {
             @RequestParam final Long cursorId
     ) {
         return ResponseEntity.ok().body(postService.getAllPostByCategory(authentication.userId, categoryId, cursorId));
-    }
-
-    @GetMapping("/recentscore")
-    public ResponseEntity<PostsRecentScoreResponseDto> getRecentScoreByAllPostsOfCategory(
-            @RequestParam final Long categoryId
-    ) {
-        final PostsRecentScoreResponseDto response = postService.getRecentScore(categoryId);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @GetMapping("/posts/recent")
-    public ResponseEntity<CursorResult<RecentPostResponseDto>> recentAllPosts(
-            @AuthenticationPrincipal final JwtAuthentication authentication,
-            @RequestParam final Long cursorId
-    ) {
-        final CursorResult<RecentPostResponseDto> recentAllPosts = postService.recentAllPosts(authentication.userId, cursorId);
-        return ResponseEntity.ok().body(recentAllPosts);
     }
 }

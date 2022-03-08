@@ -127,7 +127,7 @@ public class PostService {
         return new PostsRecentScoreResponseDto(recentScore);
     }
 
-    public List<PostCountResponseDto> getCountsPerDayWithYear(final int year, final Long userId) {
+    public List<PostCountResponseDto> getPostCountsOfYear(final int year, final Long userId) {
         final User user = getUser(userId);
         return postRepository.findAllDateAndCountBetween(year, user);
     }

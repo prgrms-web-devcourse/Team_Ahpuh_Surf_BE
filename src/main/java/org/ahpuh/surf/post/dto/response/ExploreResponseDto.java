@@ -58,6 +58,6 @@ public class ExploreResponseDto {
     }
 
     public void likeCheck() {
-        isLiked = likeId != null;
+        isLiked = (likeId != null);
     }
 }

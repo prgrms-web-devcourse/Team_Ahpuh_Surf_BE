@@ -61,6 +61,6 @@ public class RecentPostResponseDto {
     }
 
     public void likeCheck() {
-        isLiked = likeId != null;
+        isLiked = (likeId != null);
     }
 }

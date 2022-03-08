@@ -61,7 +61,7 @@ public class CategoryService {
         final List<Category> categoryList = categoryRepository.findByUser(user);
 
         return categoryList.stream()
-                .map((Category category) -> categoryConverter.toCategoryDetailResponseDto(category, (int) getAverageScore(category)))
+                .map(category -> categoryConverter.toCategoryDetailResponseDto(category, (int) getAverageScore(category)))
                 .toList();
     }
 
@@ -69,7 +69,8 @@ public class CategoryService {
         return category.getPosts()
                 .stream()
                 .mapToInt(Post::getScore)
-                .average().orElse(0);
+                .average()
+                .orElse(0);
     }
 
     private User getUser(final Long userId) {

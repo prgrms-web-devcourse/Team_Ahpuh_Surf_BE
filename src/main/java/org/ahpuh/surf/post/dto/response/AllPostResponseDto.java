@@ -44,6 +44,6 @@ public class AllPostResponseDto {
     }
 
     public void likeCheck() {
-        isLiked = likeId != null;
+        isLiked = (likeId != null);
     }
 }

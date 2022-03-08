@@ -78,7 +78,7 @@ public class PostTest {
     @Transactional
     void getCountsPerDayWithYear() {
         // when
-        final List<PostCountResponseDto> response = postService.getCountsPerDayWithYear(year, userId2);
+        final List<PostCountResponseDto> response = postService.getPostCountsOfYear(year, userId2);
 
         // then
         assertAll(
