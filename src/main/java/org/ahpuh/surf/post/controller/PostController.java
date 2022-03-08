@@ -81,13 +81,13 @@ public class PostController {
     }
 
     @GetMapping("/posts/month")
-    public ResponseEntity<List<PostResponseDto>> getPostOfPeriod(
+    public ResponseEntity<List<PostsOfMonthResponseDto>> getPostOfPeriod(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Integer year,
             @RequestParam final Integer month
     ) {
         final Long userId = authentication.userId;
-        return ResponseEntity.ok().body(postService.getPostOfPeriod(userId, year, month));
+        return ResponseEntity.ok().body(postService.getPostsOfMonth(userId, year, month));
     }
 
     @GetMapping("/recentscore")

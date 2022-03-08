@@ -45,7 +45,26 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     }
 
     @Override
-    public List<PostCountResponseDto> findAllDateAndCountBetween(final int year, final User user) {
+    public List<PostsOfMonthResponseDto> findPostsOfMonth(final Long userId, final LocalDate startDate, final LocalDate endDate) {
+        return queryFactory
+                .select(new QPostsOfMonthResponseDto(
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate.as("selectedDate")
+                ))
+                .from(post)
+                .where(post.user.userId.eq(userId).and(post.selectedDate.between(startDate, endDate)))
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<PostCountResponseDto> findEachDateAndCountOfYearByUser(final int year, final User user) {
         return queryFactory
                 .select(new QPostCountResponseDto(
                         post.selectedDate.as("date"),
