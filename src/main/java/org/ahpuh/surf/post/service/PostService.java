@@ -75,9 +75,10 @@ public class PostService {
         updateFileInfo(fileStatus, post);
     }
 
-    public PostReadResponseDto readOne(final Long userId, final Long postId) {
-        final Post post = getPost(postId);
-        return postConverter.toPostReadResponseDto(post, userId);
+    public PostReadResponseDto readPost(final Long userId, final Long postId) {
+        final PostReadResponseDto responseDto = postRepository.findPost(postId, userId)
+                .orElseThrow(PostNotFoundException::new);
+        return responseDto.likeCheck();
     }
 
     @Transactional
