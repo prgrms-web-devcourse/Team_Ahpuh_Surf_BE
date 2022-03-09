@@ -106,7 +106,7 @@ public class PostService {
     public List<PostsOfMonthResponseDto> getPostsOfMonth(final Long userId, final Integer year, final Integer month) {
         if (Objects.isNull(year) | Objects.isNull(month)) {
             throw new InvalidPeriodException();
-        } else if (year < 1900 | month > 12 | month < 1) {
+        } else if (month > 12 | month < 1) {
             throw new InvalidPeriodException();
         }
         final LocalDate startDate = LocalDate.of(year, month, 1);
