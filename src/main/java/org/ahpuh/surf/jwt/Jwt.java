@@ -35,9 +35,9 @@ public class Jwt {
         if (expirySeconds > 0) {
             builder.withExpiresAt(new Date(now.getTime() + expirySeconds * 1_000L));
         }
-        builder.withClaim("user_id", claims.userId);
-        builder.withClaim("email", claims.email);
-        builder.withArrayClaim("roles", claims.roles);
+        builder.withClaim("user_id", claims.getUserId());
+        builder.withClaim("email", claims.getEmail());
+        builder.withArrayClaim("roles", claims.getRoles());
         return builder.sign(algorithm);
     }
 

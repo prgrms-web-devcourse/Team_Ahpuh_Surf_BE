@@ -48,7 +48,7 @@ public class S3ServiceImpl implements S3Service {
     private AmazonS3 s3Client;
 
     @PostConstruct
-    public void setS3Client() {
+    private void setS3Client() {
         final AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
 
         s3Client = AmazonS3ClientBuilder.standard()
@@ -82,7 +82,7 @@ public class S3ServiceImpl implements S3Service {
         throw new UploadFailException();
     }
 
-    public String uploadImg(final MultipartFile file) throws IOException {
+    private String uploadImg(final MultipartFile file) throws IOException {
         final String fileName = getFileName(file);
         final String extension = getFileExtension(fileName);
         validateImageExtension(extension);
@@ -90,7 +90,7 @@ public class S3ServiceImpl implements S3Service {
         return upload(file, fileName);
     }
 
-    public String uploadFile(final MultipartFile file) throws IOException {
+    private String uploadFile(final MultipartFile file) throws IOException {
         final String fileName = getFileName(file);
         final String extension = getFileExtension(fileName);
         validateFileExtension(extension);
@@ -121,13 +121,13 @@ public class S3ServiceImpl implements S3Service {
         }
     }
 
-    public void validateImageExtension(final String extension) {
+    private void validateImageExtension(final String extension) {
         if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
             throw new InvalidExtensionException();
         }
     }
 
-    public void validateFileExtension(final String extension) {
+    private void validateFileExtension(final String extension) {
         if (!PERMISSION_FILE_EXTENSIONS.contains(extension)) {
             throw new InvalidExtensionException();
         }

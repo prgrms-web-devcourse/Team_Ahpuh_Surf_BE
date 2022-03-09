@@ -3,7 +3,7 @@ package org.ahpuh.surf.jwt;
 import org.ahpuh.surf.common.exception.jwt.TokenNotFoundException;
 import org.ahpuh.surf.common.exception.jwt.UserInformationNotFoundException;
 
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import java.util.Objects;
 
 public class JwtAuthentication {
 
@@ -12,11 +12,11 @@ public class JwtAuthentication {
     public final String email;
 
     public JwtAuthentication(final String token, final Long userId, final String email) {
-        if (!isNotEmpty(token))
+        if (Objects.isNull(token))
             throw new TokenNotFoundException();
-        if (userId == null)
+        if (Objects.isNull(userId))
             throw new UserInformationNotFoundException();
-        if (!isNotEmpty(email))
+        if (Objects.isNull(email))
             throw new UserInformationNotFoundException();
 
         this.token = token;
