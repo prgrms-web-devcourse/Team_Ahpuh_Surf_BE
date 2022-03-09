@@ -106,7 +106,7 @@ public class PostService {
     public List<PostsOfMonthResponseDto> getPostsOfMonth(final Long userId, final Integer year, final Integer month) {
         if (Objects.isNull(year) | Objects.isNull(month)) {
             throw new InvalidPeriodException();
-        } else if (year < 1900 | month > 12 | month < 1) {
+        } else if (month > 12 | month < 1) {
             throw new InvalidPeriodException();
         }
         final LocalDate startDate = LocalDate.of(year, month, 1);
@@ -117,10 +117,11 @@ public class PostService {
 
     public PostsRecentScoreResponseDto getRecentScore(final Long categoryId) {
         final Category category = getCategory(categoryId);
-        final Integer recentScore = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category)
-                .getScore();
-
-        return new PostsRecentScoreResponseDto(recentScore);
+        Optional<Post> findedPost = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category);
+        
+        return findedPost.isEmpty()
+                ? new PostsRecentScoreResponseDto(null)
+                : new PostsRecentScoreResponseDto(findedPost.get().getScore());
     }
 
     public List<PostCountResponseDto> getPostCountsOfYear(final int year, final Long userId) {
