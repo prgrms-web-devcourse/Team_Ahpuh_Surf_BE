@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryQuerydsl {
 
@@ -14,6 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
     List<Post> findAllByCategoryOrderBySelectedDateDesc(Category category, Pageable page);
 
-    Post findTop1ByCategoryOrderBySelectedDateDesc(Category category);
+    Optional<Post> findTop1ByCategoryOrderBySelectedDateDesc(Category category);
 
 }
