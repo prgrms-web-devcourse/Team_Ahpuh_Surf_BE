@@ -117,10 +117,11 @@ public class PostService {
 
     public PostsRecentScoreResponseDto getRecentScore(final Long categoryId) {
         final Category category = getCategory(categoryId);
-        final Integer recentScore = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category)
-                .getScore();
-
-        return new PostsRecentScoreResponseDto(recentScore);
+        Optional<Post> findedPost = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category);
+        
+        return findedPost.isEmpty()
+                ? new PostsRecentScoreResponseDto(null)
+                : new PostsRecentScoreResponseDto(findedPost.get().getScore());
     }
 
     public List<PostCountResponseDto> getPostCountsOfYear(final int year, final Long userId) {
