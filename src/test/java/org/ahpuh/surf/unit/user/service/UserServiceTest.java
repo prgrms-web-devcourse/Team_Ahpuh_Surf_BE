@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.io.IOException;
 import java.util.Optional;
 
+import static org.ahpuh.surf.common.factory.MockFileFactory.createEmptyImageFile;
 import static org.ahpuh.surf.common.factory.MockUserFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -228,7 +229,7 @@ public class UserServiceTest {
                 // Given
                 final MockMultipartFile file = mock(MockMultipartFile.class);
                 given(s3Service.uploadUserImage(file))
-                        .willReturn("imageUrl");
+                        .willReturn(Optional.of("imageUrl"));
                 final User mockUser = mock(User.class);
                 given(userRepository.findById(anyLong()))
                         .willReturn(Optional.of(mockUser));
@@ -259,7 +260,7 @@ public class UserServiceTest {
                         .willReturn(Optional.of(mockUser));
 
                 // When
-                userService.update(1L, createUserUpdateRequestDto(), null);
+                userService.update(1L, createUserUpdateRequestDto(), createEmptyImageFile());
 
                 // Then
                 verify(s3Service, times(0))

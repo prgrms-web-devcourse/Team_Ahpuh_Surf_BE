@@ -9,6 +9,9 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ahpuh.surf.common.exception.s3.InvalidExtensionException;
+import org.ahpuh.surf.common.exception.s3.InvalidFileNameException;
+import org.ahpuh.surf.common.exception.s3.UploadFailException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @NoArgsConstructor
@@ -54,70 +58,78 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Transactional
-    public String uploadUserImage(final MultipartFile profilePhoto) throws IOException {
+    public Optional<String> uploadUserImage(final MultipartFile profilePhoto) throws IOException {
         return profilePhoto.isEmpty()
-                ? null
-                : uploadImg(profilePhoto);
+                ? Optional.empty()
+                : Optional.ofNullable(uploadImg(profilePhoto));
     }
 
     @Transactional
-    public FileStatus uploadPostFile(final MultipartFile file) throws IOException {
+    public Optional<FileStatus> uploadPostFile(final MultipartFile file) throws IOException {
         if (file.isEmpty()) {
-            String fileUrl = uploadFile(file);
-            if (fileUrl != null) {
-                return new FileStatus(fileUrl, FileType.FILE);
-            }
-
-            fileUrl = uploadImg(file);
-            if (fileUrl != null) {
-                return new FileStatus(fileUrl, FileType.IMG);
-            }
+            return Optional.empty();
         }
-        return null;
+
+        String fileUrl = uploadFile(file);
+        if (!Objects.isNull(fileUrl)) {
+            return Optional.of(new FileStatus(fileUrl, FileType.FILE));
+        }
+        fileUrl = uploadImg(file);
+        if (!Objects.isNull(fileUrl)) {
+            return Optional.of(new FileStatus(fileUrl, FileType.IMG));
+        }
+
+        throw new UploadFailException();
     }
 
     public String uploadImg(final MultipartFile file) throws IOException {
-        final String fileName = file.getOriginalFilename();
-        Objects.requireNonNull(fileName);
+        final String fileName = getFileName(file);
         final String extension = getFileExtension(fileName);
+        validateImageExtension(extension);
 
-        return validateImageExtension(extension)
-                ? upload(file, fileName)
-                : null;
+        return upload(file, fileName);
     }
 
     public String uploadFile(final MultipartFile file) throws IOException {
-        final String fileName = file.getOriginalFilename();
-        Objects.requireNonNull(fileName);
+        final String fileName = getFileName(file);
         final String extension = getFileExtension(fileName);
+        validateFileExtension(extension);
 
-        return validateFileExtension(extension)
-                ? upload(file, fileName)
-                : null;
+        return upload(file, fileName);
     }
 
     private String upload(final MultipartFile file, final String fileName) throws IOException {
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+        return String.valueOf(s3Client.getUrl(bucket, fileName));
+    }
+
+    private String getFileName(final MultipartFile file) {
+        final String fileName = file.getOriginalFilename();
+        if (Objects.isNull(fileName)) {
+            throw new InvalidFileNameException();
+        }
+        return fileName;
     }
 
     private String getFileExtension(final String fileName) {
         final int index = fileName.lastIndexOf(".");
-        return (index > 0)
-                ? fileName.substring(index + 1)
-                : null;
-    }
-
-    public boolean validateImageExtension(final String extension) {
-        if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
-            log.info("{}은(는) 지원하지 않는 파일 확장자입니다.", extension);
-            return false;
+        if (index > 0 && fileName.length() > index + 1) {
+            return fileName.substring(index + 1);
+        } else {
+            throw new InvalidExtensionException();
         }
-        return true;
     }
 
-    public boolean validateFileExtension(final String extension) {
-        return PERMISSION_FILE_EXTENSIONS.contains(extension);
+    public void validateImageExtension(final String extension) {
+        if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
+            throw new InvalidExtensionException();
+        }
+    }
+
+    public void validateFileExtension(final String extension) {
+        if (!PERMISSION_FILE_EXTENSIONS.contains(extension)) {
+            throw new InvalidExtensionException();
+        }
     }
 }

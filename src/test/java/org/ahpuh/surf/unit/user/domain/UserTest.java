@@ -22,6 +22,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPost;
 import static org.ahpuh.surf.common.factory.MockUserFactory.*;
@@ -91,7 +93,7 @@ public class UserTest {
         void updateUser_WIthPasswordAndProfileImage() {
             // Given
             final UserUpdateRequestDto updateRequest = createUserUpdateRequestDto();
-            final String profilePhotoUrl = "update";
+            final Optional<String> profilePhotoUrl = Optional.of("update");
 
             // When
             mockUser.update(passwordEncoder, updateRequest, profilePhotoUrl);
@@ -113,7 +115,7 @@ public class UserTest {
             // Given
             final User savedUser = createSavedUserWithProfileImage();
             final UserUpdateRequestDto updateRequest = createUserUpdateRequestDto();
-            final String profilePhotoUrl = null;
+            final Optional<String> profilePhotoUrl = Optional.empty();
 
             // When
             savedUser.update(passwordEncoder, updateRequest, profilePhotoUrl);
@@ -135,7 +137,7 @@ public class UserTest {
             // Given
             final User savedUser = createSavedUserWithProfileImage();
             final UserUpdateRequestDto updateRequest = createUserUpdateRequestDtoWithNoPassword();
-            final String profilePhotoUrl = "update";
+            final Optional<String> profilePhotoUrl = Optional.of("update");
 
             // When
             savedUser.update(passwordEncoder, updateRequest, profilePhotoUrl);
@@ -157,7 +159,7 @@ public class UserTest {
             // Given
             final User savedUser = createSavedUserWithProfileImage();
             final UserUpdateRequestDto updateRequest = createUserUpdateRequestDtoWithNoPassword();
-            final String profilePhotoUrl = null;
+            final Optional<String> profilePhotoUrl = Optional.empty();
 
             // When
             savedUser.update(passwordEncoder, updateRequest, profilePhotoUrl);

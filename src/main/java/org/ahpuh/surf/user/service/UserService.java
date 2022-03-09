@@ -2,6 +2,7 @@ package org.ahpuh.surf.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ahpuh.surf.common.exception.ApplicationException;
 import org.ahpuh.surf.common.exception.s3.UploadFailException;
 import org.ahpuh.surf.common.exception.user.DuplicatedEmailException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -68,14 +69,15 @@ public class UserService {
 
     @Transactional
     public void update(final Long userId, final UserUpdateRequestDto updateDto, final MultipartFile profilePhoto) {
-        String profilePhotoUrl = null;
-        if (profilePhoto != null) {
+        Optional<String> profilePhotoUrl = Optional.empty();
+        if (!profilePhoto.isEmpty()) {
             try {
                 profilePhotoUrl = s3Service.uploadUserImage(profilePhoto);
-            } catch (final IOException e) {
-                log.info("파일이 존재하지 않습니다.");
+            } catch (final ApplicationException e) {
                 e.printStackTrace();
+                throw e;
             } catch (final Exception e) {
+                e.printStackTrace();
                 throw new UploadFailException();
             }
         }
