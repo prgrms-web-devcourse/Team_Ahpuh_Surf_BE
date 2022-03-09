@@ -9,8 +9,8 @@ import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.common.exception.like.DuplicatedLikeException;
 import org.ahpuh.surf.common.exception.post.FavoriteInvalidUserException;
 import org.ahpuh.surf.like.domain.Like;
-import org.ahpuh.surf.s3.FileStatus;
-import org.ahpuh.surf.s3.FileType;
+import org.ahpuh.surf.s3.domain.FileStatus;
+import org.ahpuh.surf.s3.domain.FileType;
 import org.ahpuh.surf.user.domain.User;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -83,7 +83,7 @@ public class Post extends BaseEntity {
     }
 
     public void updateFile(final FileStatus fileStatus) {
-        if (fileStatus.fileType().equals(FileType.IMG)) {
+        if (fileStatus.fileType().equals(FileType.IMAGE)) {
             this.imageUrl = fileStatus.fileUrl();
             this.fileUrl = null;
         } else if (fileStatus.fileType().equals(FileType.FILE)) {

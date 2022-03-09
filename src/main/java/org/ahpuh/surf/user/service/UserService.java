@@ -7,7 +7,7 @@ import org.ahpuh.surf.common.exception.user.DuplicatedEmailException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
-import org.ahpuh.surf.s3.S3Service;
+import org.ahpuh.surf.s3.service.S3Service;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserConverter;
 import org.ahpuh.surf.user.domain.UserRepository;

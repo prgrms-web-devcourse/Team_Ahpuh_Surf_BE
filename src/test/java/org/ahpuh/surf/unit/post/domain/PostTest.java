@@ -5,8 +5,8 @@ import org.ahpuh.surf.common.exception.like.DuplicatedLikeException;
 import org.ahpuh.surf.common.exception.post.FavoriteInvalidUserException;
 import org.ahpuh.surf.like.domain.Like;
 import org.ahpuh.surf.post.domain.Post;
-import org.ahpuh.surf.s3.FileStatus;
-import org.ahpuh.surf.s3.FileType;
+import org.ahpuh.surf.s3.domain.FileStatus;
+import org.ahpuh.surf.s3.domain.FileType;
 import org.ahpuh.surf.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -54,7 +54,7 @@ public class PostTest {
             final User user = createMockUser();
             final Category category = createMockCategory(user);
             final Post post = createMockPost(user, category);
-            final FileStatus fileStatus = new FileStatus("updateImageUrl", FileType.IMG);
+            final FileStatus fileStatus = new FileStatus("updateImageUrl", FileType.IMAGE);
 
             // When
             post.updateFile(fileStatus);

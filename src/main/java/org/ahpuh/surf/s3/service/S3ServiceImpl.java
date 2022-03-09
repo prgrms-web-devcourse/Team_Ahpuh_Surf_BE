@@ -1,4 +1,4 @@
-package org.ahpuh.surf.s3;
+package org.ahpuh.surf.s3.service;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -10,6 +10,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.ahpuh.surf.common.exception.s3.InvalidExtensionException;
 import org.ahpuh.surf.common.exception.s3.InvalidFileNameException;
 import org.ahpuh.surf.common.exception.s3.UploadFailException;
+import org.ahpuh.surf.s3.domain.FileStatus;
+import org.ahpuh.surf.s3.domain.FileType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -72,7 +74,7 @@ public class S3ServiceImpl implements S3Service {
         }
         fileUrl = uploadImg(file);
         if (!Objects.isNull(fileUrl)) {
-            return Optional.of(new FileStatus(fileUrl, FileType.IMG));
+            return Optional.of(new FileStatus(fileUrl, FileType.IMAGE));
         }
 
         throw new UploadFailException();

@@ -1,5 +1,6 @@
-package org.ahpuh.surf.s3;
+package org.ahpuh.surf.s3.service;
 
+import org.ahpuh.surf.s3.domain.FileStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

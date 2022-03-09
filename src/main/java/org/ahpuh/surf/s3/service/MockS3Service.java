@@ -1,10 +1,10 @@
-package org.ahpuh.surf.s3;
+package org.ahpuh.surf.s3.service;
 
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.common.exception.s3.InvalidExtensionException;
 import org.ahpuh.surf.common.exception.s3.InvalidFileNameException;
 import org.ahpuh.surf.common.exception.s3.UploadFailException;
+import org.ahpuh.surf.s3.domain.FileStatus;
+import org.ahpuh.surf.s3.domain.FileType;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class MockS3Service implements S3Service {
     public Optional<String> uploadUserImage(final MultipartFile profilePhoto) {
         return profilePhoto.isEmpty()
                 ? Optional.empty()
-                : Optional.ofNullable(uploadImg(profilePhoto));
+                : Optional.of(uploadImg(profilePhoto));
     }
 
     @Transactional
@@ -40,7 +40,7 @@ public class MockS3Service implements S3Service {
         }
         fileUrl = uploadImg(file);
         if (!Objects.isNull(fileUrl)) {
-            return Optional.of(new FileStatus(fileUrl, FileType.IMG));
+            return Optional.of(new FileStatus(fileUrl, FileType.IMAGE));
         }
 
         throw new UploadFailException();
