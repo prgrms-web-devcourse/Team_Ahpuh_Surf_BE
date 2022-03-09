@@ -1,7 +1,6 @@
 package org.ahpuh.surf.post.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
@@ -18,8 +17,8 @@ import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
 import org.ahpuh.surf.post.dto.response.*;
-import org.ahpuh.surf.s3.FileStatus;
-import org.ahpuh.surf.s3.S3Service;
+import org.ahpuh.surf.s3.domain.FileStatus;
+import org.ahpuh.surf.s3.service.S3Service;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service

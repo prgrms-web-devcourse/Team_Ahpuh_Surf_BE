@@ -5,10 +5,10 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Component
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "jwt")
+@Component
 public class JwtConfig {
 
     private String header;

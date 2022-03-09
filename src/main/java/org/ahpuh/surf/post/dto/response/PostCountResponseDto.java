@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostCountResponseDto {
@@ -16,6 +15,7 @@ public class PostCountResponseDto {
     private LocalDate date;
     private Long count;
 
+    @Builder
     @QueryProjection
     public PostCountResponseDto(final LocalDate date, final Long count) {
         this.date = date;

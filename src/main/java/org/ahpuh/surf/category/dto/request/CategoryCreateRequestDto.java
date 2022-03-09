@@ -7,9 +7,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
+@Builder
 public class CategoryCreateRequestDto {
 
     @NotBlank(message = "Category name must not be blank.")

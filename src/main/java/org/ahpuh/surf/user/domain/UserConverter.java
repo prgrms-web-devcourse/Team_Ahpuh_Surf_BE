@@ -6,8 +6,8 @@ import org.ahpuh.surf.user.dto.response.UserFindInfoResponseDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class UserConverter {
 
     private final PasswordEncoder bCryptEncoder;

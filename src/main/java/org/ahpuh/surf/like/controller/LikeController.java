@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/v1/posts/{postId}")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/posts/{postId}")
+@RestController
 public class LikeController {
 
     private final LikeService likeService;

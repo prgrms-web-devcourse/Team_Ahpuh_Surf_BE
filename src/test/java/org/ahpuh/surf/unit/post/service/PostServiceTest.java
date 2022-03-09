@@ -4,7 +4,7 @@ import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.post.domain.PostConverter;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.post.service.PostService;
-import org.ahpuh.surf.s3.S3Service;
+import org.ahpuh.surf.s3.service.S3Service;
 import org.ahpuh.surf.user.domain.UserRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,14 +1,13 @@
 package org.ahpuh.surf.user.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.common.exception.ApplicationException;
 import org.ahpuh.surf.common.exception.s3.UploadFailException;
 import org.ahpuh.surf.common.exception.user.DuplicatedEmailException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
-import org.ahpuh.surf.s3.S3Service;
+import org.ahpuh.surf.s3.service.S3Service;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserConverter;
 import org.ahpuh.surf.user.domain.UserRepository;
@@ -25,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
