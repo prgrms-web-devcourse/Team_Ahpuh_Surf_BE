@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -36,18 +37,18 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         final HttpServletRequest request = (HttpServletRequest) req;
         final HttpServletResponse response = (HttpServletResponse) res;
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
             final String token = getToken(request);
-            if (token != null) {
+            if (!Objects.isNull(token)) {
                 try {
                     final Claims claims = verify(token);
                     log.debug("Jwt parse result: {}", claims);
 
-                    final Long userId = claims.userId;
-                    final String email = claims.email;
+                    final Long userId = claims.getUserId();
+                    final String email = claims.getEmail();
                     final List<GrantedAuthority> authorities = getAuthorities(claims);
 
-                    if (userId != null && isNotEmpty(email) && authorities.size() > 0) {
+                    if (!Objects.isNull(userId) && !Objects.isNull(email) && authorities.size() > 0) {
                         final JwtAuthenticationToken authentication =
                                 new JwtAuthenticationToken(new JwtAuthentication(token, userId, email), null, authorities);
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -83,8 +84,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
     private List<GrantedAuthority> getAuthorities(final Claims claims) {
-        final String[] roles = claims.roles;
-        return roles == null || roles.length == 0
+        final String[] roles = claims.getRoles();
+        return Objects.isNull(roles) || roles.length == 0
                 ? emptyList()
                 : Arrays.stream(roles).map(SimpleGrantedAuthority::new).collect(toList());
     }

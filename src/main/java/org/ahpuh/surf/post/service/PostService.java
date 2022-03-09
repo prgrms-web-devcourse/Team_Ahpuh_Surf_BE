@@ -73,9 +73,9 @@ public class PostService {
     }
 
     public PostReadResponseDto readPost(final Long userId, final Long postId) {
-        final PostReadResponseDto responseDto = postRepository.findPost(postId, userId)
+        return postRepository.findPost(postId, userId)
+                .map(PostReadResponseDto::likeCheck)
                 .orElseThrow(PostNotFoundException::new);
-        return responseDto.likeCheck();
     }
 
     @Transactional
@@ -106,7 +106,7 @@ public class PostService {
     }
 
     public List<PostsOfMonthResponseDto> getPostsOfMonth(final Long userId, final Integer year, final Integer month) {
-        if (year == null | month == null) {
+        if (Objects.isNull(year) | Objects.isNull(month)) {
             throw new InvalidPeriodException();
         } else if (year < 1900 | month > 12 | month < 1) {
             throw new InvalidPeriodException();
@@ -139,7 +139,7 @@ public class PostService {
 
     public CursorResult<RecentPostResponseDto> recentAllPosts(final Long userId, final Long cursorId) {
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
-        final List<RecentPostResponseDto> postDtos = findPost == null
+        final List<RecentPostResponseDto> postDtos = Objects.isNull(findPost)
                 ? postRepository.findAllRecentPost(userId, PAGE)
                 : postRepository.findAllRecentPostByCursor(userId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
 
@@ -156,7 +156,7 @@ public class PostService {
         }
 
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
-        final List<ExploreResponseDto> exploreDtos = findPost == null
+        final List<ExploreResponseDto> exploreDtos = Objects.isNull(findPost)
                 ? postRepository.findFollowingPosts(userId, PAGE)
                 : postRepository.findFollowingPostsByCursor(userId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
 
@@ -168,7 +168,7 @@ public class PostService {
 
     public CursorResult<AllPostResponseDto> getAllPostByUser(final Long userId, final Long postUserId, final Long cursorId) {
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
-        final List<AllPostResponseDto> postDtos = findPost == null
+        final List<AllPostResponseDto> postDtos = Objects.isNull(findPost)
                 ? postRepository.findAllPostOfUser(userId, postUserId, PAGE)
                 : postRepository.findAllPostOfUserByCursor(userId, postUserId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
 
@@ -180,7 +180,7 @@ public class PostService {
 
     public CursorResult<AllPostResponseDto> getAllPostByCategory(final Long userId, final Long categoryId, final Long cursorId) {
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
-        final List<AllPostResponseDto> postDtos = findPost == null
+        final List<AllPostResponseDto> postDtos = Objects.isNull(findPost)
                 ? postRepository.findAllPostOfCategory(userId, categoryId, PAGE)
                 : postRepository.findAllPostOfCategoryByCursor(userId, categoryId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
 
@@ -206,12 +206,11 @@ public class PostService {
     }
 
     private boolean hasNextCheck(final List<?> postList) {
-        boolean hasNext = false;
         if (postList.size() == PAGE.getPageSize()) {
-            hasNext = true;
             postList.remove(PAGE.getPageSize() - 1);
+            return true;
         }
-        return hasNext;
+        return false;
     }
 
     private Optional<FileStatus> fileUpload(final MultipartFile file) {

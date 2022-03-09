@@ -48,7 +48,7 @@ public class MockS3Service implements S3Service {
         throw new UploadFailException();
     }
 
-    public String uploadImg(final MultipartFile file) {
+    private String uploadImg(final MultipartFile file) {
         final String fileName = getFileName(file);
         final String extension = getFileExtension(fileName);
         validateImageExtension(extension);
@@ -56,7 +56,7 @@ public class MockS3Service implements S3Service {
         return "mock upload";
     }
 
-    public String uploadFile(final MultipartFile file) {
+    private String uploadFile(final MultipartFile file) {
         final String fileName = getFileName(file);
         final String extension = getFileExtension(fileName);
         validateFileExtension(extension);
@@ -81,13 +81,13 @@ public class MockS3Service implements S3Service {
         }
     }
 
-    public void validateImageExtension(final String extension) {
+    private void validateImageExtension(final String extension) {
         if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
             throw new InvalidExtensionException();
         }
     }
 
-    public void validateFileExtension(final String extension) {
+    private void validateFileExtension(final String extension) {
         if (!PERMISSION_FILE_EXTENSIONS.contains(extension)) {
             throw new InvalidExtensionException();
         }

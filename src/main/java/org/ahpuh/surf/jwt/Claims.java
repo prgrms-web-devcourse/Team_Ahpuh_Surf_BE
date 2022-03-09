@@ -3,18 +3,20 @@ package org.ahpuh.surf.jwt;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Claims {
 
-    public Long userId;
-    public String email;
-    public String[] roles;
-    public Date iat;
-    public Date exp;
+    private Long userId;
+    private String email;
+    private String[] roles;
+    private Date iat;
+    private Date exp;
 
     public Claims(final DecodedJWT decodedJWT) {
         final Claim userId = decodedJWT.getClaim("user_id");

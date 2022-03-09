@@ -98,7 +98,7 @@ public class User extends BaseEntity {
     }
 
     public boolean checkPassword(final PasswordEncoder passwordEncoder, final String credentials) {
-        if (credentials == null) {
+        if (Objects.isNull(credentials)) {
             throw new InvalidPasswordException();
         }
         if (!passwordEncoder.matches(credentials, password)) {
