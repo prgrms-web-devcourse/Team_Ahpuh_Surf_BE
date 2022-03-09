@@ -39,6 +39,8 @@ public enum ExceptionType {
     INVALID_LIKE_REQUEST(HttpStatus.BAD_REQUEST, "해당 게시글에 대한 좋아요 기록이 아닙니다."),
 
     // S3
+    INVALID_FILENAME(HttpStatus.BAD_REQUEST, "파일 이름이 없습니다."),
+    INVALID_EXTENSION(HttpStatus.BAD_REQUEST, "파일의 확장자가 잘못되었습니다."),
     UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패하였습니다.");
 
     private final HttpStatus httpStatus;
