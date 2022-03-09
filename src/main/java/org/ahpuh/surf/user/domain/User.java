@@ -20,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -110,17 +112,15 @@ public class User extends BaseEntity {
         this.permission = permission;
     }
 
-    public void update(final PasswordEncoder passwordEncoder, final UserUpdateRequestDto request, final String profilePhotoUrl) {
+    public void update(final PasswordEncoder passwordEncoder, final UserUpdateRequestDto request, final Optional<String> profilePhotoUrl) {
+        if (!Objects.isNull(request.getPassword())) {
+            this.password = passwordEncoder.encode(request.getPassword());
+        }
         this.userName = request.getUserName();
         this.url = request.getUrl();
         this.aboutMe = request.getAboutMe();
         this.accountPublic = request.getAccountPublic();
-        if (request.getPassword() != null) {
-            this.password = passwordEncoder.encode(request.getPassword());
-        }
-        if (profilePhotoUrl != null) {
-            this.profilePhotoUrl = profilePhotoUrl;
-        }
+        profilePhotoUrl.ifPresent(s -> this.profilePhotoUrl = s);
     }
 
     public void addCategory(final Category category) {

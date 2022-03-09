@@ -6,6 +6,7 @@ import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.domain.CategoryRepository;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.cursor.CursorResult;
+import org.ahpuh.surf.common.exception.ApplicationException;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.common.exception.category.NoCategoryFromUserException;
 import org.ahpuh.surf.common.exception.post.*;
@@ -27,9 +28,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -47,16 +49,15 @@ public class PostService {
 
     @Transactional
     public Long create(final Long userId, final PostRequestDto request, final MultipartFile file) {
-        final FileStatus fileStatus = fileUpload(file);
         final User user = getUser(userId);
         final Category category = user.getCategories()
                 .stream()
                 .filter(categoryFromUser -> categoryFromUser.getCategoryId().equals(request.getCategoryId()))
                 .findFirst()
                 .orElseThrow(NoCategoryFromUserException::new);
-
         final Post post = postConverter.toEntity(user, category, request);
-        updateFileInfo(fileStatus, post);
+
+        fileUpload(file).ifPresent(post::updateFile);
 
         return postRepository.save(post)
                 .getPostId();
@@ -68,8 +69,7 @@ public class PostService {
         final Post post = getPost(postId);
         post.updatePost(category, LocalDate.parse(request.getSelectedDate()), request.getContent(), request.getScore());
 
-        final FileStatus fileStatus = fileUpload(file);
-        updateFileInfo(fileStatus, post);
+        fileUpload(file).ifPresent(post::updateFile);
     }
 
     public PostReadResponseDto readPost(final Long userId, final Long postId) {
@@ -214,24 +214,19 @@ public class PostService {
         return hasNext;
     }
 
-    private void updateFileInfo(final FileStatus fileStatus, final Post post) {
-        if (fileStatus != null) {
-            post.updateFile(fileStatus);
+    private Optional<FileStatus> fileUpload(final MultipartFile file) {
+        if (file.isEmpty()) {
+            return Optional.empty();
         }
-    }
 
-    private FileStatus fileUpload(final MultipartFile file) {
-        FileStatus fileStatus = null;
-        if (file != null) {
-            try {
-                fileStatus = s3Service.uploadPostFile(file);
-            } catch (final IOException e) {
-                log.info("파일이 존재하지 않습니다.");
-                e.printStackTrace();
-            } catch (final Exception e) {
-                throw new UploadFailException();
-            }
+        try {
+            return s3Service.uploadPostFile(file);
+        } catch (final ApplicationException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (final Exception e) {
+            e.printStackTrace();
+            throw new UploadFailException();
         }
-        return fileStatus;
     }
 }
