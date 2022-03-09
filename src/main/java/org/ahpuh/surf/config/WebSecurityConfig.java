@@ -24,9 +24,9 @@ import org.springframework.web.cors.CorsUtils;
 
 import javax.servlet.http.HttpServletResponse;
 
-@EnableWebSecurity
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtConfig jwtConfig;

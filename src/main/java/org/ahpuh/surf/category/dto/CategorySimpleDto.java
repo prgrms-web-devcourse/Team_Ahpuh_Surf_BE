@@ -9,9 +9,9 @@ import org.ahpuh.surf.post.dto.PostScoreDto;
 
 import java.util.List;
 
-@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class CategorySimpleDto {
 
     private Long categoryId;

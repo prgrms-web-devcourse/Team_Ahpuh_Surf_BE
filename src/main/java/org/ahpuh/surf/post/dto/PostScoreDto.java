@@ -12,13 +12,13 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostScoreDto {
 
-    private LocalDate x;    // selectedDate
-    private int y;          // score
+    private LocalDate selectedDate;
+    private int score;
 
     @Builder
     @QueryProjection
     public PostScoreDto(final LocalDate selectedDate, final int score) {
-        this.x = selectedDate;
-        this.y = score;
+        this.selectedDate = selectedDate;
+        this.score = score;
     }
 }

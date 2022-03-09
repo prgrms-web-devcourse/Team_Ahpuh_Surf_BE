@@ -47,8 +47,8 @@ public class PostConverter {
                         .findFirst()
                         .map(categorySimpleDto -> categorySimpleDto.getPostScores()
                                 .add(PostScoreDto.builder()
-                                        .x(postScoreCategoryDto.getSelectedDate())
-                                        .y(postScoreCategoryDto.getScore())
+                                        .selectedDate(postScoreCategoryDto.getSelectedDate())
+                                        .score(postScoreCategoryDto.getScore())
                                         .build()));
             } else {
                 throw new CategoryNotFoundException();
