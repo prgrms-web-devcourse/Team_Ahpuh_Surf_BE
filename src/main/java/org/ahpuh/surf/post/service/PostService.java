@@ -150,11 +150,6 @@ public class PostService {
     }
 
     public CursorResult<ExploreResponseDto> followExplore(final Long userId, final Long cursorId) {
-        final User user = getUser(userId);
-        if (user.getFollowing().isEmpty()) {
-            return new CursorResult<>(List.of(), false);
-        }
-
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
         final List<ExploreResponseDto> exploreDtos = Objects.isNull(findPost)
                 ? postRepository.findFollowingPosts(userId, PAGE)
