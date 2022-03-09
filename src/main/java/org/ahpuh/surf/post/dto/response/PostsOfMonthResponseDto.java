@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 public class PostsOfMonthResponseDto {
 
     private String categoryName;
@@ -22,6 +21,7 @@ public class PostsOfMonthResponseDto {
     private String fileUrl;
     private LocalDate selectedDate;
 
+    @Builder
     @QueryProjection
     public PostsOfMonthResponseDto(final String categoryName,
                                    final String colorCode,

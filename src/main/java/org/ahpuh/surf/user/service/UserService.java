@@ -1,7 +1,6 @@
 package org.ahpuh.surf.user.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.ahpuh.surf.common.exception.ApplicationException;
 import org.ahpuh.surf.common.exception.s3.UploadFailException;
 import org.ahpuh.surf.common.exception.user.DuplicatedEmailException;
@@ -25,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service

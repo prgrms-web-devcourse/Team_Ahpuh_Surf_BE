@@ -1,15 +1,16 @@
 package org.ahpuh.surf.post.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class RecentPostResponseDto {
 
     private Long userId;
@@ -28,6 +29,7 @@ public class RecentPostResponseDto {
     private Long likeId;
     private boolean isLiked;
 
+    @Builder
     @QueryProjection
     public RecentPostResponseDto(final Long userId,
                                  final String userName,

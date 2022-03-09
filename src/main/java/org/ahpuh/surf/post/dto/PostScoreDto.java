@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostScoreDto {
 
     private LocalDate x;    // selectedDate
     private int y;          // score
 
+    @Builder
     @QueryProjection
     public PostScoreDto(final LocalDate selectedDate, final int score) {
         this.x = selectedDate;

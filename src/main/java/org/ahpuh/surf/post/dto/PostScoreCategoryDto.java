@@ -10,7 +10,6 @@ import org.ahpuh.surf.category.domain.Category;
 import java.time.LocalDate;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostScoreCategoryDto {
 
@@ -18,6 +17,7 @@ public class PostScoreCategoryDto {
     private LocalDate selectedDate;
     private int score;
 
+    @Builder
     @QueryProjection
     public PostScoreCategoryDto(final Category category, final LocalDate selectedDate, final int score) {
         this.category = category;
