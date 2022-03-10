@@ -2,8 +2,10 @@ package org.ahpuh.surf.post.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
-import org.ahpuh.surf.post.dto.QPostScoreCategoryDto;
+import org.ahpuh.surf.category.domain.Category;
+import org.ahpuh.surf.category.dto.CategorySimpleDto;
+import org.ahpuh.surf.post.domain.Post;
+import org.ahpuh.surf.post.dto.PostScoreDto;
 import org.ahpuh.surf.post.dto.response.*;
 import org.ahpuh.surf.user.domain.User;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +13,12 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 import static org.ahpuh.surf.follow.domain.QFollow.follow;
 import static org.ahpuh.surf.like.domain.QLike.like;
 import static org.ahpuh.surf.post.domain.QPost.post;
@@ -79,17 +85,27 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     }
 
     @Override
-    public List<PostScoreCategoryDto> findAllScoreWithCategoryByUser(final User user) {
-        return queryFactory
-                .select(new QPostScoreCategoryDto(
-                        post.category.as("category"),
-                        post.selectedDate.as("selectedDate"),
-                        post.score.as("score")
-                ))
+    public List<CategorySimpleDto> findAllScoreWithCategoryByUser(final Long userId) {
+        final Map<Category, List<Post>> transform = queryFactory
                 .from(post)
-                .where(post.user.eq(user))
+                .where(post.user.userId.eq(userId))
                 .orderBy(post.category.categoryId.asc(), post.selectedDate.asc())
-                .fetch();
+                .transform(groupBy(post.category).as(list(post)));
+
+        return transform.entrySet().stream()
+                .map(entry ->
+                        CategorySimpleDto.builder()
+                                .categoryId(entry.getKey().getCategoryId())
+                                .categoryName(entry.getKey().getName())
+                                .colorCode(entry.getKey().getColorCode())
+                                .postScores(entry.getValue().stream()
+                                        .map(post -> PostScoreDto.builder()
+                                                .selectedDate(post.getSelectedDate())
+                                                .score(post.getScore())
+                                                .build())
+                                        .collect(Collectors.toList()))
+                                .build())
+                .toList();
     }
 
     @Override

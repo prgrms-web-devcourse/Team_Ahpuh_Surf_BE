@@ -14,7 +14,6 @@ import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.PostConverter;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
-import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
 import org.ahpuh.surf.post.dto.response.*;
 import org.ahpuh.surf.s3.domain.FileStatus;
@@ -130,10 +129,7 @@ public class PostService {
     }
 
     public List<CategorySimpleDto> getScoresOfCategoryByUser(final Long userId) {
-        final User user = getUser(userId);
-        final List<PostScoreCategoryDto> posts = postRepository.findAllScoreWithCategoryByUser(user);
-        final List<Category> categories = categoryRepository.findByUser(user);
-        return postConverter.sortPostScoresByCategory(posts, categories);
+        return postRepository.findAllScoreWithCategoryByUser(userId);
     }
 
     public CursorResult<RecentPostResponseDto> recentAllPosts(final Long userId, final Long cursorId) {

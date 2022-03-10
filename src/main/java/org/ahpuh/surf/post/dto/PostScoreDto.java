@@ -1,24 +1,17 @@
 package org.ahpuh.surf.post.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@Builder
 public class PostScoreDto {
 
     private LocalDate selectedDate;
+
     private int score;
 
-    @Builder
-    @QueryProjection
-    public PostScoreDto(final LocalDate selectedDate, final int score) {
-        this.selectedDate = selectedDate;
-        this.score = score;
-    }
 }

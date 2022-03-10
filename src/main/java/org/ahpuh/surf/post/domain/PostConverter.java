@@ -1,18 +1,11 @@
 package org.ahpuh.surf.post.domain;
 
 import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.category.dto.CategorySimpleDto;
-import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
-import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
-import org.ahpuh.surf.post.dto.PostScoreDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
 import org.ahpuh.surf.user.domain.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PostConverter {
@@ -21,40 +14,9 @@ public class PostConverter {
         return Post.builder()
                 .user(user)
                 .category(category)
-                .selectedDate(LocalDate.parse(request.getSelectedDate())) // yyyy-mm-dd
+                .selectedDate(LocalDate.parse(request.getSelectedDate()))
                 .content(request.getContent())
                 .score(request.getScore())
                 .build();
-    }
-
-    public List<CategorySimpleDto> sortPostScoresByCategory(
-            final List<PostScoreCategoryDto> posts,
-            final List<Category> categories) {
-
-        final List<CategorySimpleDto> categorySimpleDtos = categories.stream()
-                .map(category -> new CategorySimpleDto(
-                        category.getCategoryId(),
-                        category.getName(),
-                        category.getColorCode(),
-                        new ArrayList<>()))
-                .collect(Collectors.toList());
-
-        posts.forEach(postScoreCategoryDto -> {
-            final Category category = postScoreCategoryDto.getCategory();
-            if (categories.contains(category)) {
-                categorySimpleDtos.stream()
-                        .filter(categorySimpleDto -> categorySimpleDto.getCategoryId().equals(category.getCategoryId()))
-                        .findFirst()
-                        .map(categorySimpleDto -> categorySimpleDto.getPostScores()
-                                .add(PostScoreDto.builder()
-                                        .selectedDate(postScoreCategoryDto.getSelectedDate())
-                                        .score(postScoreCategoryDto.getScore())
-                                        .build()));
-            } else {
-                throw new CategoryNotFoundException();
-            }
-        });
-
-        return categorySimpleDtos;
     }
 }
