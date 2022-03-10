@@ -1,6 +1,6 @@
 package org.ahpuh.surf.post.domain.repository;
 
-import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
+import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.post.dto.response.*;
 import org.ahpuh.surf.user.domain.User;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +18,7 @@ public interface PostRepositoryQuerydsl {
 
     List<PostCountResponseDto> findEachDateAndCountOfYearByUser(int year, User user);
 
-    List<PostScoreCategoryDto> findAllScoreWithCategoryByUser(User user);
+    List<CategorySimpleDto> findAllScoreWithCategoryByUser(Long userId);
 
     List<RecentPostResponseDto> findAllRecentPost(Long userId, Pageable page);
 

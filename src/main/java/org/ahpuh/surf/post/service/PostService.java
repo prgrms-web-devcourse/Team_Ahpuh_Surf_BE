@@ -130,10 +130,7 @@ public class PostService {
     }
 
     public List<CategorySimpleDto> getScoresOfCategoryByUser(final Long userId) {
-        final User user = getUser(userId);
-        final List<PostScoreCategoryDto> posts = postRepository.findAllScoreWithCategoryByUser(user);
-        final List<Category> categories = categoryRepository.findByUser(user);
-        return postConverter.sortPostScoresByCategory(posts, categories);
+        return postRepository.findAllScoreWithCategoryByUser(userId);
     }
 
     public CursorResult<RecentPostResponseDto> recentAllPosts(final Long userId, final Long cursorId) {
