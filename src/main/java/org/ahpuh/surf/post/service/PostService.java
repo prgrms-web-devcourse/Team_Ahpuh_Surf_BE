@@ -116,7 +116,7 @@ public class PostService {
 
     public PostsRecentScoreResponseDto getRecentScore(final Long categoryId) {
         final Category category = getCategory(categoryId);
-        Optional<Post> findedPost = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category);
+        final Optional<Post> findedPost = postRepository.findTop1ByCategoryOrderBySelectedDateDesc(category);
         
         return findedPost.isEmpty()
                 ? new PostsRecentScoreResponseDto(null)
