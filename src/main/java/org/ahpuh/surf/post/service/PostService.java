@@ -14,7 +14,6 @@ import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.PostConverter;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
-import org.ahpuh.surf.post.dto.PostScoreCategoryDto;
 import org.ahpuh.surf.post.dto.request.PostRequestDto;
 import org.ahpuh.surf.post.dto.response.*;
 import org.ahpuh.surf.s3.domain.FileStatus;
