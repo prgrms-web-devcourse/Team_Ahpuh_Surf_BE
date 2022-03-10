@@ -23,6 +23,7 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import org.springframework.web.cors.CorsUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +41,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AccessDeniedHandler accessDeniedHandler() {
         return (request, response, e) -> {
             final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            final Object principal = authentication != null ? authentication.getPrincipal() : null;
+            final Object principal = !Objects.isNull(authentication)
+                    ? authentication.getPrincipal()
+                    : null;
             log.error("{} is denied", principal, e);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("text/plain;charset=UTF-8");

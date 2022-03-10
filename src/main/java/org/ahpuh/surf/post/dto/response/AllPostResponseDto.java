@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -46,6 +47,6 @@ public class AllPostResponseDto {
     }
 
     public void likeCheck() {
-        isLiked = (likeId != null);
+        isLiked = !Objects.isNull(likeId);
     }
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -63,6 +64,6 @@ public class RecentPostResponseDto {
     }
 
     public void likeCheck() {
-        isLiked = (likeId != null);
+        isLiked = !Objects.isNull(likeId);
     }
 }
