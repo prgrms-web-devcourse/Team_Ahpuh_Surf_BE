@@ -35,9 +35,6 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    @InjectMocks
-    private UserService userService;
-
     @Mock
     private PasswordEncoder passwordEncoder;
 
@@ -49,6 +46,9 @@ public class UserServiceTest {
 
     @Mock
     private UserConverter userConverter;
+
+    @InjectMocks
+    private UserService userService;
 
     @DisplayName("login 메소드는")
     @Nested

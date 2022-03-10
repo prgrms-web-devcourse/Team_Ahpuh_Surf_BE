@@ -36,9 +36,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
 
-    @InjectMocks
-    private CategoryService categoryService;
-
     @Mock
     private CategoryRepository categoryRepository;
 
@@ -47,6 +44,9 @@ public class CategoryServiceTest {
 
     @Mock
     private CategoryConverter categoryConverter;
+
+    @InjectMocks
+    private CategoryService categoryService;
 
     @DisplayName("createCategory 메소드는")
     @Nested
