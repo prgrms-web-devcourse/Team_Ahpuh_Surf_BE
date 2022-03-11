@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
+import static org.ahpuh.surf.common.factory.MockFollowFactory.createMockFollow;
 import static org.ahpuh.surf.common.factory.MockLikeFactory.createMockLike;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPost;
 import static org.ahpuh.surf.common.factory.MockUserFactory.*;
@@ -214,10 +215,7 @@ public class UserTest {
             // Given
             final User user1 = createMockUser("test1@naver.com");
             final User user2 = createMockUser("test2@naver.com");
-            final Follow follow = Follow.builder()
-                    .source(user1)
-                    .target(user2)
-                    .build();
+            final Follow follow = createMockFollow(user1, user2);
 
             // When Then
             assertThatThrownBy(() -> user1.addFollowing(follow))
@@ -231,10 +229,7 @@ public class UserTest {
             // Given
             final User user1 = createMockUser("test1@naver.com");
             final User user2 = createMockUser("test2@naver.com");
-            final Follow follow = Follow.builder()
-                    .source(user1)
-                    .target(user2)
-                    .build();
+            final Follow follow = createMockFollow(user1, user2);
 
             // When Then
             assertThatThrownBy(() -> user2.addFollowers(follow))
