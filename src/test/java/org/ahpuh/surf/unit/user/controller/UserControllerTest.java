@@ -108,7 +108,7 @@ public class UserControllerTest extends ControllerTest {
         void updateUserInfo_MultipartFile_Success() throws Exception {
             // Given
             final UserUpdateRequestDto request = createUserUpdateRequestDto();
-            final MockMultipartFile file = MockFileFactory.createMultipartFileImage1();
+            final MockMultipartFile file = createMultipartFileImage1();
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/users")
@@ -302,7 +302,7 @@ public class UserControllerTest extends ControllerTest {
         void updateUserInfo_Fail() throws Exception {
             // Given
             final UserUpdateRequestDto request = createUserUpdateRequestDto();
-            final MockMultipartFile file = MockFileFactory.createMultipartFileImage1();
+            final MockMultipartFile file = createMultipartFileImage1();
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/users")

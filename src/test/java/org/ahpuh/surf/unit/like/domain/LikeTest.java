@@ -1,13 +1,13 @@
 package org.ahpuh.surf.unit.like.domain;
 
 import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.like.domain.Like;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
+import static org.ahpuh.surf.common.factory.MockLikeFactory.createMockLike;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPost;
 import static org.ahpuh.surf.common.factory.MockUserFactory.createMockUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,10 +24,7 @@ public class LikeTest {
         final Post post = createMockPost(user, category);
 
         // When
-        Like.builder()
-                .user(user)
-                .post(post)
-                .build();
+        createMockLike(user, post);
 
         // Then
         assertAll("유저와 게시글의 Like 리스트에 자동 add 되는지 테스트",

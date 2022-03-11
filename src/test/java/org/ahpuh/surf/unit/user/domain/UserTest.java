@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
+import static org.ahpuh.surf.common.factory.MockLikeFactory.createMockLike;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPost;
 import static org.ahpuh.surf.common.factory.MockUserFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -248,10 +249,7 @@ public class UserTest {
             final User user = createMockUser();
             final Category category = createMockCategory(user);
             final Post post = createMockPost(user, category);
-            final Like like = Like.builder()
-                    .user(user)
-                    .post(post)
-                    .build();
+            final Like like = createMockLike(user, post);
 
             // When Then
             assertThatThrownBy(() -> user.addLike(like))
