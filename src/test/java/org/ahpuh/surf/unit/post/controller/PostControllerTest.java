@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.ResultActions;
@@ -25,12 +24,7 @@ import static org.ahpuh.surf.common.factory.MockPostFactory.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,22 +70,8 @@ public class PostControllerTest extends ControllerTest {
                 verify(postService, times(1))
                         .create(anyLong(), any(PostRequestDto.class), any(MockMultipartFile.class));
 
-                perform.andDo(document("post/createWithFile",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                        ),
-                        requestPartBody("file"),
-                        requestPartFields("request",
-                                fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 id"),
-                                fieldWithPath("selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜"),
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                        ),
-                        responseHeaders(
-                                headerWithName(HttpHeaders.LOCATION).description("location")
-                        )));
+                // RestDocs
+                perform.andDo(PostDocumentation.createWithFile());
             }
 
             @DisplayName("게시글을 생성할 수 있다_MultipartFile X")
@@ -111,21 +91,8 @@ public class PostControllerTest extends ControllerTest {
                 verify(postService, times(1))
                         .create(anyLong(), any(PostRequestDto.class), any());
 
-                perform.andDo(document("post/createOnlyDto",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                        ),
-                        requestPartFields("request",
-                                fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 id"),
-                                fieldWithPath("selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜"),
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                        ),
-                        responseHeaders(
-                                headerWithName(HttpHeaders.LOCATION).description("location")
-                        )));
+                // RestDocs
+                perform.andDo(PostDocumentation.createWithOnlyDto());
             }
         }
 
@@ -156,19 +123,8 @@ public class PostControllerTest extends ControllerTest {
                 verify(postService, times(1))
                         .update(anyLong(), any(PostRequestDto.class), any(MockMultipartFile.class));
 
-                perform.andDo(document("post/updateWithFile",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                        ),
-                        requestPartBody("file"),
-                        requestPartFields("request",
-                                fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 id"),
-                                fieldWithPath("selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜"),
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                        )));
+                // RestDocs
+                perform.andDo(PostDocumentation.updateWithFile());
             }
 
             @DisplayName("게시글을 수정할 수 있다_MultipartFile X")
@@ -192,18 +148,8 @@ public class PostControllerTest extends ControllerTest {
                 verify(postService, times(1))
                         .update(anyLong(), any(PostRequestDto.class), any());
 
-                perform.andDo(document("post/updateOnlyDto",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                        ),
-                        requestPartFields("request",
-                                fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 id"),
-                                fieldWithPath("selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜"),
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                        )));
+                // RestDocs
+                perform.andDo(PostDocumentation.updateWithOnlyDto());
             }
         }
 
@@ -225,29 +171,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .readPost(anyLong(), anyLong());
 
-            perform.andDo(document("post/readPost",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    pathParameters(
-                            parameterWithName("postId").description("게시글 id")
-                    ),
-                    responseFields(
-                            fieldWithPath("postId").type(JsonFieldType.NUMBER).description("게시글 id"),
-                            fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저 id"),
-                            fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 id"),
-                            fieldWithPath("selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜"),
-                            fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
-                            fieldWithPath("score").type(JsonFieldType.NUMBER).description("게시글 성장 점수"),
-                            fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("이미지 주소"),
-                            fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("파일 주소"),
-                            fieldWithPath("createdAt").type(JsonFieldType.STRING).description("게시글 생성 시간"),
-                            fieldWithPath("favorite").type(JsonFieldType.BOOLEAN).description("게시글 즐겨찾기 여부"),
-                            fieldWithPath("likeId").type(JsonFieldType.NUMBER).description("게시글 좋아요 id"),
-                            fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("게시글 좋아요 여부")
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.readPost());
         }
 
         @DisplayName("게시글을 삭제할 수 있다.")
@@ -263,15 +188,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .delete(anyLong(), anyLong());
 
-            perform.andDo(document("post/delete",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    pathParameters(
-                            parameterWithName("postId").description("게시글 id")
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.delete());
         }
 
         @DisplayName("내 게시글을 즐겨찾기에 추가할 수 있다.")
@@ -287,15 +205,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .makeFavorite(anyLong(), anyLong());
 
-            perform.andDo(document("post/makeFavorite",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    pathParameters(
-                            parameterWithName("postId").description("게시글 id")
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.makeFavorite());
         }
 
         @DisplayName("내 게시글을 즐겨찾기에서 삭제할 수 있다.")
@@ -311,15 +222,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .cancelFavorite(anyLong(), anyLong());
 
-            perform.andDo(document("post/cancelFavorite",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    pathParameters(
-                            parameterWithName("postId").description("게시글 id")
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.cancelFavorite());
         }
 
         @DisplayName("해당 월의 모든 게시글을 조회할 수 있다.")
@@ -342,34 +246,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .getPostsOfMonth(anyLong(), anyInt(), anyInt());
 
-            perform.andDo(document("post/getPostOfMonth",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestParameters(
-                            parameterWithName("year").description("년도"),
-                            parameterWithName("month").description("월")
-                    ),
-                    responseFields(
-                            fieldWithPath("[].categoryName").type(JsonFieldType.STRING).description("카테고리명")
-                                    .optional(),
-                            fieldWithPath("[].colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                                    .optional(),
-                            fieldWithPath("[].postId").type(JsonFieldType.NUMBER).description("게시글 id")
-                                    .optional(),
-                            fieldWithPath("[].content").type(JsonFieldType.STRING).description("게시글 내용")
-                                    .optional(),
-                            fieldWithPath("[].score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                                    .optional(),
-                            fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("이미지 주소")
-                                    .optional(),
-                            fieldWithPath("[].fileUrl").type(JsonFieldType.STRING).description("파일 주소")
-                                    .optional(),
-                            fieldWithPath("[].selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜")
-                                    .optional()
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.getPostOfMonth());
         }
 
         @DisplayName("해당 카테고리의 최신 게시글 점수를 조회할 수 있다.")
@@ -391,19 +269,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .getRecentScore(anyLong());
 
-            perform.andDo(document("post/getRecentScoreByAllPostsOfCategory",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestParameters(
-                            parameterWithName("categoryId").description("카테고리 id")
-                    ),
-                    responseFields(
-                            fieldWithPath("recentScore").type(JsonFieldType.NUMBER).description("최근 게시글 점수")
-                                    .optional()
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.getRecentScoreByAllPostsOfCategory());
         }
 
         @DisplayName("해당 년도의 각 날마다 게시글 개수를 조회할 수 있다.")
@@ -426,22 +293,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .getPostCountsOfYear(anyInt(), anyLong());
 
-            perform.andDo(document("post/getPostCountsOfYear",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestParameters(
-                            parameterWithName("year").description("해당 년도"),
-                            parameterWithName("userId").description("유저 id")
-                    ),
-                    responseFields(
-                            fieldWithPath("[].date").type(JsonFieldType.STRING).description("날짜")
-                                    .optional(),
-                            fieldWithPath("[].count").type(JsonFieldType.NUMBER).description("게시글 개수")
-                                    .optional()
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.getPostCountsOfYear());
         }
 
         @DisplayName("해당 유저의 각 카테고리마다 게시글들의 점수를 조회할 수 있다.")
@@ -463,27 +316,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .getScoresOfCategoryByUser(anyLong());
 
-            perform.andDo(document("post/getScoresOfCategory",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestParameters(
-                            parameterWithName("userId").description("유저 id")
-                    ),
-                    responseFields(
-                            fieldWithPath("[].categoryId").type(JsonFieldType.NUMBER).description("카테고리 id")
-                                    .optional(),
-                            fieldWithPath("[].categoryName").type(JsonFieldType.STRING).description("카테고리명")
-                                    .optional(),
-                            fieldWithPath("[].colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                                    .optional(),
-                            fieldWithPath("[].postScores[].selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜")
-                                    .optional(),
-                            fieldWithPath("[].postScores[].score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                                    .optional()
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.getScoresOfCategory());
         }
 
         @DisplayName("모든 게시글을 최신순으로 조회할 수 있다.")
@@ -505,48 +339,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .recentAllPosts(anyLong(), anyLong());
 
-            perform.andDo(document("post/recentAllPosts",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestParameters(
-                            parameterWithName("cursorId").description("커서 id -> 처음 조회할 때는 0 입력, 다음 페이지를 조회할 때는 이전 페이지 마지막 게시글의 postId를 cursorId로 입력")
-                    ),
-                    responseFields(
-                            fieldWithPath("values[].userId").type(JsonFieldType.NUMBER).description("유저 id")
-                                    .optional(),
-                            fieldWithPath("values[].userName").type(JsonFieldType.STRING).description("유저 이름")
-                                    .optional(),
-                            fieldWithPath("values[].profilePhotoUrl").type(JsonFieldType.STRING).description("유저 프로필사진 url 주소")
-                                    .optional(),
-                            fieldWithPath("values[].followId").type(JsonFieldType.NUMBER).description("팔로우 id")
-                                    .optional(),
-                            fieldWithPath("values[].categoryName").type(JsonFieldType.STRING).description("카테고리명")
-                                    .optional(),
-                            fieldWithPath("values[].colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                                    .optional(),
-                            fieldWithPath("values[].postId").type(JsonFieldType.NUMBER).description("게시글 id")
-                                    .optional(),
-                            fieldWithPath("values[].content").type(JsonFieldType.STRING).description("게시글 내용")
-                                    .optional(),
-                            fieldWithPath("values[].score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                                    .optional(),
-                            fieldWithPath("values[].imageUrl").type(JsonFieldType.STRING).description("이미지 주소")
-                                    .optional(),
-                            fieldWithPath("values[].fileUrl").type(JsonFieldType.STRING).description("파일 주소")
-                                    .optional(),
-                            fieldWithPath("values[].selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜")
-                                    .optional(),
-                            fieldWithPath("values[].createdAt").type(JsonFieldType.STRING).description("게시글 생성 시간")
-                                    .optional(),
-                            fieldWithPath("values[].likeId").type(JsonFieldType.NUMBER).description("게시글 좋아요 id")
-                                    .optional(),
-                            fieldWithPath("values[].isLiked").type(JsonFieldType.BOOLEAN).description("게시글 좋아요 여부")
-                                    .optional(),
-                            fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 여부")
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.recentAllPosts());
         }
 
         @DisplayName("내가 팔로우한 모든 유저의 게시글을 최신순으로 조회할 수 있다.")
@@ -568,46 +362,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .followExplore(anyLong(), anyLong());
 
-            perform.andDo(document("post/followExplore",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestParameters(
-                            parameterWithName("cursorId").description("커서 id -> 처음 조회할 때는 0 입력, 다음 페이지를 조회할 때는 이전 페이지 마지막 게시글의 postId를 cursorId로 입력")
-                    ),
-                    responseFields(
-                            fieldWithPath("values[].userId").type(JsonFieldType.NUMBER).description("유저 id")
-                                    .optional(),
-                            fieldWithPath("values[].userName").type(JsonFieldType.STRING).description("유저 이름")
-                                    .optional(),
-                            fieldWithPath("values[].profilePhotoUrl").type(JsonFieldType.STRING).description("유저 프로필사진 url 주소")
-                                    .optional(),
-                            fieldWithPath("values[].categoryName").type(JsonFieldType.STRING).description("카테고리명")
-                                    .optional(),
-                            fieldWithPath("values[].colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                                    .optional(),
-                            fieldWithPath("values[].postId").type(JsonFieldType.NUMBER).description("게시글 id")
-                                    .optional(),
-                            fieldWithPath("values[].content").type(JsonFieldType.STRING).description("게시글 내용")
-                                    .optional(),
-                            fieldWithPath("values[].score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                                    .optional(),
-                            fieldWithPath("values[].imageUrl").type(JsonFieldType.STRING).description("이미지 주소")
-                                    .optional(),
-                            fieldWithPath("values[].fileUrl").type(JsonFieldType.STRING).description("파일 주소")
-                                    .optional(),
-                            fieldWithPath("values[].selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜")
-                                    .optional(),
-                            fieldWithPath("values[].createdAt").type(JsonFieldType.STRING).description("게시글 생성 시간")
-                                    .optional(),
-                            fieldWithPath("values[].likeId").type(JsonFieldType.NUMBER).description("게시글 좋아요 id")
-                                    .optional(),
-                            fieldWithPath("values[].isLiked").type(JsonFieldType.BOOLEAN).description("게시글 좋아요 여부")
-                                    .optional(),
-                            fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 여부")
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.followExplore());
         }
 
         @DisplayName("해당 유저의 모든 게시글을 최신순으로 조회할 수 있다.")
@@ -630,39 +386,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .getAllPostByUser(anyLong(), anyLong(), anyLong());
 
-            perform.andDo(document("post/getAllPostByUser",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestParameters(
-                            parameterWithName("userId").description("유저 id"),
-                            parameterWithName("cursorId").description("커서 id -> 처음 조회할 때는 0 입력, 다음 페이지를 조회할 때는 이전 페이지 마지막 게시글의 postId를 cursorId로 입력")
-                    ),
-                    responseFields(
-                            fieldWithPath("values[].categoryName").type(JsonFieldType.STRING).description("카테고리명")
-                                    .optional(),
-                            fieldWithPath("values[].colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                                    .optional(),
-                            fieldWithPath("values[].postId").type(JsonFieldType.NUMBER).description("게시글 id")
-                                    .optional(),
-                            fieldWithPath("values[].content").type(JsonFieldType.STRING).description("게시글 내용")
-                                    .optional(),
-                            fieldWithPath("values[].score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                                    .optional(),
-                            fieldWithPath("values[].imageUrl").type(JsonFieldType.STRING).description("이미지 주소")
-                                    .optional(),
-                            fieldWithPath("values[].fileUrl").type(JsonFieldType.STRING).description("파일 주소")
-                                    .optional(),
-                            fieldWithPath("values[].selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜")
-                                    .optional(),
-                            fieldWithPath("values[].likeId").type(JsonFieldType.NUMBER).description("게시글 좋아요 id")
-                                    .optional(),
-                            fieldWithPath("values[].isLiked").type(JsonFieldType.BOOLEAN).description("게시글 좋아요 여부")
-                                    .optional(),
-                            fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 여부")
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.getAllPostByUser());
         }
 
         @DisplayName("해당 카테고리의 모든 게시글을 최신순으로 조회할 수 있다.")
@@ -685,39 +410,8 @@ public class PostControllerTest extends ControllerTest {
             verify(postService, times(1))
                     .getAllPostByCategory(anyLong(), anyLong(), anyLong());
 
-            perform.andDo(document("post/getAllPostByCategory",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestParameters(
-                            parameterWithName("categoryId").description("카테고리 id"),
-                            parameterWithName("cursorId").description("커서 id -> 처음 조회할 때는 0 입력, 다음 페이지를 조회할 때는 이전 페이지 마지막 게시글의 postId를 cursorId로 입력")
-                    ),
-                    responseFields(
-                            fieldWithPath("values[].categoryName").type(JsonFieldType.STRING).description("카테고리명")
-                                    .optional(),
-                            fieldWithPath("values[].colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                                    .optional(),
-                            fieldWithPath("values[].postId").type(JsonFieldType.NUMBER).description("게시글 id")
-                                    .optional(),
-                            fieldWithPath("values[].content").type(JsonFieldType.STRING).description("게시글 내용")
-                                    .optional(),
-                            fieldWithPath("values[].score").type(JsonFieldType.NUMBER).description("게시글 성장 점수")
-                                    .optional(),
-                            fieldWithPath("values[].imageUrl").type(JsonFieldType.STRING).description("이미지 주소")
-                                    .optional(),
-                            fieldWithPath("values[].fileUrl").type(JsonFieldType.STRING).description("파일 주소")
-                                    .optional(),
-                            fieldWithPath("values[].selectedDate").type(JsonFieldType.STRING).description("게시글 지정 날짜")
-                                    .optional(),
-                            fieldWithPath("values[].likeId").type(JsonFieldType.NUMBER).description("게시글 좋아요 id")
-                                    .optional(),
-                            fieldWithPath("values[].isLiked").type(JsonFieldType.BOOLEAN).description("게시글 좋아요 여부")
-                                    .optional(),
-                            fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 여부")
-                    )));
+            // RestDocs
+            perform.andDo(PostDocumentation.getAllPostByCategory());
         }
     }
 
