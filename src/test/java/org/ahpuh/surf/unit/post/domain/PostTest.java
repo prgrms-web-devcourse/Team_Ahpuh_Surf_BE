@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
+import static org.ahpuh.surf.common.factory.MockLikeFactory.createMockLike;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPost;
 import static org.ahpuh.surf.common.factory.MockUserFactory.createMockUser;
 import static org.ahpuh.surf.common.factory.MockUserFactory.createSavedUser;
@@ -129,10 +130,7 @@ public class PostTest {
         final User user = createMockUser();
         final Category category = createMockCategory(user);
         final Post post = createMockPost(user, category);
-        final Like like = Like.builder()
-                .user(user)
-                .post(post)
-                .build();
+        final Like like = createMockLike(user, post);
 
         // When Then
         assertThatThrownBy(() -> post.addLike(like))

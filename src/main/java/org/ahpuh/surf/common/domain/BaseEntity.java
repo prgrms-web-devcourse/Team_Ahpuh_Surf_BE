@@ -28,7 +28,9 @@ public abstract class BaseEntity {
     private Boolean isDeleted;
 
     @PrePersist
-    private void setIsDeleted() {
+    private void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
         isDeleted = false;
     }
 }

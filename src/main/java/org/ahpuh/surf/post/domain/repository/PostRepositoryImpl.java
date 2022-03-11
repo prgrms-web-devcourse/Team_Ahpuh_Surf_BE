@@ -225,54 +225,6 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
     }
 
     @Override
-    public List<AllPostResponseDto> findAllPostOfCategory(final Long userId, final Long categoryId, final Pageable page) {
-        return queryFactory
-                .select(new QAllPostResponseDto(
-                        post.category.name.as("categoryName"),
-                        post.category.colorCode.as("colorCode"),
-                        post.postId.as("postId"),
-                        post.content.as("content"),
-                        post.score.as("score"),
-                        post.imageUrl.as("imageUrl"),
-                        post.fileUrl.as("fileUrl"),
-                        post.selectedDate.as("selectedDate"),
-                        like.likeId.as("likeId")
-                ))
-                .from(post)
-                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
-                .where(post.category.categoryId.eq(categoryId))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
-                .limit(page.getPageSize())
-                .fetch();
-    }
-
-    @Override
-    public List<AllPostResponseDto> findAllPostOfCategoryByCursor(final Long userId, final Long categoryId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
-        return queryFactory
-                .select(new QAllPostResponseDto(
-                        post.category.name.as("categoryName"),
-                        post.category.colorCode.as("colorCode"),
-                        post.postId.as("postId"),
-                        post.content.as("content"),
-                        post.score.as("score"),
-                        post.imageUrl.as("imageUrl"),
-                        post.fileUrl.as("fileUrl"),
-                        post.selectedDate.as("selectedDate"),
-                        like.likeId.as("likeId")
-                ))
-                .from(post)
-                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
-                .where(post.category.categoryId.eq(categoryId)
-                        .and(post.selectedDate.before(selectedDate))
-                        .or(post.category.categoryId.eq(categoryId)
-                                .and(post.selectedDate.eq(selectedDate))
-                                .and(post.createdAt.before(createdAt))))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
-                .limit(page.getPageSize())
-                .fetch();
-    }
-
-    @Override
     public List<AllPostResponseDto> findAllPostOfUser(final Long userId, final Long postUserId, final Pageable page) {
         return queryFactory
                 .select(new QAllPostResponseDto(
@@ -313,6 +265,54 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .where(post.user.userId.eq(postUserId)
                         .and(post.selectedDate.before(selectedDate))
                         .or(post.user.userId.eq(postUserId)
+                                .and(post.selectedDate.eq(selectedDate))
+                                .and(post.createdAt.before(createdAt))))
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .limit(page.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<AllPostResponseDto> findAllPostOfCategory(final Long userId, final Long categoryId, final Pageable page) {
+        return queryFactory
+                .select(new QAllPostResponseDto(
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate.as("selectedDate"),
+                        like.likeId.as("likeId")
+                ))
+                .from(post)
+                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
+                .where(post.category.categoryId.eq(categoryId))
+                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .limit(page.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<AllPostResponseDto> findAllPostOfCategoryByCursor(final Long userId, final Long categoryId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+        return queryFactory
+                .select(new QAllPostResponseDto(
+                        post.category.name.as("categoryName"),
+                        post.category.colorCode.as("colorCode"),
+                        post.postId.as("postId"),
+                        post.content.as("content"),
+                        post.score.as("score"),
+                        post.imageUrl.as("imageUrl"),
+                        post.fileUrl.as("fileUrl"),
+                        post.selectedDate.as("selectedDate"),
+                        like.likeId.as("likeId")
+                ))
+                .from(post)
+                .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
+                .where(post.category.categoryId.eq(categoryId)
+                        .and(post.selectedDate.before(selectedDate))
+                        .or(post.category.categoryId.eq(categoryId)
                                 .and(post.selectedDate.eq(selectedDate))
                                 .and(post.createdAt.before(createdAt))))
                 .orderBy(post.selectedDate.desc(), post.createdAt.desc())

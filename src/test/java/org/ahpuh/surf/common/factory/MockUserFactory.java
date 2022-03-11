@@ -40,7 +40,7 @@ public class MockUserFactory {
         return new User(1L,
                 "mock",
                 "test1@naver.com",
-                "$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG", //testpw
+                "$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG",
                 null,
                 null,
                 null,
@@ -60,7 +60,7 @@ public class MockUserFactory {
         return new User(1L,
                 "mock",
                 "test1@naver.com",
-                "$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG", //testpw
+                "$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG",
                 "profilePhoto",
                 null,
                 null,
