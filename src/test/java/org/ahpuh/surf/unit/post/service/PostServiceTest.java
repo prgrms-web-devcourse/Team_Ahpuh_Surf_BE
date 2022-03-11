@@ -299,7 +299,7 @@ public class PostServiceTest {
 
         @DisplayName("존재하지 않는 게시글 아이디가 입력되면 예외가 발생한다.")
         @Test
-        void PostNotFoundException() throws IOException {
+        void postNotFoundException() throws IOException {
             // Given
             given(categoryRepository.findById(anyLong()))
                     .willReturn(Optional.of(mock(Category.class)));
@@ -348,7 +348,7 @@ public class PostServiceTest {
 
         @DisplayName("존재하지 않는 게시글 아이디가 입력되면 예외가 발생한다.")
         @Test
-        void PostNotFoundException() {
+        void postNotFoundException() {
             // Given
             given(postRepository.findPost(anyLong(), anyLong()))
                     .willReturn(Optional.empty());
@@ -393,7 +393,7 @@ public class PostServiceTest {
 
         @DisplayName("존재하지 않는 게시글 아이디가 입력되면 예외가 발생한다.")
         @Test
-        void PostNotFoundException() {
+        void postNotFoundException() {
             // Given
             given(postRepository.findById(any()))
                     .willReturn(Optional.empty());
@@ -464,7 +464,7 @@ public class PostServiceTest {
 
         @DisplayName("존재하지 않는 게시글 아이디가 입력되면 예외가 발생한다.")
         @Test
-        void PostNotFoundException() {
+        void postNotFoundException() {
             // Given
             given(postRepository.findById(any()))
                     .willReturn(Optional.empty());
@@ -532,7 +532,7 @@ public class PostServiceTest {
 
         @DisplayName("존재하지 않는 게시글 아이디가 입력되면 예외가 발생한다.")
         @Test
-        void PostNotFoundException() {
+        void postNotFoundException() {
             // Given
             given(postRepository.findById(any()))
                     .willReturn(Optional.empty());
@@ -549,7 +549,7 @@ public class PostServiceTest {
 
         @DisplayName("즐겨찾기에 등록 되어있지 않은 경우 예외가 발생한다.")
         @Test
-        void FavoriteInvalidRequestException() {
+        void favoriteInvalidRequestException() {
             // Given
             final Post post = mock(Post.class);
             given(postRepository.findById(any()))

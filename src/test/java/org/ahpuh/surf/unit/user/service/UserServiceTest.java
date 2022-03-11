@@ -253,7 +253,7 @@ public class UserServiceTest {
 
             @DisplayName("유저 정보를 변경한다.")
             @Test
-            void UpdateUser() throws IOException {
+            void updateUser() throws IOException {
                 // Given
                 final User mockUser = mock(User.class);
                 given(userRepository.findById(anyLong()))

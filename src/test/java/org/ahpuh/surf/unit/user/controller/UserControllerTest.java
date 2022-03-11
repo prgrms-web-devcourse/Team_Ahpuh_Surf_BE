@@ -1,6 +1,5 @@
 package org.ahpuh.surf.unit.user.controller;
 
-import org.ahpuh.surf.common.factory.MockFileFactory;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.unit.ControllerTest;
 import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
@@ -20,6 +19,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage1;
 import static org.ahpuh.surf.common.factory.MockJwtFactory.createJwtToken;
 import static org.ahpuh.surf.common.factory.MockUserFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
