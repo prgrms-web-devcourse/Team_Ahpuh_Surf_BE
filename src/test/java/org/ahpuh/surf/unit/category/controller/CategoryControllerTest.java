@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.ResultActions;
@@ -24,12 +23,7 @@ import static org.ahpuh.surf.common.factory.MockJwtFactory.createJwtToken;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,19 +63,8 @@ public class CategoryControllerTest extends ControllerTest {
             verify(categoryService, times(1))
                     .createCategory(anyLong(), any(CategoryCreateRequestDto.class));
 
-            perform.andDo(document("category/create",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestFields(
-                            fieldWithPath("name").type(JsonFieldType.STRING).description("카테고리명"),
-                            fieldWithPath("colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                    ),
-                    responseHeaders(
-                            headerWithName(HttpHeaders.LOCATION).description("location")
-                    )));
+            // RestDocs
+            perform.andDo(CategoryDocumentation.create());
         }
 
         @DisplayName("카테고리를 수정할 수 있다.")
@@ -102,17 +85,8 @@ public class CategoryControllerTest extends ControllerTest {
             verify(categoryService, times(1))
                     .updateCategory(anyLong(), any(CategoryUpdateRequestDto.class));
 
-            perform.andDo(document("category/update",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestFields(
-                            fieldWithPath("name").type(JsonFieldType.STRING).description("카테고리명"),
-                            fieldWithPath("isPublic").type(JsonFieldType.BOOLEAN).description("카테고리 공개여부"),
-                            fieldWithPath("colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                    )));
+            // RestDocs
+            perform.andDo(CategoryDocumentation.update());
         }
 
         @DisplayName("카테고리를 삭제할 수 있다.")
@@ -128,15 +102,8 @@ public class CategoryControllerTest extends ControllerTest {
             verify(categoryService, times(1))
                     .deleteCategory(anyLong());
 
-            perform.andDo(document("category/delete",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    pathParameters(
-                            parameterWithName("categoryId").description("카테고리 id")
-                    )));
+            // RestDocs
+            perform.andDo(CategoryDocumentation.delete());
         }
 
         @DisplayName("내 모든 카테고리를 반환할 수 있다.")
@@ -157,22 +124,8 @@ public class CategoryControllerTest extends ControllerTest {
             verify(categoryService, times(1))
                     .findAllCategoryByUser(anyLong());
 
-            perform.andDo(document("category/findAll",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    responseFields(
-                            fieldWithPath("[].categoryId").type(JsonFieldType.NUMBER).description("카테고리 id")
-                                    .optional(),
-                            fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리명")
-                                    .optional(),
-                            fieldWithPath("[].isPublic").type(JsonFieldType.BOOLEAN).description("카테고리 공개여부")
-                                    .optional(),
-                            fieldWithPath("[].colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                                    .optional()
-                    )));
+            // RestDocs
+            perform.andDo(CategoryDocumentation.findAll());
         }
 
         @DisplayName("해당 유저의 모든 카테고리 평균점수, 게시글 개수를 조회할 수 있다.")
@@ -194,29 +147,8 @@ public class CategoryControllerTest extends ControllerTest {
             verify(categoryService, times(1))
                     .getCategoryDashboard(anyLong());
 
-            perform.andDo(document("category/getDashboardInfo",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestParameters(
-                            parameterWithName("userId").description("유저 id")
-                    ),
-                    responseFields(
-                            fieldWithPath("[].categoryId").type(JsonFieldType.NUMBER).description("카테고리 id")
-                                    .optional(),
-                            fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리명")
-                                    .optional(),
-                            fieldWithPath("[].isPublic").type(JsonFieldType.BOOLEAN).description("카테고리 공개여부")
-                                    .optional(),
-                            fieldWithPath("[].colorCode").type(JsonFieldType.STRING).description("지정 색깔코드")
-                                    .optional(),
-                            fieldWithPath("[].averageScore").type(JsonFieldType.NUMBER).description("해당 카테고리의 게시글 평균점수")
-                                    .optional(),
-                            fieldWithPath("[].postCount").type(JsonFieldType.NUMBER).description("해당 카테고리의 게시글 갯수")
-                                    .optional()
-                    )));
+            // RestDocs
+            perform.andDo(CategoryDocumentation.getDashboardInfo());
         }
     }
 

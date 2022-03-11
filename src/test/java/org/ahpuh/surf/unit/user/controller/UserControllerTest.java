@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.ResultActions;
@@ -26,13 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -78,29 +71,8 @@ public class UserControllerTest extends ControllerTest {
                     .getUserInfo(anyLong());
             assertThat(responseBody).isEqualTo(objectMapper.writeValueAsString(response));
 
-            perform.andDo(document("user/findUserInfo",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    pathParameters(
-                            parameterWithName("userId").description("유저 id")
-                    ),
-                    responseFields(
-                            fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저 id"),
-                            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                            fieldWithPath("userName").type(JsonFieldType.STRING).description("유저 이름"),
-                            fieldWithPath("profilePhotoUrl").type(JsonFieldType.STRING).description("유저 프로필사진 url 주소")
-                                    .optional(),
-                            fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("유저 자기소개 문구")
-                                    .optional(),
-                            fieldWithPath("url").type(JsonFieldType.STRING).description("유저 컨택 url 주소")
-                                    .optional(),
-                            fieldWithPath("followerCount").type(JsonFieldType.NUMBER).description("팔로워 수"),
-                            fieldWithPath("followingCount").type(JsonFieldType.NUMBER).description("팔로잉 수"),
-                            fieldWithPath("accountPublic").type(JsonFieldType.BOOLEAN).description("계정 공개여부")
-                    )));
+            // RestDocs
+            perform.andDo(UserDocumentation.findUserInfo());
         }
 
         @DisplayName("내 회원정보를 수정할 수 있다_유저 프로필 이미지 파일 첨부 O")
@@ -126,22 +98,8 @@ public class UserControllerTest extends ControllerTest {
             verify(userService, times(1))
                     .update(anyLong(), any(UserUpdateRequestDto.class), any(MockMultipartFile.class));
 
-            perform.andDo(document("user/updateUserWithImage",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestPartBody("file"),
-                    requestPartFields("request",
-                            fieldWithPath("userName").type(JsonFieldType.STRING).description("유저 이름"),
-                            fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-                            fieldWithPath("url").type(JsonFieldType.STRING).optional()
-                                    .description("유저 컨택 url 주소"),
-                            fieldWithPath("aboutMe").type(JsonFieldType.STRING).optional()
-                                    .description("유저 자기소개 문구"),
-                            fieldWithPath("accountPublic").type(JsonFieldType.BOOLEAN).description("계정 공개여부")
-                    )));
+            // RestDocs
+            perform.andDo(UserDocumentation.updateUserWithImage());
         }
 
         @DisplayName("내 회원정보를 수정할 수 있다_유저 프로필 이미지 파일 첨부 X")
@@ -165,21 +123,8 @@ public class UserControllerTest extends ControllerTest {
             verify(userService, times(1))
                     .update(anyLong(), any(UserUpdateRequestDto.class), any());
 
-            perform.andDo(document("user/updateUserOnlyDto",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    ),
-                    requestPartFields("request",
-                            fieldWithPath("userName").type(JsonFieldType.STRING).description("유저 이름"),
-                            fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-                            fieldWithPath("url").type(JsonFieldType.STRING).optional()
-                                    .description("유저 컨택 url 주소"),
-                            fieldWithPath("aboutMe").type(JsonFieldType.STRING).optional()
-                                    .description("유저 자기소개 문구"),
-                            fieldWithPath("accountPublic").type(JsonFieldType.BOOLEAN).description("계정 공개여부")
-                    )));
+            // RestDocs
+            perform.andDo(UserDocumentation.updateUserWithOnlyDto());
         }
 
         @DisplayName("회원을 삭제할 수 있다.")
@@ -195,12 +140,8 @@ public class UserControllerTest extends ControllerTest {
             verify(userService, times(1))
                     .delete(anyLong());
 
-            perform.andDo(document("user/deleteUser",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                            headerWithName(HttpHeaders.AUTHORIZATION).description("token")
-                    )));
+            // RestDocs
+            perform.andDo(UserDocumentation.deleteUser());
         }
     }
 
@@ -223,17 +164,8 @@ public class UserControllerTest extends ControllerTest {
             verify(userService, times(1))
                     .join(any(UserJoinRequestDto.class));
 
-            perform.andDo(document("user/join",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestFields(
-                            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                            fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-                            fieldWithPath("userName").type(JsonFieldType.STRING).description("유저 이름")
-                    ),
-                    responseHeaders(
-                            headerWithName(HttpHeaders.LOCATION).description("location")
-                    )));
+            // RestDocs
+            perform.andDo(UserDocumentation.join());
         }
 
         @DisplayName("로그인을 할 수 있다.")
@@ -262,17 +194,8 @@ public class UserControllerTest extends ControllerTest {
                     .authenticate(request.getEmail(), request.getPassword());
             assertThat(responseBody).isEqualTo(objectMapper.writeValueAsString(response));
 
-            perform.andDo(document("user/login",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    requestFields(
-                            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                            fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
-                    ),
-                    responseFields(
-                            fieldWithPath("token").type(JsonFieldType.STRING).description("토큰"),
-                            fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저 id")
-                    )));
+            // RestDocs
+            perform.andDo(UserDocumentation.login());
         }
 
         @DisplayName("회원정보를 조회할 수 없다.")
