@@ -40,7 +40,7 @@ import java.util.Optional;
 
 import static org.ahpuh.surf.common.factory.MockFileFactory.createEmptyImageFile;
 import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage1;
-import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPostCountDto;
+import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPostCountResponseDto;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPostRequestDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -718,21 +718,21 @@ public class PostServiceTest {
         void getPostCountsOfYear_Success() {
             // Given
             final User user = mock(User.class);
-            final PostCountResponseDto responseDto = createMockPostCountDto();
+            final List<PostCountResponseDto> responseDtos = createMockPostCountResponseDto();
             given(userRepository.findById(anyLong()))
                     .willReturn(Optional.of(user));
             given(postRepository.findEachDateAndCountOfYearByUser(2022, user))
-                    .willReturn(List.of(responseDto, responseDto));
+                    .willReturn(responseDtos);
 
             // When
-            final List<PostCountResponseDto> responseDtos = postService.getPostCountsOfYear(2022, 1L);
+            final List<PostCountResponseDto> response = postService.getPostCountsOfYear(2022, 1L);
 
             // Then
             verify(userRepository, times(1))
                     .findById(anyLong());
             verify(postRepository, times(1))
                     .findEachDateAndCountOfYearByUser(anyInt(), any(User.class));
-            assertThat(responseDtos).isEqualTo(List.of(responseDto, responseDto));
+            assertThat(response).isEqualTo(responseDtos);
         }
 
         @DisplayName("작성한 게시글이 없는 경우 빈 리스트를 반환한다.")

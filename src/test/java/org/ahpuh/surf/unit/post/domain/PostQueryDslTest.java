@@ -2,7 +2,6 @@ package org.ahpuh.surf.unit.post.domain;
 
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
-import org.ahpuh.surf.common.factory.MockFollowFactory;
 import org.ahpuh.surf.config.QuerydslConfig;
 import org.ahpuh.surf.like.domain.Like;
 import org.ahpuh.surf.post.domain.Post;
@@ -25,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
+import static org.ahpuh.surf.common.factory.MockFollowFactory.createMockFollow;
 import static org.ahpuh.surf.common.factory.MockLikeFactory.createMockLike;
 import static org.ahpuh.surf.common.factory.MockPostFactory.*;
 import static org.ahpuh.surf.common.factory.MockUserFactory.createMockUser;
@@ -410,7 +410,7 @@ public class PostQueryDslTest {
                 final Category category2 = testEntityManager.persist(createMockCategory(user2));
                 testEntityManager.persist(
                         createMockPostWithSelectedDate(user2, category2, LocalDate.of(2022, 1, 10)));
-                final Long followId = testEntityManager.persist(MockFollowFactory.createMockFollow(user, user2))
+                final Long followId = testEntityManager.persist(createMockFollow(user, user2))
                         .getFollowId();
 
                 // When
@@ -500,7 +500,7 @@ public class PostQueryDslTest {
                         createMockPostWithSelectedDate(user2, category2, LocalDate.of(2022, 1, 10)));
 
                 // user2 -> user1 팔로우
-                testEntityManager.persist(MockFollowFactory.createMockFollow(user2, user1));
+                testEntityManager.persist(createMockFollow(user2, user1));
 
                 testEntityManager.flush();
                 testEntityManager.clear();

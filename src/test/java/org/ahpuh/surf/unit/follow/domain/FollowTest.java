@@ -1,10 +1,10 @@
 package org.ahpuh.surf.unit.follow.domain;
 
-import org.ahpuh.surf.follow.domain.Follow;
 import org.ahpuh.surf.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.ahpuh.surf.common.factory.MockFollowFactory.createMockFollow;
 import static org.ahpuh.surf.common.factory.MockUserFactory.createMockUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -19,10 +19,7 @@ public class FollowTest {
         final User user2 = createMockUser("test2@naver.com");
 
         // When
-        Follow.builder()
-                .source(user1)
-                .target(user2)
-                .build();
+        createMockFollow(user1, user2);
 
         // Then
         assertAll("유저의 팔로우 리스트에 자동 add 되는지 테스트",

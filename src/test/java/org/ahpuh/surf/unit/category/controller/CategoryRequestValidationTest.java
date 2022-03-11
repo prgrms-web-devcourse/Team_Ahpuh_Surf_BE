@@ -31,7 +31,7 @@ public class CategoryRequestValidationTest extends ControllerTest {
 
     @BeforeEach
     void setUp() {
-        final JwtAuthenticationToken authentication = createJwtToken(1L, "testEmail");
+        final JwtAuthenticationToken authentication = createJwtToken(1L, "testEmail@naver.com");
         final SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
 
