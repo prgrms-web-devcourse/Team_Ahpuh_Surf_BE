@@ -47,7 +47,7 @@ public class UserControllerTest extends ControllerTest {
 
         @BeforeEach
         void setUp() {
-            final JwtAuthenticationToken authentication = createJwtToken(1L, "testEmail");
+            final JwtAuthenticationToken authentication = createJwtToken(1L, "testEmail@naver.com");
             final SecurityContext securityContext = mock(SecurityContext.class);
             SecurityContextHolder.setContext(securityContext);
 
@@ -113,11 +113,7 @@ public class UserControllerTest extends ControllerTest {
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/users")
                     .file(file)
-                    .file(new MockMultipartFile(
-                            "request",
-                            "request.txt",
-                            "application/json",
-                            objectMapper.writeValueAsBytes(request)))
+                    .file("request", objectMapper.writeValueAsBytes(request))
                     .with(requestMethod -> {
                         requestMethod.setMethod("PUT");
                         return requestMethod;
@@ -156,11 +152,7 @@ public class UserControllerTest extends ControllerTest {
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/users")
-                    .file(new MockMultipartFile(
-                            "request",
-                            "request.txt",
-                            "application/json",
-                            objectMapper.writeValueAsBytes(request)))
+                    .file("request", objectMapper.writeValueAsBytes(request))
                     .with(requestMethod -> {
                         requestMethod.setMethod("PUT");
                         return requestMethod;
@@ -307,11 +299,7 @@ public class UserControllerTest extends ControllerTest {
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/users")
                     .file(file)
-                    .file(new MockMultipartFile(
-                            "request",
-                            "request.txt",
-                            "application/json",
-                            objectMapper.writeValueAsBytes(request)))
+                    .file("request", objectMapper.writeValueAsBytes(request))
                     .with(requestMethod -> {
                         requestMethod.setMethod("PUT");
                         return requestMethod;

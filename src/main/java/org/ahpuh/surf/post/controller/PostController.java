@@ -81,7 +81,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/month")
-    public ResponseEntity<List<PostsOfMonthResponseDto>> getPostOfPeriod(
+    public ResponseEntity<List<PostsOfMonthResponseDto>> getPostOfMonth(
             @AuthenticationPrincipal final JwtAuthentication authentication,
             @RequestParam final Integer year,
             @RequestParam final Integer month
@@ -90,7 +90,7 @@ public class PostController {
         return ResponseEntity.ok().body(postService.getPostsOfMonth(userId, year, month));
     }
 
-    @GetMapping("/recentscore")
+    @GetMapping("/recentScore")
     public ResponseEntity<PostsRecentScoreResponseDto> getRecentScoreByAllPostsOfCategory(
             @RequestParam final Long categoryId
     ) {

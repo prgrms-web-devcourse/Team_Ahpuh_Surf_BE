@@ -28,7 +28,7 @@ public class RecentPostResponseDto {
     private LocalDate selectedDate;
     private LocalDateTime createdAt;
     private Long likeId;
-    private boolean isLiked;
+    private Boolean isLiked;
 
     @Builder
     @QueryProjection
