@@ -1,11 +1,12 @@
 package org.ahpuh.surf.follow.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.common.exception.follow.DuplicatedFollowingException;
 import org.ahpuh.surf.common.exception.follow.FollowNotFoundException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.follow.domain.Follow;
 import org.ahpuh.surf.follow.domain.FollowConverter;
-import org.ahpuh.surf.follow.domain.FollowRepository;
+import org.ahpuh.surf.follow.domain.repository.FollowRepository;
 import org.ahpuh.surf.follow.dto.response.FollowResponseDto;
 import org.ahpuh.surf.follow.dto.response.FollowUserResponseDto;
 import org.ahpuh.surf.user.domain.User;
@@ -28,8 +29,10 @@ public class FollowService {
     public FollowResponseDto follow(final Long userId, final Long targetId) {
         final User source = getUser(userId);
         final User target = getUser(targetId);
-        final Long followId = followRepository.save(followConverter.toEntity(source, target))
-                .getFollowId();
+        if (followRepository.existsBySourceAndTarget(source, target)) {
+            throw new DuplicatedFollowingException();
+        }
+        final Follow followEntity = followRepository.save(followConverter.toEntity(source, target));
 
         return new FollowResponseDto(followEntity.getFollowId());
     }
