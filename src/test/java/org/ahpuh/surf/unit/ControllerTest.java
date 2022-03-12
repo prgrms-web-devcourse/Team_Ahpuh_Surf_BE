@@ -6,6 +6,8 @@ import org.ahpuh.surf.category.service.CategoryService;
 import org.ahpuh.surf.config.JwtConfig;
 import org.ahpuh.surf.follow.controller.FollowController;
 import org.ahpuh.surf.follow.service.FollowService;
+import org.ahpuh.surf.like.controller.LikeController;
+import org.ahpuh.surf.like.service.LikeService;
 import org.ahpuh.surf.post.controller.PostController;
 import org.ahpuh.surf.post.service.PostService;
 import org.ahpuh.surf.user.controller.UserController;
@@ -25,7 +27,8 @@ import org.springframework.test.web.servlet.MockMvc;
         UserController.class,
         CategoryController.class,
         PostController.class,
-        FollowController.class
+        FollowController.class,
+        LikeController.class
 })
 public abstract class ControllerTest {
 
@@ -40,6 +43,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected FollowService followService;
+
+    @MockBean
+    protected LikeService likeService;
 
     @Autowired
     protected MockMvc mockMvc;

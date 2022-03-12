@@ -48,7 +48,7 @@ public class FollowRepositoryTest {
 
             // Then
             final List<Follow> follows = followRepository.findAll();
-            assertAll("게시글 등록 테스트",
+            assertAll("팔로우 등록 테스트",
                     () -> assertThat(follows.size()).isEqualTo(1),
                     () -> assertThat(follows.get(0).getSource().getEmail()).isEqualTo("user1@naver.com"),
                     () -> assertThat(follows.get(0).getTarget().getEmail()).isEqualTo("user2@naver.com")
@@ -57,7 +57,7 @@ public class FollowRepositoryTest {
 
         @DisplayName("팔로우를 등록하면 해당 유저에 연관관계가 매핑된다.")
         @Test
-        void postUserAndCategoryMappingTest() {
+        void followMappingTest() {
             // Given
             final User user1 = testEntityManager.persist(createMockUser("user1@naver.com"));
             final User user2 = testEntityManager.persist(createMockUser("user2@naver.com"));
@@ -68,7 +68,7 @@ public class FollowRepositoryTest {
 
             // Then
             final List<Follow> follows = followRepository.findAll();
-            assertAll("게시글 등록 테스트",
+            assertAll("팔로우 연관관계 매핑 테스트",
                     () -> assertThat(follows.size()).isEqualTo(1),
                     () -> assertThat(follows.get(0).getSource().getFollowing().size()).isEqualTo(1),
                     () -> assertThat(follows.get(0).getSource().getFollowing().get(0).getTarget().getEmail()).isEqualTo("user2@naver.com"),
@@ -84,7 +84,7 @@ public class FollowRepositoryTest {
 
         @DisplayName("팔로우를 삭제할 수 있다.")
         @Test
-        void deleteAllMapping() {
+        void deleteFollowTest() {
             // Given
             final User user1 = testEntityManager.persist(createMockUser("user1@naver.com"));
             final User user2 = testEntityManager.persist(createMockUser("user2@naver.com"));
