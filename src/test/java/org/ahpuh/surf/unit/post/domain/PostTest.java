@@ -1,9 +1,7 @@
 package org.ahpuh.surf.unit.post.domain;
 
 import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.common.exception.like.DuplicatedLikeException;
 import org.ahpuh.surf.common.exception.post.FavoriteInvalidUserException;
-import org.ahpuh.surf.like.domain.Like;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.s3.domain.FileStatus;
 import org.ahpuh.surf.s3.domain.FileType;
@@ -15,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
-import static org.ahpuh.surf.common.factory.MockLikeFactory.createMockLike;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPost;
 import static org.ahpuh.surf.common.factory.MockUserFactory.createMockUser;
 import static org.ahpuh.surf.common.factory.MockUserFactory.createSavedUser;
@@ -121,20 +118,5 @@ public class PostTest {
                     .isInstanceOf(FavoriteInvalidUserException.class)
                     .hasMessage("즐겨찾기를 등록 또는 취소할 수 없습니다.(내 게시글만 등록 가능)");
         }
-    }
-
-    @DisplayName("addLike 메소드는 이미 좋아요를 누른 게시글을 다시 좋아요하면 예외가 발생한다.")
-    @Test
-    void duplicatedLikeException() {
-        // Given
-        final User user = createMockUser();
-        final Category category = createMockCategory(user);
-        final Post post = createMockPost(user, category);
-        final Like like = createMockLike(user, post);
-
-        // When Then
-        assertThatThrownBy(() -> post.addLike(like))
-                .isInstanceOf(DuplicatedLikeException.class)
-                .hasMessage("이미 좋아요를 누른 게시글입니다.");
     }
 }

@@ -18,6 +18,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -99,7 +100,7 @@ public class Post extends BaseEntity {
     }
 
     public void addLike(final Like like) {
-        if (likes.isEmpty()) {
+        if (Objects.isNull(likes)) {
             likes = new ArrayList<>();
         }
         likes.add(like);

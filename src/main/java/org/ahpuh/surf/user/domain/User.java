@@ -120,35 +120,35 @@ public class User extends BaseEntity {
     }
 
     public void addCategory(final Category category) {
-        if (categories.isEmpty()) {
+        if (Objects.isNull(categories)) {
             categories = new ArrayList<>();
         }
         categories.add(category);
     }
 
     public void addPost(final Post post) {
-        if (posts.isEmpty()) {
+        if (Objects.isNull(posts)) {
             posts = new ArrayList<>();
         }
         posts.add(post);
     }
 
     public void addFollowing(final Follow followingUser) {
-        if (following.isEmpty()) {
+        if (Objects.isNull(following)) {
             following = new ArrayList<>();
         }
         following.add(followingUser);
     }
 
     public void addFollowers(final Follow follower) {
-        if (followers.isEmpty()) {
+        if (Objects.isNull(followers)) {
             followers = new ArrayList<>();
         }
         followers.add(follower);
     }
 
     public void addLike(final Like like) {
-        if (likes.isEmpty()) {
+        if (Objects.isNull(likes)) {
             likes = new ArrayList<>();
         }
         likes.add(like);

@@ -1,14 +1,6 @@
 package org.ahpuh.surf.unit.user.domain;
 
-import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.common.exception.category.DuplicatedCategoryException;
-import org.ahpuh.surf.common.exception.follow.DuplicatedFollowingException;
-import org.ahpuh.surf.common.exception.like.DuplicatedLikeException;
-import org.ahpuh.surf.common.exception.post.DuplicatedPostException;
 import org.ahpuh.surf.common.exception.user.InvalidPasswordException;
-import org.ahpuh.surf.follow.domain.Follow;
-import org.ahpuh.surf.like.domain.Like;
-import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.Permission;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
@@ -24,10 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
-import static org.ahpuh.surf.common.factory.MockFollowFactory.createMockFollow;
-import static org.ahpuh.surf.common.factory.MockLikeFactory.createMockLike;
-import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPost;
 import static org.ahpuh.surf.common.factory.MockUserFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -175,81 +163,6 @@ public class UserTest {
                     () -> assertThat(passwordEncoder.matches("testpw", savedUser.getPassword())).isTrue(),
                     () -> assertThat(savedUser.getProfilePhotoUrl()).isEqualTo("profilePhoto")
             );
-        }
-    }
-
-    @DisplayName("연관관계 매핑 예외")
-    @Nested
-    class EntityMappingExceptions {
-
-        @DisplayName("addCategory 메소드는 이미 등록된 카테고리가 다시 등록되면 예외가 발생한다.")
-        @Test
-        void duplicatedCategoryException() {
-            // Given
-            final User user = createMockUser();
-            final Category category = createMockCategory(user);
-
-            // When Then
-            assertThatThrownBy(() -> user.addCategory(category))
-                    .isInstanceOf(DuplicatedCategoryException.class)
-                    .hasMessage("이미 등록된 카테고리입니다.");
-        }
-
-        @DisplayName("addPost 메소드는 이미 등록된 게시글이 다시 등록되면 예외가 발생한다.")
-        @Test
-        void duplicatedPostException() {
-            // Given
-            final User user = createMockUser();
-            final Category category = createMockCategory(user);
-            final Post post = createMockPost(user, category);
-
-            // When Then
-            assertThatThrownBy(() -> user.addPost(post))
-                    .isInstanceOf(DuplicatedPostException.class)
-                    .hasMessage("이미 등록된 게시글입니다.");
-        }
-
-        @DisplayName("addFollowing 메소드는 이미 팔로우 한 유저가 다시 팔로우하면 예외가 발생한다.")
-        @Test
-        void duplicatedFollowingException_Following() {
-            // Given
-            final User user1 = createMockUser("test1@naver.com");
-            final User user2 = createMockUser("test2@naver.com");
-            final Follow follow = createMockFollow(user1, user2);
-
-            // When Then
-            assertThatThrownBy(() -> user1.addFollowing(follow))
-                    .isInstanceOf(DuplicatedFollowingException.class)
-                    .hasMessage("이미 팔로우 한 사용자입니다.");
-        }
-
-        @DisplayName("addFollowers 메소드는 이미 팔로우 한 유저를 다시 팔로우하면 예외가 발생한다.")
-        @Test
-        void duplicatedFollowingException_Followers() {
-            // Given
-            final User user1 = createMockUser("test1@naver.com");
-            final User user2 = createMockUser("test2@naver.com");
-            final Follow follow = createMockFollow(user1, user2);
-
-            // When Then
-            assertThatThrownBy(() -> user2.addFollowers(follow))
-                    .isInstanceOf(DuplicatedFollowingException.class)
-                    .hasMessage("이미 팔로우 한 사용자입니다.");
-        }
-
-        @DisplayName("addLike 메소드는 이미 좋아요를 누른 게시글을 다시 좋아요하면 예외가 발생한다.")
-        @Test
-        void duplicatedLikeException() {
-            // Given
-            final User user = createMockUser();
-            final Category category = createMockCategory(user);
-            final Post post = createMockPost(user, category);
-            final Like like = createMockLike(user, post);
-
-            // When Then
-            assertThatThrownBy(() -> user.addLike(like))
-                    .isInstanceOf(DuplicatedLikeException.class)
-                    .hasMessage("이미 좋아요를 누른 게시글입니다.");
         }
     }
 }
