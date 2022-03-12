@@ -1,11 +1,12 @@
 package org.ahpuh.surf.follow.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ahpuh.surf.common.exception.follow.DuplicatedFollowingException;
 import org.ahpuh.surf.common.exception.follow.FollowNotFoundException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.follow.domain.Follow;
 import org.ahpuh.surf.follow.domain.FollowConverter;
-import org.ahpuh.surf.follow.domain.FollowRepository;
+import org.ahpuh.surf.follow.domain.repository.FollowRepository;
 import org.ahpuh.surf.follow.dto.response.FollowResponseDto;
 import org.ahpuh.surf.follow.dto.response.FollowUserResponseDto;
 import org.ahpuh.surf.user.domain.User;
@@ -28,38 +29,28 @@ public class FollowService {
     public FollowResponseDto follow(final Long userId, final Long targetId) {
         final User source = getUser(userId);
         final User target = getUser(targetId);
-        final Long followId = followRepository.save(followConverter.toEntity(source, target))
-                .getFollowId();
+        if (followRepository.existsBySourceAndTarget(source, target)) {
+            throw new DuplicatedFollowingException();
+        }
+        final Follow followEntity = followRepository.save(followConverter.toEntity(source, target));
 
-        return new FollowResponseDto(followId);
+        return new FollowResponseDto(followEntity.getFollowId());
     }
 
     @Transactional
     public void unfollow(final Long userId, final Long targetId) {
-        final User source = getUser(userId);
-        final User target = getUser(targetId);
-        final Follow followEntity = followRepository.findBySourceAndTarget(source, target)
+        final Follow followEntity = followRepository.findBySourceIdAndTargetId(userId, targetId)
                 .orElseThrow(FollowNotFoundException::new);
 
         followRepository.delete(followEntity);
     }
 
     public List<FollowUserResponseDto> findFollowerList(final Long targetId) {
-        final User userEntity = getUser(targetId);
-        return followRepository.findByTarget(userEntity)
-                .stream()
-                .map(Follow::getSource)
-                .map(followConverter::toFollowUserDto)
-                .toList();
+        return followRepository.findByTargetId(targetId);
     }
 
     public List<FollowUserResponseDto> findFollowingList(final Long userId) {
-        final User userEntity = getUser(userId);
-        return followRepository.findBySource(userEntity)
-                .stream()
-                .map(Follow::getTarget)
-                .map(followConverter::toFollowUserDto)
-                .toList();
+        return followRepository.findBySourceId(userId);
     }
 
     private User getUser(final Long userId) {

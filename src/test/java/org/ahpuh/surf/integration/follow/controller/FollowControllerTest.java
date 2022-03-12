@@ -2,7 +2,7 @@ package org.ahpuh.surf.integration.follow.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.follow.domain.Follow;
-import org.ahpuh.surf.follow.domain.FollowRepository;
+import org.ahpuh.surf.follow.domain.repository.FollowRepository;
 import org.ahpuh.surf.user.controller.UserController;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
