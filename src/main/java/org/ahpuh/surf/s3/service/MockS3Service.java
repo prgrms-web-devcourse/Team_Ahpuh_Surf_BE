@@ -46,7 +46,7 @@ public class MockS3Service implements S3Service {
         throw new UploadFailException();
     }
 
-    private String uploadImg(final MultipartFile file) {
+    public String uploadImg(final MultipartFile file) {
         final String fileName = getFileName(file);
         final String extension = getFileExtension(fileName);
         validateImageExtension(extension);
@@ -54,23 +54,26 @@ public class MockS3Service implements S3Service {
         return "mock upload";
     }
 
-    private String uploadFile(final MultipartFile file) {
+    public String uploadFile(final MultipartFile file) {
         final String fileName = getFileName(file);
         final String extension = getFileExtension(fileName);
-        validateFileExtension(extension);
 
-        return "mock upload";
+        if (validateFileExtension(extension)) {
+            return "mock upload";
+        } else {
+            return null;
+        }
     }
 
-    private String getFileName(final MultipartFile file) {
+    public String getFileName(final MultipartFile file) {
         final String fileName = file.getOriginalFilename();
-        if (Objects.isNull(fileName)) {
+        if (Objects.isNull(fileName) | fileName.isEmpty()) {
             throw new InvalidFileNameException();
         }
         return fileName;
     }
 
-    private String getFileExtension(final String fileName) {
+    public String getFileExtension(final String fileName) {
         final int index = fileName.lastIndexOf(".");
         if (index > 0 && fileName.length() > index + 1) {
             return fileName.substring(index + 1);
@@ -79,15 +82,13 @@ public class MockS3Service implements S3Service {
         }
     }
 
-    private void validateImageExtension(final String extension) {
+    public void validateImageExtension(final String extension) {
         if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
             throw new InvalidExtensionException();
         }
     }
 
-    private void validateFileExtension(final String extension) {
-        if (!PERMISSION_FILE_EXTENSIONS.contains(extension)) {
-            throw new InvalidExtensionException();
-        }
+    public boolean validateFileExtension(final String extension) {
+        return PERMISSION_FILE_EXTENSIONS.contains(extension);
     }
 }

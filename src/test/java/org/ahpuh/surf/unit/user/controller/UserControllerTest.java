@@ -18,7 +18,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage1;
+import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage;
 import static org.ahpuh.surf.common.factory.MockJwtFactory.createJwtToken;
 import static org.ahpuh.surf.common.factory.MockUserFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -80,7 +80,7 @@ public class UserControllerTest extends ControllerTest {
         void updateUserInfo_MultipartFile_Success() throws Exception {
             // Given
             final UserUpdateRequestDto request = createUserUpdateRequestDto();
-            final MockMultipartFile file = createMultipartFileImage1();
+            final MockMultipartFile file = createMultipartFileImage();
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/users")
@@ -217,7 +217,7 @@ public class UserControllerTest extends ControllerTest {
         void updateUserInfo_Fail() throws Exception {
             // Given
             final UserUpdateRequestDto request = createUserUpdateRequestDto();
-            final MockMultipartFile file = createMultipartFileImage1();
+            final MockMultipartFile file = createMultipartFileImage();
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/users")
