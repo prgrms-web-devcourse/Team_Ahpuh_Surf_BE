@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
-import org.ahpuh.surf.common.exception.like.DuplicatedLikeException;
 import org.ahpuh.surf.common.exception.post.FavoriteInvalidUserException;
 import org.ahpuh.surf.like.domain.Like;
 import org.ahpuh.surf.s3.domain.FileStatus;
@@ -19,6 +18,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -100,8 +100,8 @@ public class Post extends BaseEntity {
     }
 
     public void addLike(final Like like) {
-        if (likes.contains(like)) {
-            throw new DuplicatedLikeException();
+        if (Objects.isNull(likes)) {
+            likes = new ArrayList<>();
         }
         likes.add(like);
     }

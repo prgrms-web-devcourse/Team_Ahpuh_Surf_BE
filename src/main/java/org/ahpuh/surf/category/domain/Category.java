@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.ahpuh.surf.common.domain.BaseEntity;
-import org.ahpuh.surf.common.exception.post.DuplicatedPostException;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 import org.hibernate.annotations.Formula;
@@ -15,6 +14,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -65,8 +65,8 @@ public class Category extends BaseEntity {
     }
 
     public void addPost(final Post post) {
-        if (posts.contains(post)) {
-            throw new DuplicatedPostException();
+        if (Objects.isNull(posts)) {
+            posts = new ArrayList<>();
         }
         posts.add(post);
     }
