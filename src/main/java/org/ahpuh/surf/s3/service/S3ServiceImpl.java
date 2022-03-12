@@ -91,9 +91,12 @@ public class S3ServiceImpl implements S3Service {
     private String uploadFile(final MultipartFile file) throws IOException {
         final String fileName = getFileName(file);
         final String extension = getFileExtension(fileName);
-        validateFileExtension(extension);
 
-        return upload(file, fileName);
+        if (validateFileExtension(extension)) {
+            return upload(file, fileName);
+        } else {
+            return null;
+        }
     }
 
     private String upload(final MultipartFile file, final String fileName) throws IOException {
@@ -104,7 +107,7 @@ public class S3ServiceImpl implements S3Service {
 
     private String getFileName(final MultipartFile file) {
         final String fileName = file.getOriginalFilename();
-        if (Objects.isNull(fileName)) {
+        if (Objects.isNull(fileName) | fileName.isEmpty()) {
             throw new InvalidFileNameException();
         }
         return fileName;
@@ -125,9 +128,7 @@ public class S3ServiceImpl implements S3Service {
         }
     }
 
-    private void validateFileExtension(final String extension) {
-        if (!PERMISSION_FILE_EXTENSIONS.contains(extension)) {
-            throw new InvalidExtensionException();
-        }
+    private boolean validateFileExtension(final String extension) {
+        return PERMISSION_FILE_EXTENSIONS.contains(extension);
     }
 }
