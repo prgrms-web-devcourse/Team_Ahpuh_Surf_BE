@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.category.controller.CategoryController;
 import org.ahpuh.surf.category.service.CategoryService;
 import org.ahpuh.surf.config.JwtConfig;
+import org.ahpuh.surf.follow.controller.FollowController;
+import org.ahpuh.surf.follow.service.FollowService;
 import org.ahpuh.surf.post.controller.PostController;
 import org.ahpuh.surf.post.service.PostService;
 import org.ahpuh.surf.user.controller.UserController;
@@ -22,7 +24,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest({
         UserController.class,
         CategoryController.class,
-        PostController.class
+        PostController.class,
+        FollowController.class
 })
 public abstract class ControllerTest {
 
@@ -34,6 +37,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected PostService postService;
+
+    @MockBean
+    protected FollowService followService;
 
     @Autowired
     protected MockMvc mockMvc;
