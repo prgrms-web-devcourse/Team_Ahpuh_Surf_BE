@@ -3,10 +3,6 @@ package org.ahpuh.surf.user.domain;
 import lombok.*;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
-import org.ahpuh.surf.common.exception.category.DuplicatedCategoryException;
-import org.ahpuh.surf.common.exception.follow.DuplicatedFollowingException;
-import org.ahpuh.surf.common.exception.like.DuplicatedLikeException;
-import org.ahpuh.surf.common.exception.post.DuplicatedPostException;
 import org.ahpuh.surf.common.exception.user.InvalidPasswordException;
 import org.ahpuh.surf.follow.domain.Follow;
 import org.ahpuh.surf.like.domain.Like;
@@ -124,36 +120,36 @@ public class User extends BaseEntity {
     }
 
     public void addCategory(final Category category) {
-        if (categories.contains(category)) {
-            throw new DuplicatedCategoryException();
+        if (categories.isEmpty()) {
+            categories = new ArrayList<>();
         }
         categories.add(category);
     }
 
     public void addPost(final Post post) {
-        if (posts.contains(post)) {
-            throw new DuplicatedPostException();
+        if (posts.isEmpty()) {
+            posts = new ArrayList<>();
         }
         posts.add(post);
     }
 
     public void addFollowing(final Follow followingUser) {
-        if (following.contains(followingUser)) {
-            throw new DuplicatedFollowingException();
+        if (following.isEmpty()) {
+            following = new ArrayList<>();
         }
         following.add(followingUser);
     }
 
     public void addFollowers(final Follow follower) {
-        if (followers.contains(follower)) {
-            throw new DuplicatedFollowingException();
+        if (followers.isEmpty()) {
+            followers = new ArrayList<>();
         }
         followers.add(follower);
     }
 
     public void addLike(final Like like) {
-        if (likes.contains(like)) {
-            throw new DuplicatedLikeException();
+        if (likes.isEmpty()) {
+            likes = new ArrayList<>();
         }
         likes.add(like);
     }
