@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage1;
+import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage;
 import static org.ahpuh.surf.common.factory.MockJwtFactory.createJwtToken;
 import static org.ahpuh.surf.common.factory.MockPostFactory.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -56,7 +56,7 @@ public class PostControllerTest extends ControllerTest {
             void testCreatePost_WithMultipartFile() throws Exception {
                 // Given
                 final PostRequestDto request = createMockPostRequestDto();
-                final MockMultipartFile file = createMultipartFileImage1();
+                final MockMultipartFile file = createMultipartFileImage();
 
                 // When
                 final ResultActions perform = mockMvc.perform(multipart("/api/v1/posts")
@@ -105,7 +105,7 @@ public class PostControllerTest extends ControllerTest {
             void testUpdatePost_WithMultipartFile() throws Exception {
                 // Given
                 final PostRequestDto request = createMockPostRequestDto();
-                final MockMultipartFile file = createMultipartFileImage1();
+                final MockMultipartFile file = createMultipartFileImage();
 
                 // When
                 final ResultActions perform = mockMvc.perform(multipart("/api/v1/posts/{postId}", 1L)
@@ -424,7 +424,7 @@ public class PostControllerTest extends ControllerTest {
         void testCreatePost_Fail() throws Exception {
             // Given
             final PostRequestDto request = createMockPostRequestDto();
-            final MockMultipartFile file = createMultipartFileImage1();
+            final MockMultipartFile file = createMultipartFileImage();
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/posts")
@@ -443,7 +443,7 @@ public class PostControllerTest extends ControllerTest {
         void testUpdatePost_Fail() throws Exception {
             // Given
             final PostRequestDto request = createMockPostRequestDto();
-            final MockMultipartFile file = createMultipartFileImage1();
+            final MockMultipartFile file = createMultipartFileImage();
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/posts/{postId}", 1L)

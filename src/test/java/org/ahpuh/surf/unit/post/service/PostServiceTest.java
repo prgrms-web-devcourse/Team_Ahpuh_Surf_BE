@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.ahpuh.surf.common.factory.MockFileFactory.createEmptyImageFile;
-import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage1;
+import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPostCountResponseDto;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPostRequestDto;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,7 +82,7 @@ public class PostServiceTest {
             final Category category = mock(Category.class);
             final Post post = mock(Post.class);
             final PostRequestDto request = createMockPostRequestDto();
-            final MockMultipartFile imageFile = createMultipartFileImage1();
+            final MockMultipartFile imageFile = createMultipartFileImage();
             final Optional<FileStatus> fileStatus = Optional.of(new FileStatus("url", FileType.FILE));
             given(userRepository.findById(anyLong()))
                     .willReturn(Optional.of(user));
@@ -223,7 +223,7 @@ public class PostServiceTest {
             final Category category = mock(Category.class);
             final Post post = mock(Post.class);
             final PostRequestDto request = createMockPostRequestDto();
-            final MockMultipartFile imageFile = createMultipartFileImage1();
+            final MockMultipartFile imageFile = createMultipartFileImage();
             final Optional<FileStatus> fileStatus = Optional.of(new FileStatus("url", FileType.FILE));
             given(categoryRepository.findById(anyLong()))
                     .willReturn(Optional.of(category));
