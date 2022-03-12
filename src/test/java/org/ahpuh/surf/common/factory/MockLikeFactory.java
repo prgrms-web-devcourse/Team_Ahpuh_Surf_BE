@@ -1,6 +1,7 @@
 package org.ahpuh.surf.common.factory;
 
 import org.ahpuh.surf.like.domain.Like;
+import org.ahpuh.surf.like.dto.response.LikeResponseDto;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 
@@ -11,5 +12,9 @@ public class MockLikeFactory {
                 .user(user)
                 .post(post)
                 .build();
+    }
+
+    public static LikeResponseDto createMockLikeResponseDto() {
+        return new LikeResponseDto(1L);
     }
 }
