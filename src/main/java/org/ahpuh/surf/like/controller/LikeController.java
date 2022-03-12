@@ -29,7 +29,7 @@ public class LikeController {
             @PathVariable final Long postId,
             @PathVariable final Long likeId
     ) {
-        likeService.unlike(postId, likeId);
+        likeService.unlike(likeId);
         return ResponseEntity.noContent().build();
     }
 }

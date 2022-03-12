@@ -1,7 +1,7 @@
 package org.ahpuh.surf.like.service;
 
 import lombok.RequiredArgsConstructor;
-import org.ahpuh.surf.common.exception.like.InvalidLikeRequestException;
+import org.ahpuh.surf.common.exception.like.DuplicatedLikeException;
 import org.ahpuh.surf.common.exception.like.LikeNotFoundException;
 import org.ahpuh.surf.common.exception.post.PostNotFoundException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
@@ -27,21 +27,21 @@ public class LikeService {
     private final LikeConverter likeConverter;
 
     public LikeResponseDto like(final Long userId, final Long postId) {
-        final User userEntity = getUser(userId);
-        final Post postEntity = getPost(postId);
-        final Long likeId = likeRepository.save(likeConverter.toEntity(userEntity, postEntity))
-                .getLikeId();
+        final User user = getUser(userId);
+        final Post post = getPost(postId);
+        if (likeRepository.existsByUserAndPost(user, post)) {
+            throw new DuplicatedLikeException();
+        }
+        final Like likeEntity = likeRepository.save(likeConverter.toEntity(user, post));
 
-        return new LikeResponseDto(likeId);
+        return new LikeResponseDto(likeEntity.getLikeId());
     }
 
-    public void unlike(final Long postId, final Long likeId) {
+    public void unlike(final Long likeId) {
         final Like like = likeRepository.findById(likeId)
                 .orElseThrow(LikeNotFoundException::new);
-        if (!like.getPost().getPostId().equals(postId)) {
-            throw new InvalidLikeRequestException();
-        }
-        likeRepository.deleteById(likeId);
+
+        likeRepository.delete(like);
     }
 
     private User getUser(final Long userId) {
