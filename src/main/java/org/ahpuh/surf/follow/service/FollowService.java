@@ -31,35 +31,23 @@ public class FollowService {
         final Long followId = followRepository.save(followConverter.toEntity(source, target))
                 .getFollowId();
 
-        return new FollowResponseDto(followId);
+        return new FollowResponseDto(followEntity.getFollowId());
     }
 
     @Transactional
     public void unfollow(final Long userId, final Long targetId) {
-        final User source = getUser(userId);
-        final User target = getUser(targetId);
-        final Follow followEntity = followRepository.findBySourceAndTarget(source, target)
+        final Follow followEntity = followRepository.findBySourceIdAndTargetId(userId, targetId)
                 .orElseThrow(FollowNotFoundException::new);
 
         followRepository.delete(followEntity);
     }
 
     public List<FollowUserResponseDto> findFollowerList(final Long targetId) {
-        final User userEntity = getUser(targetId);
-        return followRepository.findByTarget(userEntity)
-                .stream()
-                .map(Follow::getSource)
-                .map(followConverter::toFollowUserDto)
-                .toList();
+        return followRepository.findByTargetId(targetId);
     }
 
     public List<FollowUserResponseDto> findFollowingList(final Long userId) {
-        final User userEntity = getUser(userId);
-        return followRepository.findBySource(userEntity)
-                .stream()
-                .map(Follow::getTarget)
-                .map(followConverter::toFollowUserDto)
-                .toList();
+        return followRepository.findBySourceId(userId);
     }
 
     private User getUser(final Long userId) {
