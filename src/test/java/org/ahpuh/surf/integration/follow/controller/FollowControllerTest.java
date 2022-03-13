@@ -1,8 +1,8 @@
 package org.ahpuh.surf.integration.follow.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ahpuh.surf.follow.domain.Follow;
 import org.ahpuh.surf.follow.domain.repository.FollowRepository;
+import org.ahpuh.surf.integration.IntegrationControllerTest;
 import org.ahpuh.surf.user.controller.UserController;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
@@ -11,11 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,18 +23,14 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
-@SpringBootTest
-class FollowControllerTest {
+class FollowControllerTest extends IntegrationControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
     private FollowRepository followRepository;
+
     @Autowired
     private UserRepository userRepository;
+    
     @Autowired
     private UserController userController;
 
