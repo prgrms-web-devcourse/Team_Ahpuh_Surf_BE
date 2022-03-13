@@ -2,6 +2,7 @@ package org.ahpuh.surf.integration.like.controller;
 
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.integration.IntegrationControllerTest;
 import org.ahpuh.surf.like.domain.Like;
 import org.ahpuh.surf.like.domain.LikeRepository;
 import org.ahpuh.surf.post.domain.Post;
@@ -14,11 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -31,20 +29,20 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
-@SpringBootTest
-class LikeControllerTest {
+class LikeControllerTest extends IntegrationControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
-    @Autowired
     private UserController userController;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private CategoryRepository categoryRepository;
+
     @Autowired
     private PostRepository postRepository;
+    
     @Autowired
     private LikeRepository likeRepository;
 

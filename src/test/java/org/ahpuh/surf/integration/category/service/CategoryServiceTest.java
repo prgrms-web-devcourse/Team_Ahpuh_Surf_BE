@@ -7,6 +7,7 @@ import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
 import org.ahpuh.surf.category.service.CategoryService;
+import org.ahpuh.surf.integration.IntegrationTest;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.user.domain.User;
@@ -15,30 +16,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@SpringBootTest
-@Transactional
-class CategoryServiceTest {
+class CategoryServiceTest extends IntegrationTest {
 
     @Autowired
     private CategoryService categoryService;
+
     @Autowired
     private CategoryRepository categoryRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private PostRepository postRepository;
-    @Autowired
-    private EntityManager entityManager;
 
     private Category category;
     private User user;
