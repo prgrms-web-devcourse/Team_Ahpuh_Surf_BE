@@ -1,0 +1,160 @@
+:toc: left
+:toclevels: 2
+:sectlinks:
+ifndef::snippets[]
+endif::[]
+
+== Post (게시글)
+
+=== 게시글 생성_파일 첨부 O
+
+.Request
+include::{snippets}/post/createWithFile/curl-request.adoc[]
+include::{snippets}/post/createWithFile/request-part-request-fields.adoc[]
+
+.Response
+include::{snippets}/post/createWithFile/http-response.adoc[]
+
+=== 게시글 생성_파일 첨부 X
+
+.Request
+include::{snippets}/post/createWithOnlyDto/http-request.adoc[]
+include::{snippets}/post/createWithOnlyDto/request-part-request-fields.adoc[]
+
+.Response
+include::{snippets}/post/createWithOnlyDto/http-response.adoc[]
+
+=== 해당 게시글 정보 조회
+
+.Request
+include::{snippets}/post/readPost/http-request.adoc[]
+include::{snippets}/post/readPost/path-parameters.adoc[]
+
+.Response
+include::{snippets}/post/readPost/http-response.adoc[]
+include::{snippets}/post/readPost/response-fields.adoc[]
+
+=== 나의 게시글 정보 수정_파일 첨부 O
+
+.Request
+include::{snippets}/post/updateWithFile/curl-request.adoc[]
+include::{snippets}/post/updateWithFile/request-part-request-fields.adoc[]
+
+.Response
+include::{snippets}/post/updateWithFile/http-response.adoc[]
+
+=== 나의 게시글 정보 수정_파일 첨부 X
+
+.Request
+include::{snippets}/post/updateWithOnlyDto/http-request.adoc[]
+include::{snippets}/post/updateWithOnlyDto/request-part-request-fields.adoc[]
+
+.Response
+include::{snippets}/post/updateWithOnlyDto/http-response.adoc[]
+
+=== 나의 카테고리 삭제
+
+.Request
+include::{snippets}/post/delete/http-request.adoc[]
+include::{snippets}/post/delete/path-parameters.adoc[]
+
+.Response
+include::{snippets}/post/delete/http-response.adoc[]
+
+=== 즐겨찾기 추가
+
+.Request
+include::{snippets}/post/makeFavorite/http-request.adoc[]
+include::{snippets}/post/makeFavorite/path-parameters.adoc[]
+
+.Response
+include::{snippets}/post/makeFavorite/http-response.adoc[]
+
+=== 즐겨찾기 삭제
+
+.Request
+include::{snippets}/post/cancelFavorite/http-request.adoc[]
+include::{snippets}/post/cancelFavorite/path-parameters.adoc[]
+
+.Response
+include::{snippets}/post/cancelFavorite/http-response.adoc[]
+
+=== 내 한달 게시글 정보 조회
+
+.Request
+include::{snippets}/post/getPostOfMonth/http-request.adoc[]
+include::{snippets}/post/getPostOfMonth/request-parameters.adoc[]
+
+.Response
+include::{snippets}/post/getPostOfMonth/http-response.adoc[]
+include::{snippets}/post/getPostOfMonth/response-fields.adoc[]
+
+=== 해당 카테고리의 최신 게시글 점수 조회
+
+.Request
+include::{snippets}/post/getRecentScoreByAllPostsOfCategory/http-request.adoc[]
+include::{snippets}/post/getRecentScoreByAllPostsOfCategory/request-parameters.adoc[]
+
+.Response
+include::{snippets}/post/getRecentScoreByAllPostsOfCategory/http-response.adoc[]
+include::{snippets}/post/getRecentScoreByAllPostsOfCategory/response-fields.adoc[]
+
+=== 해당 유저의 일년치 게시글 개수 조회
+
+.Request
+include::{snippets}/post/getPostCountsOfYear/http-request.adoc[]
+include::{snippets}/post/getPostCountsOfYear/request-parameters.adoc[]
+
+.Response
+include::{snippets}/post/getPostCountsOfYear/http-response.adoc[]
+include::{snippets}/post/getPostCountsOfYear/response-fields.adoc[]
+
+=== 해당 유저의 카테고리별 게시글 점수 조회
+
+.Request
+include::{snippets}/post/getScoresOfCategory/http-request.adoc[]
+include::{snippets}/post/getScoresOfCategory/request-parameters.adoc[]
+
+.Response
+include::{snippets}/post/getScoresOfCategory/http-response.adoc[]
+include::{snippets}/post/getScoresOfCategory/response-fields.adoc[]
+
+=== 전체 최신 게시글 둘러보기
+
+.Request
+include::{snippets}/post/recentAllPosts/http-request.adoc[]
+include::{snippets}/post/recentAllPosts/request-parameters.adoc[]
+
+.Response
+include::{snippets}/post/recentAllPosts/http-response.adoc[]
+include::{snippets}/post/recentAllPosts/response-fields.adoc[]
+
+=== 내가 팔로잉한 유저들의 전체 게시글 둘러보기
+
+.Request
+include::{snippets}/post/followExplore/http-request.adoc[]
+include::{snippets}/post/followExplore/request-parameters.adoc[]
+
+.Response
+include::{snippets}/post/followExplore/http-response.adoc[]
+include::{snippets}/post/followExplore/response-fields.adoc[]
+
+=== 해당 유저의 모든 게시글 정보 조회
+
+.Request
+include::{snippets}/post/getAllPostByUser/http-request.adoc[]
+include::{snippets}/post/getAllPostByUser/request-parameters.adoc[]
+
+.Response
+include::{snippets}/post/getAllPostByUser/http-response.adoc[]
+include::{snippets}/post/getAllPostByUser/response-fields.adoc[]
+
+=== 해당 카테고리의 모든 게시글 정보 조회
+
+.Request
+include::{snippets}/post/getAllPostByCategory/http-request.adoc[]
+include::{snippets}/post/getAllPostByCategory/request-parameters.adoc[]
+
+.Response
+include::{snippets}/post/getAllPostByCategory/http-response.adoc[]
+include::{snippets}/post/getAllPostByCategory/response-fields.adoc[]

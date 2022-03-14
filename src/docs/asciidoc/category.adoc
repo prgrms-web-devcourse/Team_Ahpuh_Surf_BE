@@ -1,0 +1,54 @@
+:toc: left
+:toclevels: 2
+:sectlinks:
+ifndef::snippets[]
+endif::[]
+
+== Category (카테고리)
+
+=== 카테고리 생성
+
+.Request
+include::{snippets}/category/create/http-request.adoc[]
+include::{snippets}/category/create/request-fields.adoc[]
+
+.Response
+include::{snippets}/category/create/http-response.adoc[]
+
+=== 나의 카테고리 전체 조회
+
+.Request
+include::{snippets}/category/findAll/http-request.adoc[]
+
+.Response
+include::{snippets}/category/findAll/http-response.adoc[]
+include::{snippets}/category/findAll/response-fields.adoc[]
+
+=== 해당 유저의 카테고리 정보 조회
+
+.Request
+include::{snippets}/category/getDashboardInfo/http-request.adoc[]
+include::{snippets}/category/getDashboardInfo/request-parameters.adoc[]
+
+.Response
+include::{snippets}/category/getDashboardInfo/http-response.adoc[]
+include::{snippets}/category/getDashboardInfo/response-fields.adoc[]
+
+=== 나의 카테고리 정보 수정
+
+.Request
+include::{snippets}/category/update/http-request.adoc[]
+include::{snippets}/category/update/path-parameters.adoc[]
+include::{snippets}/category/update/request-fields.adoc[]
+
+.Response
+include::{snippets}/category/update/http-response.adoc[]
+
+=== 나의 카테고리 삭제
+
+.Request
+include::{snippets}/category/delete/http-request.adoc[]
+include::{snippets}/category/delete/path-parameters.adoc[]
+
+.Response
+include::{snippets}/category/delete/http-response.adoc[]

@@ -1,0 +1,62 @@
+:toc: left
+:toclevels: 2
+:sectlinks:
+ifndef::snippets[]
+endif::[]
+
+== User (유저)
+
+=== 회원 가입
+
+.Request
+include::{snippets}/user/join/http-request.adoc[]
+include::{snippets}/user/join/request-fields.adoc[]
+
+.Response
+include::{snippets}/user/join/http-response.adoc[]
+
+=== 로그인
+
+.Request
+include::{snippets}/user/login/http-request.adoc[]
+include::{snippets}/user/login/request-fields.adoc[]
+
+.Response
+include::{snippets}/user/login/http-response.adoc[]
+include::{snippets}/user/login/response-fields.adoc[]
+
+=== 유저 정보 조회
+
+.Request
+include::{snippets}/user/findUserInfo/http-request.adoc[]
+include::{snippets}/user/findUserInfo/path-parameters.adoc[]
+
+.Response
+include::{snippets}/user/findUserInfo/http-response.adoc[]
+include::{snippets}/user/findUserInfo/response-fields.adoc[]
+
+=== 유저 정보 수정_프로필 이미지 첨부 O
+
+.Request
+include::{snippets}/user/updateUserWithImage/curl-request.adoc[]
+include::{snippets}/user/updateUserWithImage/request-part-request-fields.adoc[]
+
+.Response
+include::{snippets}/user/updateUserWithImage/http-response.adoc[]
+
+=== 유저 정보 수정_프로필 이미지 첨부 X
+
+.Request
+include::{snippets}/user/updateUserWithOnlyDto/http-request.adoc[]
+include::{snippets}/user/updateUserWithOnlyDto/request-part-request-fields.adoc[]
+
+.Response
+include::{snippets}/user/updateUserWithOnlyDto/http-response.adoc[]
+
+=== 유저 삭제
+
+.Request
+include::{snippets}/user/deleteUser/http-request.adoc[]
+
+.Response
+include::{snippets}/user/deleteUser/http-response.adoc[]

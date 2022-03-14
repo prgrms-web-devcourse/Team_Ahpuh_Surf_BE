@@ -1,0 +1,46 @@
+:toc: left
+:toclevels: 2
+:sectlinks:
+ifndef::snippets[]
+endif::[]
+
+== Follow (팔로우)
+
+=== 팔로우
+
+.Request
+include::{snippets}/follow/follow/http-request.adoc[]
+include::{snippets}/follow/follow/request-fields.adoc[]
+
+.Response
+include::{snippets}/follow/follow/http-response.adoc[]
+include::{snippets}/follow/follow/response-fields.adoc[]
+
+=== 언팔로우
+
+.Request
+include::{snippets}/follow/unfollow/http-request.adoc[]
+include::{snippets}/follow/unfollow/path-parameters.adoc[]
+
+.Response
+include::{snippets}/follow/unfollow/http-response.adoc[]
+
+=== 해당 유저의 팔로워 정보 전체 조회
+
+.Request
+include::{snippets}/follow/findFollowersList/http-request.adoc[]
+include::{snippets}/follow/findFollowersList/path-parameters.adoc[]
+
+.Response
+include::{snippets}/follow/findFollowersList/http-response.adoc[]
+include::{snippets}/follow/findFollowersList/response-fields.adoc[]
+
+=== 해당 유저가 팔로잉한 유저 정보 전체 조회
+
+.Request
+include::{snippets}/follow/findFollowingList/http-request.adoc[]
+include::{snippets}/follow/findFollowingList/path-parameters.adoc[]
+
+.Response
+include::{snippets}/follow/findFollowingList/http-response.adoc[]
+include::{snippets}/follow/findFollowingList/response-fields.adoc[]
