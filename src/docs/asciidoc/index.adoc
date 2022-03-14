@@ -1,0 +1,16 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+== Surf API
+
+include::user.adoc[]
+include::category.adoc[]
+include::post.adoc[]
+include::follow.adoc[]
+include::like.adoc[]
