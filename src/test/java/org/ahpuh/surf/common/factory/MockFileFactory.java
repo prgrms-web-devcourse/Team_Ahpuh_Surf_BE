@@ -24,7 +24,7 @@ public class MockFileFactory {
         return textToMultipart(file);
     }
 
-    public static MockMultipartFile createEmptyImageFile() {
+    public static MockMultipartFile createEmptyFile() {
         return new MockMultipartFile(
                 FILE_KEY,
                 null,

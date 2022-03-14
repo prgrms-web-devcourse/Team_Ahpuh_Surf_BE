@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.ahpuh.surf.common.factory.MockFileFactory.createEmptyImageFile;
+import static org.ahpuh.surf.common.factory.MockFileFactory.createEmptyFile;
 import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage;
 import static org.ahpuh.surf.common.factory.MockUserFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -194,7 +194,7 @@ public class UserServiceIntegrationTest extends IntegrationTest {
                     () -> assertThat(user.getProfilePhotoUrl()).isNull()
             );
             final UserUpdateRequestDto request = createUserUpdateRequestDto();
-            final MockMultipartFile emptyImageFile = createEmptyImageFile();
+            final MockMultipartFile emptyImageFile = createEmptyFile();
 
             // When
             userService.update(user.getUserId(), request, emptyImageFile);

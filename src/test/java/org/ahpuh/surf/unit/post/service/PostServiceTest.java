@@ -38,7 +38,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.ahpuh.surf.common.factory.MockFileFactory.createEmptyImageFile;
+import static org.ahpuh.surf.common.factory.MockFileFactory.createEmptyFile;
 import static org.ahpuh.surf.common.factory.MockFileFactory.createMultipartFileImage;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPostCountResponseDto;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPostRequestDto;
@@ -138,7 +138,7 @@ public class PostServiceTest {
                     .willReturn(1L);
 
             // When
-            final Long postId = postService.create(1L, request, createEmptyImageFile());
+            final Long postId = postService.create(1L, request, createEmptyFile());
 
             // Then
             verify(userRepository, times(1))
@@ -261,7 +261,7 @@ public class PostServiceTest {
                     .willReturn(Optional.of(post));
 
             // When
-            postService.update(1L, request, createEmptyImageFile());
+            postService.update(1L, request, createEmptyFile());
 
             // Then
             verify(categoryRepository, times(1))

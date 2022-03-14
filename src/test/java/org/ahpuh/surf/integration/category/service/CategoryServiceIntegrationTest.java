@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class CategoryServiceTest extends IntegrationTest {
+class CategoryServiceIntegrationTest extends IntegrationTest {
 
     @Autowired
     private CategoryService categoryService;
@@ -172,11 +172,11 @@ class CategoryServiceTest extends IntegrationTest {
         }
     }
 
-    @DisplayName("나의 카테고리 전체 조회 테스트")
+    @DisplayName("내 카테고리 전체 조회 테스트")
     @Nested
     class GetCategoryDashboardTest {
 
-        @DisplayName("나의 대시보드에 표시할 모든 카테고리의 게시글 평균점수와 개수를 반환할 수 있다.")
+        @DisplayName("내 대시보드에 표시할 모든 카테고리의 게시글 평균점수와 개수를 반환할 수 있다.")
         @Test
         void getCategoryDashboardSuccess() {
             // Given
@@ -193,7 +193,7 @@ class CategoryServiceTest extends IntegrationTest {
                     createMockPostWithScore(user, allCategory.get(0), 90));
             entityManager.persist(
                     createMockPostWithScore(user, allCategory.get(1), 80));
-            
+
             entityManager.flush();
             entityManager.clear();
 
