@@ -1,6 +1,5 @@
 package org.ahpuh.surf.unit.follow.controller;
 
-import org.ahpuh.surf.common.factory.MockFollowFactory;
 import org.ahpuh.surf.follow.dto.request.FollowRequestDto;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
 import org.ahpuh.surf.unit.ControllerTest;
@@ -14,8 +13,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.ahpuh.surf.common.factory.MockFollowFactory.createMockFollowResponseDto;
-import static org.ahpuh.surf.common.factory.MockFollowFactory.createMockFollowUserResponseDtos;
+import static org.ahpuh.surf.common.factory.MockFollowFactory.*;
 import static org.ahpuh.surf.common.factory.MockJwtFactory.createJwtToken;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -46,7 +44,7 @@ public class FollowControllerTest extends ControllerTest {
         @Test
         void testFollow() throws Exception {
             // Given
-            final FollowRequestDto request = MockFollowFactory.createMockFollowRequestDto();
+            final FollowRequestDto request = createMockFollowRequestDto();
             given(followService.follow(anyLong(), anyLong()))
                     .willReturn(createMockFollowResponseDto());
 
@@ -134,7 +132,7 @@ public class FollowControllerTest extends ControllerTest {
         @Test
         void testFollow_Fail() throws Exception {
             // Given
-            final FollowRequestDto request = MockFollowFactory.createMockFollowRequestDto();
+            final FollowRequestDto request = createMockFollowRequestDto();
 
             // When
             final ResultActions perform = mockMvc.perform(post("/api/v1/follow")
