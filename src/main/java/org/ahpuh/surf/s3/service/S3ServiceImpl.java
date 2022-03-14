@@ -21,8 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Profile("!test")
 @Service
@@ -69,11 +71,11 @@ public class S3ServiceImpl implements S3Service {
         }
 
         String fileUrl = uploadFile(file);
-        if (!Objects.isNull(fileUrl)) {
+        if (isNotEmpty(fileUrl)) {
             return Optional.of(new FileStatus(fileUrl, FileType.FILE));
         }
         fileUrl = uploadImg(file);
-        if (!Objects.isNull(fileUrl)) {
+        if (isNotEmpty(fileUrl)) {
             return Optional.of(new FileStatus(fileUrl, FileType.IMAGE));
         }
 
@@ -107,7 +109,7 @@ public class S3ServiceImpl implements S3Service {
 
     private String getFileName(final MultipartFile file) {
         final String fileName = file.getOriginalFilename();
-        if (Objects.isNull(fileName) | fileName.isEmpty()) {
+        if (isEmpty(fileName)) {
             throw new InvalidFileNameException();
         }
         return fileName;

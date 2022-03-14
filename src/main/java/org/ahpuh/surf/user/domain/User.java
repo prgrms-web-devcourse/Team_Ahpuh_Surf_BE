@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -109,7 +111,7 @@ public class User extends BaseEntity {
     }
 
     public void update(final PasswordEncoder passwordEncoder, final UserUpdateRequestDto request, final Optional<String> profilePhotoUrl) {
-        if (!Objects.isNull(request.getPassword())) {
+        if (isNotEmpty(request.getPassword())) {
             this.password = passwordEncoder.encode(request.getPassword());
         }
         this.userName = request.getUserName();

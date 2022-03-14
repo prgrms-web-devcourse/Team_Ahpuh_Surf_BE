@@ -128,7 +128,7 @@ public class PostQueryDslTest {
 
         @DisplayName("같은 날짜(selectedDate)로 지정되어 작성됐다면 생성 날짜(createdAt)를 기준으로 내림차순 정렬한다.")
         @Test
-        void sameSelectedDate_orderByCreatedAt() {
+        void sameSelectedDate_orderByCreatedAt() throws InterruptedException {
             // Given
             final User user = createMockUser();
             final Long userId = testEntityManager.persist(user).getUserId();
@@ -138,8 +138,10 @@ public class PostQueryDslTest {
 
             testEntityManager.persist(
                     createMockPostWithContent(user, category, "post1"));
+            Thread.sleep(0, 1);
             testEntityManager.persist(
                     createMockPostWithContent(user, category, "post2"));
+            Thread.sleep(0, 1);
             testEntityManager.persist(
                     createMockPostWithContent(user, category, "post3"));
 
