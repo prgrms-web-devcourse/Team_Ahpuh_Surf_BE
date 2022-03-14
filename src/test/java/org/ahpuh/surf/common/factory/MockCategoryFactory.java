@@ -26,7 +26,7 @@ public class MockCategoryFactory {
 
     public static CategoryUpdateRequestDto createMockCategoryUpdateRequestDto() {
         return CategoryUpdateRequestDto.builder()
-                .name("categoryName")
+                .name("update")
                 .colorCode("#000000")
                 .isPublic(true)
                 .build();

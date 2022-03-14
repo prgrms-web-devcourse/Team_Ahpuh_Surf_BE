@@ -25,7 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.ahpuh.surf.common.factory.MockFileFactory.createEmptyImageFile;
+import static org.ahpuh.surf.common.factory.MockFileFactory.createEmptyFile;
 import static org.ahpuh.surf.common.factory.MockUserFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -260,7 +260,7 @@ public class UserServiceTest {
                         .willReturn(Optional.of(mockUser));
 
                 // When
-                userService.update(1L, createUserUpdateRequestDto(), createEmptyImageFile());
+                userService.update(1L, createUserUpdateRequestDto(), createEmptyFile());
 
                 // Then
                 verify(s3Service, times(0))

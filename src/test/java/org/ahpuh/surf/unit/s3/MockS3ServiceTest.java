@@ -46,7 +46,7 @@ public class MockS3ServiceTest {
         @Test
         void emptyFile_ReturnEmpty() {
             // Given
-            final MockMultipartFile emptyFile = createEmptyImageFile();
+            final MockMultipartFile emptyFile = createEmptyFile();
 
             // When
             final Optional<String> response = s3Service.uploadUserImage(emptyFile);
@@ -122,7 +122,7 @@ public class MockS3ServiceTest {
         @Test
         void emptyFile_ReturnEmpty() {
             // Given
-            final MockMultipartFile emptyFile = createEmptyImageFile();
+            final MockMultipartFile emptyFile = createEmptyFile();
 
             // When
             final Optional<FileStatus> response = s3Service.uploadPostFile(emptyFile);
