@@ -7,20 +7,24 @@ import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
 import org.ahpuh.surf.category.service.CategoryService;
+import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
+import org.ahpuh.surf.common.exception.user.UserNotFoundException;
 import org.ahpuh.surf.integration.IntegrationTest;
-import org.ahpuh.surf.post.domain.Post;
-import org.ahpuh.surf.post.domain.repository.PostRepository;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
-import java.time.LocalDate;
 import java.util.List;
 
+import static org.ahpuh.surf.common.factory.MockCategoryFactory.*;
+import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPostWithScore;
+import static org.ahpuh.surf.common.factory.MockUserFactory.createMockUser;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CategoryServiceTest extends IntegrationTest {
@@ -34,143 +38,190 @@ class CategoryServiceTest extends IntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PostRepository postRepository;
+    @DisplayName("카테고리 생성 테스트")
+    @Nested
+    class CreateCategoryTest {
 
-    private Category category;
-    private User user;
+        @DisplayName("유저는 카테고리를 생성할 수 있다.")
+        @Test
+        void createCategorySuccess() {
+            // Given
+            entityManager.persist(createMockUser());
+            final User user = userRepository.findAll().get(0);
+            final CategoryCreateRequestDto request = createMockCategoryCreateRequestDto();
 
-    @BeforeEach
-    void setUp() {
-        user = userRepository.save(User.builder()
-                .password("password")
-                .email("suebeen@gmail.com")
-                .userName("name")
-                .build());
-        category = categoryRepository.save(Category.builder()
-                .user(user)
-                .name("test")
-                .colorCode("#e7f5ff")
-                .build());
+            // When
+            final Long categoryId = categoryService.createCategory(user.getUserId(), request);
+
+            // Then
+            assertThat(categoryId).isNotNull();
+        }
+
+        @DisplayName("존재하지 않는 유저 아이디가 입력되면 예외가 발생한다 - 404 응답")
+        @Test
+        void userNotFoundException_404() {
+            // Given
+            final CategoryCreateRequestDto request = createMockCategoryCreateRequestDto();
+
+            // When Then
+            assertThatThrownBy(() -> categoryService.createCategory(1L, request))
+                    .isInstanceOf(UserNotFoundException.class)
+                    .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.NOT_FOUND)
+                    .hasMessage("해당 유저를 찾을 수 없습니다.");
+        }
     }
 
-    @Test
-    @DisplayName("카테고리를 생성할 수 있다.")
-    void createCategoryTest() {
-        // given
-        final CategoryCreateRequestDto createRequestDto = CategoryCreateRequestDto.builder()
-                .name(category.getName())
-                .colorCode(category.getColorCode())
-                .build();
+    @DisplayName("카테고리 수정 테스트")
+    @Nested
+    class UpdateCategoryTest {
 
-        // when
-        categoryService.createCategory(user.getUserId(), createRequestDto);
+        @DisplayName("유저는 카테고리 정보를 수정할 수 있다.")
+        @Test
+        void updateCategorySuccess() {
+            // Given
+            final User user = createMockUser();
+            entityManager.persist(user);
+            entityManager.persist(createMockCategory(user));
+            final Category category = categoryRepository.findAll().get(0);
+            final CategoryUpdateRequestDto request = createMockCategoryUpdateRequestDto();
 
-        // then
-        assertAll(
-                () -> assertThat(categoryRepository.findAll().size()).isEqualTo(2),
-                () -> assertThat(categoryRepository.findAll().get(1).getName()).isEqualTo(createRequestDto.getName()),
-                () -> assertThat(categoryRepository.findAll().get(1).getIsPublic()).isTrue(),
-                () -> assertThat(categoryRepository.findAll().get(1).getColorCode()).isEqualTo(createRequestDto.getColorCode())
-        );
+            assertThat(category.getName()).isEqualTo("categoryName");
+
+            // When
+            categoryService.updateCategory(category.getCategoryId(), request);
+
+            // Then
+            final Category findedCategory = categoryRepository.getById(category.getCategoryId());
+            assertThat(findedCategory.getName()).isEqualTo("update");
+        }
+
+        @DisplayName("존재하지 않는 카테고리 아이디가 입력되면 예외가 발생한다 - 404 응답")
+        @Test
+        void categoryNotFoundException_404() {
+            // Given
+            final CategoryUpdateRequestDto request = createMockCategoryUpdateRequestDto();
+
+            // When Then
+            assertThatThrownBy(() -> categoryService.updateCategory(1L, request))
+                    .isInstanceOf(CategoryNotFoundException.class)
+                    .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.NOT_FOUND)
+                    .hasMessage("해당 카테고리를 찾을 수 없습니다.");
+        }
     }
 
-    @Test
-    @DisplayName("카테고리를 수정할 수 있다.")
-    void updateCategoryTest() {
-        // given
-        final CategoryUpdateRequestDto updateRequestDto = CategoryUpdateRequestDto.builder()
-                .name("update test")
-                .isPublic(false)
-                .colorCode("#d0ebff")
-                .build();
+    @DisplayName("카테고리 삭제 테스트")
+    @Nested
+    class DeleteCategoryTest {
 
-        // when
-        categoryService.updateCategory(category.getCategoryId(), updateRequestDto);
+        @DisplayName("카테고리를 삭제할 수 있다.")
+        @Test
+        void deleteCategorySuccess() {
+            // Given
+            final User user = createMockUser();
+            entityManager.persist(user);
+            entityManager.persist(createMockCategory(user));
 
-        // then
-        assertAll(
-                () -> assertThat(categoryRepository.findAll().get(0).getName()).isEqualTo(updateRequestDto.getName()),
-                () -> assertThat(categoryRepository.findAll().get(0).getIsPublic()).isFalse(),
-                () -> assertThat(categoryRepository.findAll().get(0).getColorCode()).isEqualTo(updateRequestDto.getColorCode())
-        );
+            final List<Category> allCategory = categoryRepository.findAll();
+            assertThat(allCategory.size()).isEqualTo(1);
+
+            final Category category = allCategory.get(0);
+
+            // When
+            categoryService.deleteCategory(category.getCategoryId());
+
+            // Then
+            assertThat(categoryRepository.findAll().size()).isEqualTo(0);
+        }
     }
 
-    @Test
-    @DisplayName("카테고리를 삭제할 수 있다.")
-    void deleteCategoryTest() {
-        // given
-        final Long id = category.getCategoryId();
+    @DisplayName("해당 유저의 모든 카테고리 조회 테스트")
+    @Nested
+    class FindAllCategoryByUserTest {
 
-        // when
-        categoryService.deleteCategory(id);
+        @DisplayName("해당 유저의 모든 카테고리를 조회할 수 있다.")
+        @Test
+        void findAllCategoryByUserSuccess() {
+            // Given
+            entityManager.persist(createMockUser());
+            final User user = userRepository.findAll().get(0);
 
-        // then
-        assertThat(categoryRepository.findAll().size()).isEqualTo(0);
+            entityManager.persist(createMockCategory(user));
+            entityManager.persist(createMockCategory(user));
+            final List<Category> allCategory = categoryRepository.findAll();
+            assertThat(allCategory.size()).isEqualTo(2);
+
+            // When
+            final List<AllCategoryByUserResponseDto> response = categoryService.findAllCategoryByUser(user.getUserId());
+
+            // Then
+            assertThat(response.size()).isEqualTo(2);
+        }
+
+        @DisplayName("해당 유저의 카테고리가 없을 경우 빈 배열을 반환한다.")
+        @Test
+        void noCategoryReturnEmptyList() {
+            // Given
+            entityManager.persist(createMockUser());
+            final User user = userRepository.findAll().get(0);
+
+            // When
+            final List<AllCategoryByUserResponseDto> response = categoryService.findAllCategoryByUser(user.getUserId());
+
+            // Then
+            assertThat(response).isEqualTo(List.of());
+        }
     }
 
-    @Test
-    @DisplayName("사용자의 모든 카테고리 정보를 조회할 수 있다.")
-    void findAllCategoryByUserTest() {
-        // given
-        final Category newCategory = categoryRepository.save(Category.builder()
-                .user(user)
-                .name("test2")
-                .colorCode("#e7f5df")
-                .build());
-        final Long id = user.getUserId();
+    @DisplayName("나의 카테고리 전체 조회 테스트")
+    @Nested
+    class GetCategoryDashboardTest {
 
-        // when
-        final List<AllCategoryByUserResponseDto> categories = categoryService.findAllCategoryByUser(id);
+        @DisplayName("나의 대시보드에 표시할 모든 카테고리의 게시글 평균점수와 개수를 반환할 수 있다.")
+        @Test
+        void getCategoryDashboardSuccess() {
+            // Given
+            entityManager.persist(createMockUser());
+            final User user = userRepository.findAll().get(0);
 
-        // then
-        assertAll(
-                () -> assertThat(categories.size()).isEqualTo(2),
-                () -> assertThat(categories.get(0).getCategoryId()).isEqualTo(category.getCategoryId()),
-                () -> assertThat(categories.get(1).getCategoryId()).isEqualTo(newCategory.getCategoryId())
-        );
-    }
+            entityManager.persist(createMockCategory(user));
+            entityManager.persist(createMockCategory(user));
+            final List<Category> allCategory = categoryRepository.findAll();
 
-    @Test
-    @DisplayName("사용자의 대시보드를 조회할 수 있다.")
-    void getCategoryDashboardTest() {
-        // given
-        final Category newCategory = categoryRepository.save(Category.builder()
-                .user(user)
-                .name("test2")
-                .colorCode("#e7f5df")
-                .build());
+            entityManager.persist(
+                    createMockPostWithScore(user, allCategory.get(0), 100));
+            entityManager.persist(
+                    createMockPostWithScore(user, allCategory.get(0), 90));
+            entityManager.persist(
+                    createMockPostWithScore(user, allCategory.get(1), 80));
+            
+            entityManager.flush();
+            entityManager.clear();
 
-        postRepository.save(Post.builder()
-                .user(user)
-                .category(newCategory)
-                .selectedDate(LocalDate.now())
-                .content("post1")
-                .score(88).build());
+            // When
+            final List<CategoryDetailResponseDto> response = categoryService.getCategoryDashboard(user.getUserId());
 
-        postRepository.save(Post.builder()
-                .user(user)
-                .category(newCategory)
-                .selectedDate(LocalDate.now())
-                .content("post2")
-                .score(43).build());
+            // Then
+            assertAll("카테고리1 -> 게시글 2개(100점, 90점), 카테고리2 -> 게시글 1개(80점)",
+                    () -> assertThat(response.size()).isEqualTo(2),
+                    () -> assertThat(response.get(0).getPostCount()).isEqualTo(2),
+                    () -> assertThat(response.get(0).getAverageScore()).isEqualTo(95),
+                    () -> assertThat(response.get(1).getPostCount()).isEqualTo(1),
+                    () -> assertThat(response.get(1).getAverageScore()).isEqualTo(80)
+            );
+        }
 
-        final Long id = user.getUserId();
+        @DisplayName("해당 유저의 카테고리가 없을 경우 빈 배열을 반환한다.")
+        @Test
+        void noCategoryReturnEmptyList() {
+            // Given
+            entityManager.persist(createMockUser());
+            final User user = userRepository.findAll().get(0);
 
-        // when
-        final List<CategoryDetailResponseDto> categories = categoryService.getCategoryDashboard(id);
-        entityManager.flush();
-        entityManager.clear();
+            // When
+            final List<CategoryDetailResponseDto> response = categoryService.getCategoryDashboard(user.getUserId());
 
-        // then
-        assertAll(
-                () -> assertThat(categories.size()).isEqualTo(2),
-                () -> assertThat(categories.get(0).getPostCount()).isZero(),
-                () -> assertThat(categories.get(0).getAverageScore()).isZero(),
-//                TODO : 테스트 통과x @Formula count가 안됨
-//                () -> assertThat(categories.get(1).getPostCount()).isEqualTo(2),
-                () -> assertThat(categoryRepository.findAll().get(1).getPosts().size()).isEqualTo(2),
-                () -> assertThat(categories.get(1).getAverageScore()).isEqualTo(65)
-        );
+            // Then
+            assertThat(response).isEqualTo(List.of());
+        }
     }
 }
