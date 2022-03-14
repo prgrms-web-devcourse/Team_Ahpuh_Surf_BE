@@ -1,0 +1,26 @@
+:toc: left
+:toclevels: 2
+:sectlinks:
+ifndef::snippets[]
+endif::[]
+
+== Like (좋아요)
+
+=== 좋아요
+
+.Request
+include::{snippets}/like/like/http-request.adoc[]
+include::{snippets}/like/like/path-parameters.adoc[]
+
+.Response
+include::{snippets}/like/like/http-response.adoc[]
+include::{snippets}/like/like/response-fields.adoc[]
+
+=== 좋아요 취소
+
+.Request
+include::{snippets}/like/unlike/http-request.adoc[]
+include::{snippets}/like/unlike/path-parameters.adoc[]
+
+.Response
+include::{snippets}/like/unlike/http-response.adoc[]
