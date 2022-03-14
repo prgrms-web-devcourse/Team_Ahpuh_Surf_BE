@@ -35,6 +35,9 @@ public class CategoryDocumentation {
                 requestHeaders(
                         headerWithName(HttpHeaders.AUTHORIZATION).description("token")
                 ),
+                pathParameters(
+                        parameterWithName("categoryId").description("카테고리 id")
+                ),
                 requestFields(
                         fieldWithPath("name").type(JsonFieldType.STRING).description("카테고리명"),
                         fieldWithPath("isPublic").type(JsonFieldType.BOOLEAN).description("카테고리 공개여부"),
