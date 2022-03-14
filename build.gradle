@@ -28,6 +28,7 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     // database
@@ -54,9 +55,6 @@ dependencies {
     implementation 'ch.qos.logback:logback-core:1.2.8'
     implementation 'net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1'
     implementation 'com.github.maricn:logback-slack-appender:1.4.0'
-
-    implementation 'com.google.guava:guava:23.0'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
@@ -127,7 +125,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.50
+                minimum = 0.80
             }
 
             excludes = []
