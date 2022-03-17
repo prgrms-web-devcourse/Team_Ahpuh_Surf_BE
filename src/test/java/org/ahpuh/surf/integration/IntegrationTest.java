@@ -1,18 +1,18 @@
 package org.ahpuh.surf.integration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 @ActiveProfiles("test")
 @Transactional
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public abstract class IntegrationTest {
 
-    @Autowired
+    @PersistenceContext
     protected EntityManager entityManager;
 
 }
