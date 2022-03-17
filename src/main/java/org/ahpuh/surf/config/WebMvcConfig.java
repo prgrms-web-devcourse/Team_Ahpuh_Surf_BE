@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,9 +21,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void extendMessageConverters(final List<HttpMessageConverter<?>> converters) {
-        final ReadOnlyMultipartFormDataEndpointConverter converter = new ReadOnlyMultipartFormDataEndpointConverter(objectMapper);
-        final List<MediaType> supportedMediaTypes = new ArrayList<>();
-        supportedMediaTypes.addAll(converter.getSupportedMediaTypes());
+        final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(objectMapper);
+        final List<MediaType> supportedMediaTypes = new ArrayList<>(converter.getSupportedMediaTypes());
         supportedMediaTypes.add(MediaType.APPLICATION_OCTET_STREAM);
         converter.setSupportedMediaTypes(supportedMediaTypes);
 
