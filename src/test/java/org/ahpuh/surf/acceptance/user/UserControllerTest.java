@@ -1,6 +1,5 @@
 package org.ahpuh.surf.acceptance.user;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.ahpuh.surf.acceptance.AcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -119,7 +118,7 @@ public class UserControllerTest extends AcceptanceTest {
     class 유저정보_수정 {
 
         @Test
-        void 유저정보_수정_프로필이미지_첨부O_성공() throws JsonProcessingException {
+        void 유저정보_수정_프로필이미지_첨부O_성공() {
             // Given
             USER_1.회원가입_완료();
             final File profileImage = createImageFile();
@@ -132,7 +131,7 @@ public class UserControllerTest extends AcceptanceTest {
         }
 
         @Test
-        void 유저정보_수정_프로필이미지_첨부X_성공() throws JsonProcessingException {
+        void 유저정보_수정_프로필이미지_첨부X_성공() {
             // Given
             USER_1.회원가입_완료();
 
@@ -144,7 +143,7 @@ public class UserControllerTest extends AcceptanceTest {
         }
 
         @Test
-        void 유저정보_수정_With_잘못된_File_실패() throws JsonProcessingException {
+        void 유저정보_수정_With_잘못된_File_실패() {
             // Given
             USER_1.회원가입_완료();
 
