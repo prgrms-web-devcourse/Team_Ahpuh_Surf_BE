@@ -24,6 +24,18 @@ public class MockFileFactory {
         return textToMultipart(file);
     }
 
+    public static File createImageFile() {
+        return createFile("testImage.png");
+    }
+
+    public static File createTextFile() {
+        return createFile("testText.txt");
+    }
+
+    public static File invalidFile() {
+        return createFile("invalidFile.invalid");
+    }
+
     public static MockMultipartFile createEmptyFile() {
         return new MockMultipartFile(
                 FILE_KEY,

@@ -84,10 +84,32 @@ public class MockUserFactory {
                 .build();
     }
 
+    public static UserJoinRequestDto createUserJoinRequestDtoWithEmail(final String email) {
+        return UserJoinRequestDto.builder()
+                .email(email)
+                .password("testpw")
+                .userName("mock")
+                .build();
+    }
+
     public static UserLoginRequestDto createUserLoginRequestDto() {
         return UserLoginRequestDto.builder()
                 .email("test1@naver.com")
                 .password("testpw")
+                .build();
+    }
+
+    public static UserLoginRequestDto createUserLoginRequestDto(final String email) {
+        return UserLoginRequestDto.builder()
+                .email(email)
+                .password("testpw")
+                .build();
+    }
+
+    public static UserLoginRequestDto createUserLoginRequestDto(final String email, final String password) {
+        return UserLoginRequestDto.builder()
+                .email(email)
+                .password(password)
                 .build();
     }
 
