@@ -69,6 +69,7 @@ public class UserService {
 
     @Transactional
     public void update(final Long userId, final UserUpdateRequestDto updateDto, final MultipartFile profilePhoto) {
+        final User userEntity = getUser(userId);
         Optional<String> profilePhotoUrl = Optional.empty();
         if (Objects.nonNull(profilePhoto) && !profilePhoto.isEmpty()) {
             try {
@@ -81,7 +82,6 @@ public class UserService {
                 throw new UploadFailException();
             }
         }
-        final User userEntity = getUser(userId);
         userEntity.update(passwordEncoder, updateDto, profilePhotoUrl);
     }
 
