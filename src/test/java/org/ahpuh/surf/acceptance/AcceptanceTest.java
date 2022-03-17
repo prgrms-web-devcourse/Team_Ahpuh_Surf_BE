@@ -27,7 +27,7 @@ public abstract class AcceptanceTest {
     protected String TOKEN;
 
     @BeforeEach
-    void setUp() {
+    void setPort() {
         RestAssured.port = port;
     }
 
