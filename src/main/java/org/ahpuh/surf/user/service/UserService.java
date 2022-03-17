@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Objects;
 import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -68,7 +70,7 @@ public class UserService {
     @Transactional
     public void update(final Long userId, final UserUpdateRequestDto updateDto, final MultipartFile profilePhoto) {
         Optional<String> profilePhotoUrl = Optional.empty();
-        if (!profilePhoto.isEmpty()) {
+        if (Objects.nonNull(profilePhoto) && !profilePhoto.isEmpty()) {
             try {
                 profilePhotoUrl = s3Service.uploadUserImage(profilePhoto);
             } catch (final ApplicationException e) {
