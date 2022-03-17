@@ -65,6 +65,7 @@ dependencies {
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'io.rest-assured:rest-assured:4.4.0'
 }
 
 // QueryDsl 설정 시작
@@ -79,15 +80,12 @@ sourceSets {
     main.java.srcDir querydslDir
 }
 
-compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
+configurations {
+    querydsl.extendsFrom compileClasspath
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    querydsl.extendsFrom compileClasspath
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }
 //  QueryDsl 설정 끝
 
