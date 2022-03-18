@@ -90,7 +90,6 @@ compileQuerydsl {
 //  QueryDsl 설정 끝
 
 test {
-    outputs.dir snippetsDir
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
 }
@@ -98,6 +97,7 @@ test {
 asciidoctor {
     dependsOn test
     inputs.dir snippetsDir
+    finalizedBy 'copyDocument'
 }
 
 asciidoctor.doFirst {
@@ -105,12 +105,31 @@ asciidoctor.doFirst {
 }
 
 task copyDocument(type: Copy) {
-    dependsOn asciidoctor
+    dependsOn('asciidoctor')
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
 }
 
+jacoco {
+    toolVersion = '0.8.7'
+}
+
 jacocoTestReport {
+    reports {
+        html.enabled true
+        xml.enabled false
+        csv.enabled false
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+                            "**/SurfApplication*",
+                            "**/S3ServiceImpl*"
+                    ])
+        }))
+    }
     finalizedBy 'jacocoTestCoverageVerification'
 }
 
@@ -126,7 +145,10 @@ jacocoTestCoverageVerification {
                 minimum = 0.80
             }
 
-            excludes = []
+            excludes = [
+                    '**.SurfApplication*',
+                    '**.S3ServiceImpl*'
+            ]
         }
     }
 }
