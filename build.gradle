@@ -115,6 +115,21 @@ jacoco {
 }
 
 jacocoTestReport {
+    reports {
+        html.enabled true
+        xml.enabled false
+        csv.enabled false
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+                            "**/SurfApplication*",
+                            "**/S3ServiceImpl*"
+                    ])
+        }))
+    }
     finalizedBy 'jacocoTestCoverageVerification'
 }
 
@@ -130,7 +145,10 @@ jacocoTestCoverageVerification {
                 minimum = 0.80
             }
 
-            excludes = []
+            excludes = [
+                    '**.SurfApplication*',
+                    '**.S3ServiceImpl*'
+            ]
         }
     }
 }
