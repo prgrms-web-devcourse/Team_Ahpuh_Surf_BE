@@ -1,6 +1,7 @@
 package org.ahpuh.surf.acceptance;
 
 import io.restassured.RestAssured;
+import org.ahpuh.surf.config.DatabaseCleaner;
 import org.ahpuh.surf.jwt.Claims;
 import org.ahpuh.surf.jwt.Jwt;
 import org.ahpuh.surf.user.domain.Permission;

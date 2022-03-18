@@ -1,4 +1,4 @@
-package org.ahpuh.surf.acceptance;
+package org.ahpuh.surf.config;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
