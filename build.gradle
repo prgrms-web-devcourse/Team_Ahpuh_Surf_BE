@@ -90,7 +90,6 @@ compileQuerydsl {
 //  QueryDsl 설정 끝
 
 test {
-    outputs.dir snippetsDir
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
 }
@@ -98,6 +97,7 @@ test {
 asciidoctor {
     dependsOn test
     inputs.dir snippetsDir
+    finalizedBy 'copyDocument'
 }
 
 asciidoctor.doFirst {
@@ -105,7 +105,7 @@ asciidoctor.doFirst {
 }
 
 task copyDocument(type: Copy) {
-    dependsOn asciidoctor
+    dependsOn('asciidoctor')
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
 }

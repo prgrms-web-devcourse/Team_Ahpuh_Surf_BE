@@ -28,3 +28,6 @@ out/
 ### Gradle ###
 .gradle
 build/
+
+### RestDocs ###
+src/main/resources/static/docs/**
