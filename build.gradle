@@ -110,6 +110,10 @@ task copyDocument(type: Copy) {
     into file("src/main/resources/static/docs")
 }
 
+jacoco {
+    toolVersion = '0.8.7'
+}
+
 jacocoTestReport {
     finalizedBy 'jacocoTestCoverageVerification'
 }
