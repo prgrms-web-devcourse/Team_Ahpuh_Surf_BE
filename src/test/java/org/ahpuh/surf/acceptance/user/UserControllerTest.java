@@ -39,6 +39,32 @@ public class UserControllerTest extends AcceptanceTest {
             // Then
             USER_2.response.statusCode(400);
         }
+
+        @Test
+        void 잘못된_이메일_형식_실패() {
+            // Given
+            USER_1.회원가입_완료();
+            final String invalidEmail = "user1@";
+
+            // When
+            USER_2.회원가입_요청(invalidEmail);
+
+            // Then
+            USER_2.response.statusCode(400);
+        }
+
+        @Test
+        void 유저_이름_최대20자_실패() {
+            // Given
+            USER_1.회원가입_완료();
+            final String invalidUserName = "userNameMaximum20letters";
+
+            // When
+            USER_2.회원가입_요청_name(invalidUserName);
+
+            // Then
+            USER_2.response.statusCode(400);
+        }
     }
 
     @DisplayName("로그인")
@@ -143,7 +169,7 @@ public class UserControllerTest extends AcceptanceTest {
         }
 
         @Test
-        void 유저정보_수정_With_잘못된_File_실패() {
+        void 유저정보_수정_잘못된_File_실패() {
             // Given
             USER_1.회원가입_완료();
 
@@ -169,18 +195,6 @@ public class UserControllerTest extends AcceptanceTest {
 
             // Then
             USER_1.response.statusCode(204);
-        }
-
-        @Test
-        void 존재하지_않는_유저_아이디_실패() {
-            // Given
-            USER_1.회원가입_하지_않음();
-
-            // When
-            USER_1.회원탈퇴_요청(TOKEN);
-
-            // Then
-            USER_1.response.statusCode(404);
         }
     }
 }

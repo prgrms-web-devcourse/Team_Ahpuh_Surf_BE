@@ -92,6 +92,14 @@ public class MockUserFactory {
                 .build();
     }
 
+    public static UserJoinRequestDto createUserJoinRequestDtoWithUserName(final String userName) {
+        return UserJoinRequestDto.builder()
+                .email("test1@naver.com")
+                .password("testpw")
+                .userName(userName)
+                .build();
+    }
+
     public static UserLoginRequestDto createUserLoginRequestDto() {
         return UserLoginRequestDto.builder()
                 .email("test1@naver.com")
