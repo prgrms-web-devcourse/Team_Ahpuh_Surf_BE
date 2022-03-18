@@ -143,7 +143,7 @@ public class UserControllerTest extends AcceptanceTest {
         }
 
         @Test
-        void 유저정보_수정_With_잘못된_File_실패() {
+        void 유저정보_수정_잘못된_File_실패() {
             // Given
             USER_1.회원가입_완료();
 
@@ -169,18 +169,6 @@ public class UserControllerTest extends AcceptanceTest {
 
             // Then
             USER_1.response.statusCode(204);
-        }
-
-        @Test
-        void 존재하지_않는_유저_아이디_실패() {
-            // Given
-            USER_1.회원가입_하지_않음();
-
-            // When
-            USER_1.회원탈퇴_요청(TOKEN);
-
-            // Then
-            USER_1.response.statusCode(404);
         }
     }
 }
