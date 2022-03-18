@@ -4,6 +4,9 @@ import org.ahpuh.surf.acceptance.AcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 
@@ -40,30 +43,30 @@ public class UserControllerTest extends AcceptanceTest {
             USER_2.response.statusCode(400);
         }
 
-        @Test
-        void 잘못된_이메일_형식_실패() {
-            // Given
-            USER_1.회원가입_완료();
-            final String invalidEmail = "user1@";
-
+        @ParameterizedTest
+        @NullAndEmptySource
+        @ValueSource(strings = {
+                "invalidEmail",
+                "user1@",
+                "@naver.com"
+        })
+        void 잘못된_이메일_형식_실패(final String invalidEmail) {
             // When
-            USER_2.회원가입_요청(invalidEmail);
+            USER_1.회원가입_요청(invalidEmail);
 
             // Then
-            USER_2.response.statusCode(400);
+            USER_1.response.statusCode(400);
         }
 
-        @Test
-        void 유저_이름_최대20자_실패() {
-            // Given
-            USER_1.회원가입_완료();
-            final String invalidUserName = "userNameMaximum20letters";
-
+        @ParameterizedTest
+        @NullAndEmptySource
+        @ValueSource(strings = "userName은_최대_20자까지입니다.")
+        void 유저_이름_최대20자_실패(final String invalidUserName) {
             // When
-            USER_2.회원가입_요청_name(invalidUserName);
+            USER_1.회원가입_요청_name(invalidUserName);
 
             // Then
-            USER_2.response.statusCode(400);
+            USER_1.response.statusCode(400);
         }
     }
 
@@ -99,10 +102,9 @@ public class UserControllerTest extends AcceptanceTest {
         void 틀린_비밀번호_실패() {
             // Given
             USER_1.회원가입_완료();
-            final String invalidPassword = "invalidPassword";
 
             // When
-            USER_1.로그인_요청(invalidPassword);
+            USER_1.로그인_요청("invalidPassword");
 
             // Then
             USER_1.response.statusCode(400);
@@ -116,10 +118,10 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저정보_조회_성공() {
             // Given
-            USER_1.회원가입_완료();
+            USER_1.로그인_완료();
 
             // When
-            USER_1.유저조회_요청(TOKEN, 1L);
+            USER_1.유저조회_요청(1L);
 
             // Then
             USER_1.response.statusCode(200);
@@ -128,11 +130,11 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 존재하지_않는_유저_아이디_실패() {
             // Given
-            USER_1.회원가입_완료();
+            USER_1.로그인_완료();
             final Long invalidUserId = 2L;
 
             // When
-            USER_1.유저조회_요청(TOKEN, invalidUserId);
+            USER_1.유저조회_요청(invalidUserId);
 
             // Then
             USER_1.response.statusCode(404);
@@ -146,11 +148,11 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저정보_수정_프로필이미지_첨부O_성공() {
             // Given
-            USER_1.회원가입_완료();
+            USER_1.로그인_완료();
             final File profileImage = createImageFile();
 
             // When
-            USER_1.유저정보_수정_요청_With_File(TOKEN, profileImage);
+            USER_1.유저정보_수정_요청_With_File(profileImage);
 
             // Then
             USER_1.response.statusCode(200);
@@ -159,10 +161,10 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저정보_수정_프로필이미지_첨부X_성공() {
             // Given
-            USER_1.회원가입_완료();
+            USER_1.로그인_완료();
 
             // When
-            USER_1.유저정보_수정_요청_No_File(TOKEN);
+            USER_1.유저정보_수정_요청_No_File();
 
             // Then
             USER_1.response.statusCode(200);
@@ -171,10 +173,10 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저정보_수정_잘못된_File_실패() {
             // Given
-            USER_1.회원가입_완료();
+            USER_1.로그인_완료();
 
             // When
-            USER_1.유저정보_수정_요청_With_File(TOKEN, invalidFile());
+            USER_1.유저정보_수정_요청_With_File(invalidFile());
 
             // Then
             USER_1.response.statusCode(400);
@@ -188,10 +190,10 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저삭제_성공() {
             // Given
-            USER_1.회원가입_완료();
+            USER_1.로그인_완료();
 
             // When
-            USER_1.회원탈퇴_요청(TOKEN);
+            USER_1.회원탈퇴_요청();
 
             // Then
             USER_1.response.statusCode(204);
