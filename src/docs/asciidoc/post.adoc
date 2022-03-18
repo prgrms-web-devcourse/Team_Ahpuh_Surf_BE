@@ -1,8 +1,12 @@
-:toc: left
-:toclevels: 2
-:sectlinks:
 ifndef::snippets[]
+:snippets: ./build/generated-snippets
 endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
 
 == Post (게시글)
 
