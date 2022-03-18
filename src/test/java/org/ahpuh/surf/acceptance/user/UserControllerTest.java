@@ -39,6 +39,32 @@ public class UserControllerTest extends AcceptanceTest {
             // Then
             USER_2.response.statusCode(400);
         }
+
+        @Test
+        void 잘못된_이메일_형식_실패() {
+            // Given
+            USER_1.회원가입_완료();
+            final String invalidEmail = "user1@";
+
+            // When
+            USER_2.회원가입_요청(invalidEmail);
+
+            // Then
+            USER_2.response.statusCode(400);
+        }
+
+        @Test
+        void 유저_이름_최대20자_실패() {
+            // Given
+            USER_1.회원가입_완료();
+            final String invalidUserName = "userNameMaximum20letters";
+
+            // When
+            USER_2.회원가입_요청_name(invalidUserName);
+
+            // Then
+            USER_2.response.statusCode(400);
+        }
     }
 
     @DisplayName("로그인")
