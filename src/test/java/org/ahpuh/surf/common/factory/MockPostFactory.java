@@ -64,6 +64,15 @@ public class MockPostFactory {
                 .build();
     }
 
+    public static PostRequestDto createMockPostRequestDtoWithScore(final int score) {
+        return PostRequestDto.builder()
+                .categoryId(1L)
+                .selectedDate(LocalDate.now().toString())
+                .content("content")
+                .score(score)
+                .build();
+    }
+
     public static PostRequestDto createMockPostUpdateRequestDto(final Long categoryId) {
         return PostRequestDto.builder()
                 .categoryId(categoryId)
