@@ -204,7 +204,9 @@ public class PostService {
     }
 
     private Optional<FileStatus> fileUpload(final MultipartFile file) {
-        if (Objects.isNull(file) | file.isEmpty()) {
+        if (Objects.isNull(file)) {
+            return Optional.empty();
+        } else if (file.isEmpty()) {
             return Optional.empty();
         }
 
