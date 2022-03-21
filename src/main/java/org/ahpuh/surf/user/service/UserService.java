@@ -70,18 +70,8 @@ public class UserService {
     @Transactional
     public void update(final Long userId, final UserUpdateRequestDto updateDto, final MultipartFile profilePhoto) {
         final User userEntity = getUser(userId);
-        Optional<String> profilePhotoUrl = Optional.empty();
-        if (Objects.nonNull(profilePhoto) && !profilePhoto.isEmpty()) {
-            try {
-                profilePhotoUrl = s3Service.uploadUserImage(profilePhoto);
-            } catch (final ApplicationException e) {
-                e.printStackTrace();
-                throw e;
-            } catch (final Exception e) {
-                e.printStackTrace();
-                throw new UploadFailException();
-            }
-        }
+        final Optional<String> profilePhotoUrl = profileImageUpload(profilePhoto);
+
         userEntity.update(passwordEncoder, updateDto, profilePhotoUrl);
     }
 
@@ -94,5 +84,23 @@ public class UserService {
     private User getUser(final Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    private Optional<String> profileImageUpload(final MultipartFile profilePhoto) {
+        if (Objects.isNull(profilePhoto)) {
+            return Optional.empty();
+        } else if (profilePhoto.isEmpty()) {
+            return Optional.empty();
+        }
+
+        try {
+            return s3Service.uploadUserImage(profilePhoto);
+        } catch (final ApplicationException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (final Exception e) {
+            e.printStackTrace();
+            throw new UploadFailException();
+        }
     }
 }
