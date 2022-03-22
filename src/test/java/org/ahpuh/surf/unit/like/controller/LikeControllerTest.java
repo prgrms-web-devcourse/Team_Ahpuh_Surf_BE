@@ -60,7 +60,7 @@ public class LikeControllerTest extends ControllerTest {
             perform.andDo(LikeDocumentation.like());
         }
 
-        @DisplayName("언팔로우를 할 수 있다.")
+        @DisplayName("좋아요를 취소할 수 있다.")
         @Test
         void testUnlike() throws Exception {
             // When
@@ -96,7 +96,7 @@ public class LikeControllerTest extends ControllerTest {
                     .like(any(), any());
         }
 
-        @DisplayName("언팔로우를 할 수 없다.")
+        @DisplayName("좋아요를 취소할 수 없다.")
         @Test
         void testUnlike_Fail() throws Exception {
             // When
