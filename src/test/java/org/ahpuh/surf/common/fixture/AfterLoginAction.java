@@ -10,6 +10,7 @@ public class AfterLoginAction {
     private CategoryAction categoryAction = null;
     private PostAction postAction = null;
     private FollowAction followAction = null;
+    private LikeAction likeAction = null;
 
     AfterLoginAction(final TUser user) {
         this.user = user;
@@ -213,6 +214,22 @@ public class AfterLoginAction {
         followAction().해당_유저가_팔로잉한_유저_조회_요청();
     }
 
+    /**
+     * LikeAction
+     */
+    public void 게시글_좋아요_요청(final Long postId) {
+        likeAction().게시글_좋아요_요청(postId);
+    }
+
+    public AfterLoginAction 게시글_좋아요_완료(final Long postId) {
+        게시글_좋아요_요청(postId);
+        return this;
+    }
+
+    public void 게시글_좋아요_취소_요청(final Long postId, final Long likeId) {
+        likeAction().게시글_좋아요_취소_요청(postId, likeId);
+    }
+
     private UserAction userAction() {
         if (Objects.isNull(userAction)) {
             userAction = new UserAction(user);
@@ -239,5 +256,12 @@ public class AfterLoginAction {
             followAction = new FollowAction(user);
         }
         return followAction;
+    }
+
+    private LikeAction likeAction() {
+        if (Objects.isNull(likeAction)) {
+            likeAction = new LikeAction(user);
+        }
+        return likeAction;
     }
 }
