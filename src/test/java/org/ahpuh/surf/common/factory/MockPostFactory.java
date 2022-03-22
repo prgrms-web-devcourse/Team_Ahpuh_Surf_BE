@@ -73,6 +73,24 @@ public class MockPostFactory {
                 .build();
     }
 
+    public static PostRequestDto createMockPostRequestDtoWithSelectedDate(final String selectedDate) {
+        return PostRequestDto.builder()
+                .categoryId(1L)
+                .selectedDate(selectedDate)
+                .content("content")
+                .score(100)
+                .build();
+    }
+
+    public static PostRequestDto createMockPostRequestDtoWithContent(final String content) {
+        return PostRequestDto.builder()
+                .categoryId(1L)
+                .selectedDate(LocalDate.now().toString())
+                .content(content)
+                .score(100)
+                .build();
+    }
+
     public static PostRequestDto createMockPostUpdateRequestDto(final Long categoryId) {
         return PostRequestDto.builder()
                 .categoryId(categoryId)
