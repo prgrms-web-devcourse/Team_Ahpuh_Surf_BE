@@ -19,7 +19,7 @@ public class CategoryAction {
     }
 
     public void 카테고리_생성_요청() {
-        this.user.response = given()
+        user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(createMockCategoryCreateRequestDto())
@@ -28,7 +28,7 @@ public class CategoryAction {
     }
 
     public void 카테고리_생성_요청_name(final String categoryName) {
-        this.user.response = given()
+        user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new CategoryCreateRequestDto(categoryName, "#000000"))
@@ -37,7 +37,7 @@ public class CategoryAction {
     }
 
     public void 카테고리_생성_요청_colorCode(final String colorCode) {
-        this.user.response = given()
+        user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new CategoryCreateRequestDto("categoryName", colorCode))
@@ -46,7 +46,7 @@ public class CategoryAction {
     }
 
     public void 카테고리_수정_요청() {
-        this.user.response = given()
+        user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(createMockCategoryUpdateRequestDto())
@@ -55,7 +55,7 @@ public class CategoryAction {
     }
 
     public void 카테고리_수정_요청_name(final String categoryName) {
-        this.user.response = given()
+        user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new CategoryUpdateRequestDto(categoryName, true, "#000000"))
@@ -64,7 +64,7 @@ public class CategoryAction {
     }
 
     public void 카테고리_수정_요청_colorCode(final String colorCode) {
-        this.user.response = given()
+        user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new CategoryUpdateRequestDto("categoryName", true, colorCode))
@@ -73,21 +73,21 @@ public class CategoryAction {
     }
 
     public void 카테고리_삭제_요청() {
-        this.user.response = given()
+        user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)
                 .request(Method.DELETE, "/api/v1/categories/{categoryId}", 1L)
                 .then();
     }
 
     public void 내_모든_카테고리_조회_요청() {
-        this.user.response = given()
+        user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)
                 .request(Method.GET, "/api/v1/categories")
                 .then();
     }
 
     public void 내_모든_카테고리_각각의_게시글_개수_및_평균점수_조회() {
-        this.user.response = given()
+        user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)
                 .param("userId", user.userId)
                 .request(Method.GET, "/api/v1/categories/dashboard")

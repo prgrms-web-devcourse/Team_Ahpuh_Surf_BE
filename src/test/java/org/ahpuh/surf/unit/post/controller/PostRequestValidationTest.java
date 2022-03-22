@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDate;
 
 import static org.ahpuh.surf.common.factory.MockJwtFactory.createJwtToken;
+import static org.ahpuh.surf.common.factory.MockPostFactory.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -69,11 +70,7 @@ public class PostRequestValidationTest extends ControllerTest {
         @NullAndEmptySource
         void categoryName_Fail(final String selectedDate) throws Exception {
             // Given
-            final PostRequestDto request = new PostRequestDto(
-                    1L,
-                    selectedDate,
-                    "content",
-                    100);
+            final PostRequestDto request = createMockPostRequestDtoWithSelectedDate(selectedDate);
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/posts")
@@ -90,11 +87,7 @@ public class PostRequestValidationTest extends ControllerTest {
         @NullAndEmptySource
         void content_Fail(final String content) throws Exception {
             // Given
-            final PostRequestDto request = new PostRequestDto(
-                    1L,
-                    LocalDate.now().toString(),
-                    content,
-                    100);
+            final PostRequestDto request = createMockPostRequestDtoWithContent(content);
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/posts")
@@ -110,11 +103,7 @@ public class PostRequestValidationTest extends ControllerTest {
         @Test
         void contentLength_Fail() throws Exception {
             // Given
-            final PostRequestDto request = new PostRequestDto(
-                    1L,
-                    LocalDate.now().toString(),
-                    "a".repeat(501),
-                    100);
+            final PostRequestDto request = createMockPostRequestDtoWithContent("a".repeat(501));
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/posts")
@@ -131,11 +120,7 @@ public class PostRequestValidationTest extends ControllerTest {
         @ValueSource(ints = {-1, 101})
         void score_Fail(final int score) throws Exception {
             // Given
-            final PostRequestDto request = new PostRequestDto(
-                    1L,
-                    LocalDate.now().toString(),
-                    "content",
-                    score);
+            final PostRequestDto request = createMockPostRequestDtoWithScore(score);
 
             // When
             final ResultActions perform = mockMvc.perform(multipart("/api/v1/posts")

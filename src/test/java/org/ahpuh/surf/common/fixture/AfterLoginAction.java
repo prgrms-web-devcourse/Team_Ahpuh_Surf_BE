@@ -6,14 +6,13 @@ import java.util.Objects;
 public class AfterLoginAction {
 
     public final TUser user;
-    private UserAction userAction;
-    private CategoryAction categoryAction;
-    private PostAction postAction;
+    private UserAction userAction = null;
+    private CategoryAction categoryAction = null;
+    private PostAction postAction = null;
+    private FollowAction followAction = null;
 
     AfterLoginAction(final TUser user) {
         this.user = user;
-        categoryAction = null;
-        postAction = null;
     }
 
     public void 유저조회_요청(final Long userId) {
