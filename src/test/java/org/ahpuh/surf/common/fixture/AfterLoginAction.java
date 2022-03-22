@@ -45,7 +45,7 @@ public class AfterLoginAction {
     }
 
     public AfterLoginAction 카테고리_생성_완료() {
-        categoryAction().카테고리_생성_완료();
+        categoryAction().카테고리_생성_요청();
         return this;
     }
 

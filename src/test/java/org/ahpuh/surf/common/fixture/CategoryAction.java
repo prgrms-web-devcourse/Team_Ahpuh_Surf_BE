@@ -45,14 +45,6 @@ public class CategoryAction {
                 .then();
     }
 
-    public void 카테고리_생성_완료() {
-        user.response = given().header(HttpHeaders.AUTHORIZATION, user.token)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(createMockCategoryCreateRequestDto())
-                .request(Method.POST, "/api/v1/categories")
-                .then();
-    }
-
     public void 카테고리_수정_요청() {
         this.user.response = given()
                 .header(HttpHeaders.AUTHORIZATION, user.token)

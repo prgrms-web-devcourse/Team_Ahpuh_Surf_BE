@@ -52,9 +52,7 @@ public enum TUser {
     }
 
     public void 회원가입_완료() {
-        given().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(createUserJoinRequestDtoWithEmail(this.email))
-                .request(Method.POST, "/api/v1/users");
+        회원가입_요청();
     }
 
     public void 회원가입_하지_않음() {
