@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.ahpuh.surf.common.fixture.TUser.USER_1;
 import static org.hamcrest.Matchers.is;
 
-public class CategoryControllerTest extends AcceptanceTest {
+public class CategoryAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("카테고리 생성")
     @Nested

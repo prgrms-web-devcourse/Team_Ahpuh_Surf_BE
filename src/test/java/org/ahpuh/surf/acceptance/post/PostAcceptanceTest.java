@@ -17,7 +17,7 @@ import static org.ahpuh.surf.common.fixture.TUser.USER_1;
 import static org.ahpuh.surf.common.fixture.TUser.USER_2;
 import static org.hamcrest.Matchers.is;
 
-public class PostControllerTest extends AcceptanceTest {
+public class PostAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("게시글 생성")
     @Nested

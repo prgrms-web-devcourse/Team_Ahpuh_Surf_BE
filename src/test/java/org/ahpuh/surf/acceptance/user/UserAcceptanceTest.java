@@ -16,7 +16,7 @@ import static org.ahpuh.surf.common.factory.MockFileFactory.invalidFile;
 import static org.ahpuh.surf.common.fixture.TUser.USER_1;
 import static org.ahpuh.surf.common.fixture.TUser.USER_2;
 
-public class UserControllerTest extends AcceptanceTest {
+public class UserAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("회원가입")
     @Nested
