@@ -28,15 +28,15 @@ public enum TUser {
     }
 
     public void 회원가입_요청() {
-        this.response = given()
+        response = given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(createUserJoinRequestDtoWithEmail(this.email))
+                .body(createUserJoinRequestDtoWithEmail(email))
                 .request(Method.POST, "/api/v1/users")
                 .then();
     }
 
     public void 회원가입_요청(final String email) {
-        this.response = given()
+        response = given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(createUserJoinRequestDtoWithEmail(email))
                 .request(Method.POST, "/api/v1/users")
@@ -44,7 +44,7 @@ public enum TUser {
     }
 
     public void 회원가입_요청_name(final String userName) {
-        this.response = given()
+        response = given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(createUserJoinRequestDtoWithUserName(userName))
                 .request(Method.POST, "/api/v1/users")
@@ -59,17 +59,17 @@ public enum TUser {
     }
 
     public void 로그인_요청() {
-        this.response = given()
+        response = given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(createUserLoginRequestDto(this.email))
+                .body(createUserLoginRequestDto(email))
                 .request(Method.POST, "/api/v1/users/login")
                 .then();
     }
 
     public void 로그인_요청(final String password) {
-        this.response = given()
+        response = given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(createUserLoginRequestDto(this.email, password))
+                .body(createUserLoginRequestDto(email, password))
                 .request(Method.POST, "/api/v1/users/login")
                 .then();
     }
@@ -77,7 +77,7 @@ public enum TUser {
     public AfterLoginAction 로그인_완료() {
         회원가입_완료();
         로그인_요청();
-        this.token = this.response.statusCode(200)
+        token = response.statusCode(200)
                 .extract().as(UserLoginResponseDto.class)
                 .getToken();
         return new AfterLoginAction(this);

@@ -161,8 +161,8 @@ public class CategoryControllerTest extends AcceptanceTest {
         void 내_모든_카테고리_각각의_게시글_개수_및_평균점수_조회_성공() {
             // Given
             final AfterLoginAction action = USER_1.로그인_완료().카테고리_생성_완료()
-                    .게시글_생성_완료(100)
-                    .게시글_생성_완료(90);
+                    .게시글_생성_완료_score(100)
+                    .게시글_생성_완료_score(90);
 
             // When
             action.내_모든_카테고리_각각의_게시글_개수_및_평균점수_조회();

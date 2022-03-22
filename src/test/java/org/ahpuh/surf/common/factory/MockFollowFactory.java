@@ -21,6 +21,10 @@ public class MockFollowFactory {
         return new FollowRequestDto(1L);
     }
 
+    public static FollowRequestDto createMockFollowRequestDtoWithTargetId(final Long targetId) {
+        return new FollowRequestDto(targetId);
+    }
+
     public static FollowResponseDto createMockFollowResponseDto() {
         return new FollowResponseDto(1L);
     }

@@ -6,14 +6,13 @@ import java.util.Objects;
 public class AfterLoginAction {
 
     public final TUser user;
-    private UserAction userAction;
-    private CategoryAction categoryAction;
-    private PostAction postAction;
+    private UserAction userAction = null;
+    private CategoryAction categoryAction = null;
+    private PostAction postAction = null;
+    private FollowAction followAction = null;
 
     AfterLoginAction(final TUser user) {
         this.user = user;
-        categoryAction = null;
-        postAction = null;
     }
 
     public void 유저조회_요청(final Long userId) {
@@ -73,8 +72,116 @@ public class AfterLoginAction {
         categoryAction().내_모든_카테고리_각각의_게시글_개수_및_평균점수_조회();
     }
 
-    public AfterLoginAction 게시글_생성_완료(final int postScore) {
-        postAction().게시글_생성_완료(postScore);
+    public void 게시글_생성_요청_With_File(final File file) {
+        postAction().게시글_생성_요청_With_File(file);
+    }
+
+    public void 게시글_생성_요청_No_File() {
+        postAction().게시글_생성_요청_No_File();
+    }
+
+    public void 게시글_생성_요청_selectedDate(final String selectedDate) {
+        postAction().게시글_생성_요청_selectedDate(selectedDate);
+    }
+
+    public void 게시글_생성_요청_content(final String content) {
+        postAction().게시글_생성_요청_content(content);
+    }
+
+    public void 게시글_생성_요청_score(final int score) {
+        postAction().게시글_생성_요청_score(score);
+    }
+
+    public AfterLoginAction 게시글_생성_완료() {
+        postAction().게시글_생성_요청_No_File();
+        return this;
+    }
+
+    public AfterLoginAction 게시글_생성_완료_selectedDate(final String selectedDate) {
+        postAction().게시글_생성_요청_selectedDate(selectedDate);
+        return this;
+    }
+
+    public AfterLoginAction 게시글_생성_완료_score(final int postScore) {
+        postAction().게시글_생성_요청_score(postScore);
+        return this;
+    }
+
+    public void 게시글_수정_요청_With_File(final File file) {
+        postAction().게시글_수정_요청_With_File(file);
+    }
+
+    public void 게시글_수정_요청_No_File() {
+        postAction().게시글_수정_요청_No_File();
+    }
+
+    public void 게시글_수정_요청_selectedDate(final String selectedDate) {
+        postAction().게시글_수정_요청_selectedDate(selectedDate);
+    }
+
+    public void 게시글_수정_요청_content(final String content) {
+        postAction().게시글_수정_요청_content(content);
+    }
+
+    public void 게시글_수정_요청_score(final int score) {
+        postAction().게시글_수정_요청_score(score);
+    }
+
+    public void 게시글_조회_요청() {
+        postAction().게시글_조회_요청();
+    }
+
+    public void 게시글_삭제_요청() {
+        postAction().게시글_삭제_요청();
+    }
+
+    public void 즐겨찾기_추가_요청() {
+        postAction().즐겨찾기_추가_요청();
+    }
+
+    public AfterLoginAction 즐겨찾기_추가_완료() {
+        postAction().즐겨찾기_추가_요청();
+        return this;
+    }
+
+    public void 즐겨찾기_삭제_요청() {
+        postAction().즐겨찾기_삭제_요청();
+    }
+
+    public void 특정_Month_모든_게시글_조회_요청(final int year, final int month) {
+        postAction().특정_Month_모든_게시글_조회_요청(year, month);
+    }
+
+    public void 해당_카테고리의_최신_게시글_점수_조회_요청() {
+        postAction().해당_카테고리의_최신_게시글_점수_조회_요청();
+    }
+
+    public void 특정_Year의_날짜별_게시글_개수_조회_요청(final int year) {
+        postAction().특정_Year의_날짜별_게시글_개수_조회_요청(year);
+    }
+
+    public void 해당_유저의_카테고리별_게시글_점수_조회_요청() {
+        postAction().해당_유저의_카테고리별_게시글_점수_조회_요청();
+    }
+
+    public void 전체_최신_게시글_둘러보기_요청() {
+        postAction().전체_최신_게시글_둘러보기_요청();
+    }
+
+    public void 내가_팔로우한_유저의_게시글_둘러보기_요청() {
+        postAction().내가_팔로우한_유저의_게시글_둘러보기_요청();
+    }
+
+    public void 해당_유저의_전체_게시글_조회_요청(final TUser user) {
+        postAction().해당_유저의_전체_게시글_조회_요청(user);
+    }
+
+    public void 해당_카테고리의_전체_게시글_조회_요청(final Long categoryId) {
+        postAction().해당_카테고리의_전체_게시글_조회_요청(categoryId);
+    }
+
+    public AfterLoginAction 팔로우_완료(final TUser user) {
+        followAction().팔로우_완료(user);
         return this;
     }
 
@@ -97,5 +204,12 @@ public class AfterLoginAction {
             postAction = new PostAction(user);
         }
         return postAction;
+    }
+
+    private FollowAction followAction() {
+        if (Objects.isNull(followAction)) {
+            followAction = new FollowAction(user);
+        }
+        return followAction;
     }
 }
