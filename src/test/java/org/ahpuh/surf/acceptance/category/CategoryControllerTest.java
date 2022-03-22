@@ -33,7 +33,7 @@ public class CategoryControllerTest extends AcceptanceTest {
         @ParameterizedTest
         @NullAndEmptySource
         @ValueSource(strings = "카테고리이름은최대30글자까지입니다.이것은31글자이구요..")
-        void 카테고리명_최소1_최데30자_실패(final String categoryName) {
+        void 카테고리명_최소1_최대30자_실패(final String categoryName) {
             // Given
             final AfterLoginAction action = USER_1.로그인_완료();
 
@@ -84,7 +84,7 @@ public class CategoryControllerTest extends AcceptanceTest {
         @ParameterizedTest
         @NullAndEmptySource
         @ValueSource(strings = "카테고리이름은최대30글자까지입니다.이것은31글자이구요..")
-        void 카테고리명_최소1_최데30자_실패(final String categoryName) {
+        void 카테고리명_최소1_최대30자_실패(final String categoryName) {
             // Given
             final AfterLoginAction action = USER_1.로그인_완료().카테고리_생성_완료();
 

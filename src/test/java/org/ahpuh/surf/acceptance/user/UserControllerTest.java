@@ -1,6 +1,7 @@
 package org.ahpuh.surf.acceptance.user;
 
 import org.ahpuh.surf.acceptance.AcceptanceTest;
+import org.ahpuh.surf.common.fixture.AfterLoginAction;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -118,10 +119,10 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저정보_조회_성공() {
             // Given
-            USER_1.로그인_완료();
+            final AfterLoginAction action = USER_1.로그인_완료();
 
             // When
-            USER_1.유저조회_요청(1L);
+            action.유저조회_요청(1L);
 
             // Then
             USER_1.response.statusCode(200);
@@ -130,11 +131,11 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 존재하지_않는_유저_아이디_실패() {
             // Given
-            USER_1.로그인_완료();
+            final AfterLoginAction action = USER_1.로그인_완료();
             final Long invalidUserId = 2L;
 
             // When
-            USER_1.유저조회_요청(invalidUserId);
+            action.유저조회_요청(invalidUserId);
 
             // Then
             USER_1.response.statusCode(404);
@@ -148,11 +149,11 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저정보_수정_프로필이미지_첨부O_성공() {
             // Given
-            USER_1.로그인_완료();
+            final AfterLoginAction action = USER_1.로그인_완료();
             final File profileImage = createImageFile();
 
             // When
-            USER_1.유저정보_수정_요청_With_File(profileImage);
+            action.유저정보_수정_요청_With_File(profileImage);
 
             // Then
             USER_1.response.statusCode(200);
@@ -161,10 +162,10 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저정보_수정_프로필이미지_첨부X_성공() {
             // Given
-            USER_1.로그인_완료();
+            final AfterLoginAction action = USER_1.로그인_완료();
 
             // When
-            USER_1.유저정보_수정_요청_No_File();
+            action.유저정보_수정_요청_No_File();
 
             // Then
             USER_1.response.statusCode(200);
@@ -173,10 +174,10 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저정보_수정_잘못된_File_실패() {
             // Given
-            USER_1.로그인_완료();
+            final AfterLoginAction action = USER_1.로그인_완료();
 
             // When
-            USER_1.유저정보_수정_요청_With_File(invalidFile());
+            action.유저정보_수정_요청_With_File(invalidFile());
 
             // Then
             USER_1.response.statusCode(400);
@@ -190,10 +191,10 @@ public class UserControllerTest extends AcceptanceTest {
         @Test
         void 유저삭제_성공() {
             // Given
-            USER_1.로그인_완료();
+            final AfterLoginAction action = USER_1.로그인_완료();
 
             // When
-            USER_1.회원탈퇴_요청();
+            action.회원탈퇴_요청();
 
             // Then
             USER_1.response.statusCode(204);
