@@ -15,6 +15,9 @@ public class AfterLoginAction {
         this.user = user;
     }
 
+    /**
+     * UserAction
+     */
     public void 유저조회_요청(final Long userId) {
         userAction().유저조회_요청(userId);
     }
@@ -31,6 +34,9 @@ public class AfterLoginAction {
         userAction().회원탈퇴_요청();
     }
 
+    /**
+     * CategoryAction
+     */
     public void 카테고리_생성_요청() {
         categoryAction().카테고리_생성_요청();
     }
@@ -72,6 +78,9 @@ public class AfterLoginAction {
         categoryAction().내_모든_카테고리_각각의_게시글_개수_및_평균점수_조회();
     }
 
+    /**
+     * PostAction
+     */
     public void 게시글_생성_요청_With_File(final File file) {
         postAction().게시글_생성_요청_With_File(file);
     }
@@ -180,9 +189,28 @@ public class AfterLoginAction {
         postAction().해당_카테고리의_전체_게시글_조회_요청(categoryId);
     }
 
-    public AfterLoginAction 팔로우_완료(final TUser user) {
-        followAction().팔로우_완료(user);
+    /**
+     * FollowAction
+     */
+    public void 팔로우_요청(final TUser target) {
+        followAction().팔로우_요청(target);
+    }
+
+    public AfterLoginAction 팔로우_완료(final TUser target) {
+        팔로우_요청(target);
         return this;
+    }
+
+    public void 언팔로우_요청(final TUser target) {
+        followAction().언팔로우_요청(target);
+    }
+
+    public void 해당_유저의_팔로워_조회_요청() {
+        followAction().해당_유저의_팔로워_조회_요청();
+    }
+
+    public void 해당_유저가_팔로잉한_유저_조회_요청() {
+        followAction().해당_유저가_팔로잉한_유저_조회_요청();
     }
 
     private UserAction userAction() {
