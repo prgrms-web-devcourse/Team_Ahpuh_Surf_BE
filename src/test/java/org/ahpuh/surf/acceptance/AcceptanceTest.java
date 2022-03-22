@@ -19,23 +19,9 @@ public abstract class AcceptanceTest {
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
-    @Autowired
-    private Jwt jwt;
-
-    @LocalServerPort
-    private int port;
-
-    protected String TOKEN;
-
     @BeforeEach
     void setPort() {
         RestAssured.port = port;
-    }
-
-    @BeforeEach
-    void setToken() {
-        final String[] roles = new String[]{Permission.ROLE_USER.getRole()};
-        TOKEN = jwt.sign(Claims.from(1L, "test1@naver.com", roles));
     }
 
     @AfterEach
