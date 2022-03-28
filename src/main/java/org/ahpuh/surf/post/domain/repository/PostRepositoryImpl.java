@@ -64,7 +64,9 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.selectedDate.as("selectedDate")
                 ))
                 .from(post)
-                .where(post.user.userId.eq(userId).and(post.selectedDate.between(startDate, endDate)))
+                .where(post.user.userId.eq(userId)
+                        .and(post.selectedDate.goe(startDate))
+                        .and(post.selectedDate.loe(endDate)))
                 .orderBy(post.selectedDate.desc(), post.createdAt.desc())
                 .fetch();
     }
@@ -77,7 +79,8 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         post.selectedDate.count().as("count")
                 ))
                 .from(post)
-                .where(post.selectedDate.between(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31))
+                .where(post.selectedDate.goe(LocalDate.of(year, 1, 1))
+                        .and(post.selectedDate.loe(LocalDate.of(year, 12, 31)))
                         .and(post.user.eq(user)))
                 .groupBy(post.selectedDate)
                 .orderBy(post.selectedDate.asc())
