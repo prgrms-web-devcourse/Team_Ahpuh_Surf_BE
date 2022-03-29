@@ -136,7 +136,7 @@ public class PostService {
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
         final List<RecentPostResponseDto> postDtos = Objects.isNull(findPost)
                 ? postRepository.findAllRecentPost(userId, PAGE)
-                : postRepository.findAllRecentPostByCursor(userId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
+                : postRepository.findAllRecentPostByCursor(userId, cursorId, findPost.getSelectedDate(), PAGE);
 
         final boolean hasNext = hasNextCheck(postDtos);
         postDtos.forEach(RecentPostResponseDto::likeCheck);
@@ -148,7 +148,7 @@ public class PostService {
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
         final List<ExploreResponseDto> exploreDtos = Objects.isNull(findPost)
                 ? postRepository.findFollowingPosts(userId, PAGE)
-                : postRepository.findFollowingPostsByCursor(userId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
+                : postRepository.findFollowingPostsByCursor(userId, cursorId, findPost.getSelectedDate(), PAGE);
 
         final boolean hasNext = hasNextCheck(exploreDtos);
         exploreDtos.forEach(ExploreResponseDto::likeCheck);
@@ -160,7 +160,7 @@ public class PostService {
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
         final List<AllPostResponseDto> postDtos = Objects.isNull(findPost)
                 ? postRepository.findAllPostOfUser(userId, postUserId, PAGE)
-                : postRepository.findAllPostOfUserByCursor(userId, postUserId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
+                : postRepository.findAllPostOfUserByCursor(userId, postUserId, cursorId, findPost.getSelectedDate(), PAGE);
 
         final boolean hasNext = hasNextCheck(postDtos);
         postDtos.forEach(AllPostResponseDto::likeCheck);
@@ -172,7 +172,7 @@ public class PostService {
         final Post findPost = (cursorId == 0 ? null : getPost(cursorId));
         final List<AllPostResponseDto> postDtos = Objects.isNull(findPost)
                 ? postRepository.findAllPostOfCategory(userId, categoryId, PAGE)
-                : postRepository.findAllPostOfCategoryByCursor(userId, categoryId, findPost.getSelectedDate(), findPost.getCreatedAt(), PAGE);
+                : postRepository.findAllPostOfCategoryByCursor(userId, categoryId, cursorId, findPost.getSelectedDate(), PAGE);
 
         final boolean hasNext = hasNextCheck(postDtos);
         postDtos.forEach(AllPostResponseDto::likeCheck);

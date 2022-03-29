@@ -6,7 +6,6 @@ import org.ahpuh.surf.user.domain.User;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,18 +21,18 @@ public interface PostRepositoryQuerydsl {
 
     List<RecentPostResponseDto> findAllRecentPost(Long userId, Pageable page);
 
-    List<RecentPostResponseDto> findAllRecentPostByCursor(Long userId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+    List<RecentPostResponseDto> findAllRecentPostByCursor(Long userId, Long cursorPostId, LocalDate selectedDate, Pageable page);
 
     List<ExploreResponseDto> findFollowingPosts(Long userId, Pageable page);
 
-    List<ExploreResponseDto> findFollowingPostsByCursor(Long userId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+    List<ExploreResponseDto> findFollowingPostsByCursor(Long userId, Long cursorPostId, LocalDate selectedDate, Pageable page);
 
     List<AllPostResponseDto> findAllPostOfUser(Long userId, Long postUserId, Pageable page);
 
-    List<AllPostResponseDto> findAllPostOfUserByCursor(Long userId, Long postUserId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+    List<AllPostResponseDto> findAllPostOfUserByCursor(Long userId, Long postUserId, Long cursorPostId, LocalDate selectedDate, Pageable page);
 
     List<AllPostResponseDto> findAllPostOfCategory(Long userId, Long categoryId, Pageable page);
 
-    List<AllPostResponseDto> findAllPostOfCategoryByCursor(Long userId, Long categoryId, LocalDate selectedDate, LocalDateTime createdAt, Pageable page);
+    List<AllPostResponseDto> findAllPostOfCategoryByCursor(Long userId, Long categoryId, Long cursorPostId, LocalDate selectedDate, Pageable page);
 
 }
