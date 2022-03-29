@@ -11,7 +11,6 @@ import org.ahpuh.surf.user.domain.User;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -67,7 +66,7 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .where(post.user.userId.eq(userId)
                         .and(post.selectedDate.goe(startDate))
                         .and(post.selectedDate.loe(endDate)))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .orderBy(post.selectedDate.desc(), post.postId.desc())
                 .fetch();
     }
 
@@ -133,13 +132,13 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .from(post)
                 .leftJoin(follow).on(follow.source.userId.eq(userId).and(follow.target.userId.eq(post.user.userId)))
                 .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .orderBy(post.selectedDate.desc(), post.postId.desc())
                 .limit(page.getPageSize())
                 .fetch();
     }
 
     @Override
-    public List<RecentPostResponseDto> findAllRecentPostByCursor(final Long userId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+    public List<RecentPostResponseDto> findAllRecentPostByCursor(final Long userId, final Long cursorPostId, final LocalDate selectedDate, final Pageable page) {
         return queryFactory
                 .select(new QRecentPostResponseDto(
                         post.user.userId.as("userId"),
@@ -161,8 +160,8 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .leftJoin(follow).on(follow.source.userId.eq(userId).and(follow.target.userId.eq(post.user.userId)))
                 .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
                 .where((post.selectedDate.lt(selectedDate))
-                        .or(post.selectedDate.eq(selectedDate).and(post.createdAt.lt(createdAt))))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                        .or(post.selectedDate.eq(selectedDate).and(post.postId.lt(cursorPostId))))
+                .orderBy(post.selectedDate.desc(), post.postId.desc())
                 .limit(page.getPageSize())
                 .fetch();
     }
@@ -189,13 +188,13 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .leftJoin(follow).on(follow.source.userId.eq(userId))
                 .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
                 .where(follow.source.userId.eq(userId).and(follow.target.userId.eq(post.user.userId)))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .orderBy(post.selectedDate.desc(), post.postId.desc())
                 .limit(page.getPageSize())
                 .fetch();
     }
 
     @Override
-    public List<ExploreResponseDto> findFollowingPostsByCursor(final Long userId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+    public List<ExploreResponseDto> findFollowingPostsByCursor(final Long userId, final Long cursorPostId, final LocalDate selectedDate, final Pageable page) {
         return queryFactory
                 .select(new QExploreResponseDto(
                         post.user.userId.as("userId"),
@@ -220,9 +219,9 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         .and(post.selectedDate.lt(selectedDate))
                         .or(follow.source.userId.eq(userId)
                                 .and(follow.target.userId.eq(post.user.userId))
-                                .and(post.createdAt.lt(createdAt))
+                                .and(post.postId.lt(cursorPostId))
                                 .and(post.selectedDate.eq(selectedDate))))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .orderBy(post.selectedDate.desc(), post.postId.desc())
                 .limit(page.getPageSize())
                 .fetch();
     }
@@ -244,13 +243,13 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .from(post)
                 .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
                 .where(post.user.userId.eq(postUserId))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .orderBy(post.selectedDate.desc(), post.postId.desc())
                 .limit(page.getPageSize())
                 .fetch();
     }
 
     @Override
-    public List<AllPostResponseDto> findAllPostOfUserByCursor(final Long userId, final Long postUserId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+    public List<AllPostResponseDto> findAllPostOfUserByCursor(final Long userId, final Long postUserId, final Long cursorPostId, final LocalDate selectedDate, final Pageable page) {
         return queryFactory
                 .select(new QAllPostResponseDto(
                         post.category.name.as("categoryName"),
@@ -269,8 +268,8 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         .and(post.selectedDate.lt(selectedDate))
                         .or(post.user.userId.eq(postUserId)
                                 .and(post.selectedDate.eq(selectedDate))
-                                .and(post.createdAt.lt(createdAt))))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                                .and(post.postId.lt(cursorPostId))))
+                .orderBy(post.selectedDate.desc(), post.postId.desc())
                 .limit(page.getPageSize())
                 .fetch();
     }
@@ -292,13 +291,13 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                 .from(post)
                 .leftJoin(like).on(like.user.userId.eq(userId).and(post.postId.eq(like.post.postId)))
                 .where(post.category.categoryId.eq(categoryId))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                .orderBy(post.selectedDate.desc(), post.postId.desc())
                 .limit(page.getPageSize())
                 .fetch();
     }
 
     @Override
-    public List<AllPostResponseDto> findAllPostOfCategoryByCursor(final Long userId, final Long categoryId, final LocalDate selectedDate, final LocalDateTime createdAt, final Pageable page) {
+    public List<AllPostResponseDto> findAllPostOfCategoryByCursor(final Long userId, final Long categoryId, final Long cursorPostId, final LocalDate selectedDate, final Pageable page) {
         return queryFactory
                 .select(new QAllPostResponseDto(
                         post.category.name.as("categoryName"),
@@ -317,8 +316,8 @@ public class PostRepositoryImpl implements PostRepositoryQuerydsl {
                         .and(post.selectedDate.lt(selectedDate))
                         .or(post.category.categoryId.eq(categoryId)
                                 .and(post.selectedDate.eq(selectedDate))
-                                .and(post.createdAt.lt(createdAt))))
-                .orderBy(post.selectedDate.desc(), post.createdAt.desc())
+                                .and(post.postId.lt(cursorPostId))))
+                .orderBy(post.selectedDate.desc(), post.postId.desc())
                 .limit(page.getPageSize())
                 .fetch();
     }
