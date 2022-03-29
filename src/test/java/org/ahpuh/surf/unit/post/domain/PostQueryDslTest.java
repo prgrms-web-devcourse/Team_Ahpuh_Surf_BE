@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -366,8 +365,8 @@ public class PostQueryDslTest {
                 // When
                 final List<RecentPostResponseDto> responseDtos = postRepository.findAllRecentPostByCursor(
                         userId,
+                        5L,
                         LocalDate.of(2022, 1, 3),
-                        LocalDateTime.of(2022, 1, 1, 1, 1),
                         PAGE_REQUEST);
 
                 // Then
@@ -536,8 +535,8 @@ public class PostQueryDslTest {
                 // When
                 final List<ExploreResponseDto> responseDtos = postRepository.findFollowingPostsByCursor(
                         userId2,
+                        5L,
                         LocalDate.of(2022, 1, 3),
-                        LocalDateTime.of(2022, 1, 1, 1, 1),
                         PAGE_REQUEST);
 
                 // Then
@@ -677,8 +676,8 @@ public class PostQueryDslTest {
                 final List<AllPostResponseDto> responseDtos = postRepository.findAllPostOfUserByCursor(
                         userId2,
                         userId1,
+                        5L,
                         LocalDate.of(2022, 1, 3),
-                        LocalDateTime.of(2022, 1, 1, 1, 1),
                         PAGE_REQUEST);
 
                 // Then
@@ -819,8 +818,8 @@ public class PostQueryDslTest {
                 final List<AllPostResponseDto> responseDtos = postRepository.findAllPostOfCategoryByCursor(
                         userId2,
                         categoryId1,
+                        5L,
                         LocalDate.of(2022, 1, 3),
-                        LocalDateTime.of(2022, 1, 1, 1, 1),
                         PAGE_REQUEST);
 
                 // Then

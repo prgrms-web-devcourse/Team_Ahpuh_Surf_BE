@@ -20,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -153,9 +152,7 @@ public class PostCursorPagingTest {
                         .willReturn(Optional.of(post));
                 given(post.getSelectedDate())
                         .willReturn(LocalDate.of(2022, 1, 1));
-                given(post.getCreatedAt())
-                        .willReturn(LocalDateTime.of(2022, 1, 1, 12, 12, 12));
-                given(postRepository.findAllRecentPostByCursor(anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class)))
+                given(postRepository.findAllRecentPostByCursor(anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class)))
                         .willReturn(responseDtos);
 
                 // When
@@ -167,7 +164,7 @@ public class PostCursorPagingTest {
                 verify(postRepository, times(0))
                         .findAllRecentPost(any(), any());
                 verify(postRepository, times(1))
-                        .findAllRecentPostByCursor(anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class));
+                        .findAllRecentPostByCursor(anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class));
                 verify(postDto, times(10))
                         .likeCheck();
                 assertAll("게시글 10개 조회, hasNext = true",
@@ -191,9 +188,7 @@ public class PostCursorPagingTest {
                         .willReturn(Optional.of(post));
                 given(post.getSelectedDate())
                         .willReturn(LocalDate.of(2022, 1, 1));
-                given(post.getCreatedAt())
-                        .willReturn(LocalDateTime.of(2022, 1, 1, 12, 12, 12));
-                given(postRepository.findAllRecentPostByCursor(anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class)))
+                given(postRepository.findAllRecentPostByCursor(anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class)))
                         .willReturn(responseDtos);
 
                 // When
@@ -205,7 +200,7 @@ public class PostCursorPagingTest {
                 verify(postRepository, times(0))
                         .findAllRecentPost(any(), any());
                 verify(postRepository, times(1))
-                        .findAllRecentPostByCursor(anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class));
+                        .findAllRecentPostByCursor(anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class));
                 verify(postDto, times(postCount))
                         .likeCheck();
                 assertAll("게시글 조회, hasNext = false",
@@ -348,9 +343,7 @@ public class PostCursorPagingTest {
                         .willReturn(Optional.of(post));
                 given(post.getSelectedDate())
                         .willReturn(LocalDate.of(2022, 1, 1));
-                given(post.getCreatedAt())
-                        .willReturn(LocalDateTime.of(2022, 1, 1, 12, 12, 12));
-                given(postRepository.findFollowingPostsByCursor(anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class)))
+                given(postRepository.findFollowingPostsByCursor(anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class)))
                         .willReturn(responseDtos);
 
                 // When
@@ -362,7 +355,7 @@ public class PostCursorPagingTest {
                 verify(postRepository, times(0))
                         .findFollowingPosts(any(), any());
                 verify(postRepository, times(1))
-                        .findFollowingPostsByCursor(anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class));
+                        .findFollowingPostsByCursor(anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class));
                 verify(postDto, times(10))
                         .likeCheck();
                 assertAll("게시글 10개 조회, hasNext = true",
@@ -386,9 +379,7 @@ public class PostCursorPagingTest {
                         .willReturn(Optional.of(post));
                 given(post.getSelectedDate())
                         .willReturn(LocalDate.of(2022, 1, 1));
-                given(post.getCreatedAt())
-                        .willReturn(LocalDateTime.of(2022, 1, 1, 12, 12, 12));
-                given(postRepository.findFollowingPostsByCursor(anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class)))
+                given(postRepository.findFollowingPostsByCursor(anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class)))
                         .willReturn(responseDtos);
 
                 // When
@@ -400,7 +391,7 @@ public class PostCursorPagingTest {
                 verify(postRepository, times(0))
                         .findFollowingPosts(any(), any());
                 verify(postRepository, times(1))
-                        .findFollowingPostsByCursor(anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class));
+                        .findFollowingPostsByCursor(anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class));
                 verify(postDto, times(postCount))
                         .likeCheck();
                 assertAll("게시글 조회, hasNext = false",
@@ -543,9 +534,7 @@ public class PostCursorPagingTest {
                         .willReturn(Optional.of(post));
                 given(post.getSelectedDate())
                         .willReturn(LocalDate.of(2022, 1, 1));
-                given(post.getCreatedAt())
-                        .willReturn(LocalDateTime.of(2022, 1, 1, 12, 12, 12));
-                given(postRepository.findAllPostOfUserByCursor(anyLong(), anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class)))
+                given(postRepository.findAllPostOfUserByCursor(anyLong(), anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class)))
                         .willReturn(responseDtos);
 
                 // When
@@ -557,7 +546,7 @@ public class PostCursorPagingTest {
                 verify(postRepository, times(0))
                         .findAllPostOfCategory(any(), any(), any());
                 verify(postRepository, times(1))
-                        .findAllPostOfUserByCursor(anyLong(), anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class));
+                        .findAllPostOfUserByCursor(anyLong(), anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class));
                 verify(postDto, times(10))
                         .likeCheck();
                 assertAll("게시글 10개 조회, hasNext = true",
@@ -581,9 +570,7 @@ public class PostCursorPagingTest {
                         .willReturn(Optional.of(post));
                 given(post.getSelectedDate())
                         .willReturn(LocalDate.of(2022, 1, 1));
-                given(post.getCreatedAt())
-                        .willReturn(LocalDateTime.of(2022, 1, 1, 12, 12, 12));
-                given(postRepository.findAllPostOfUserByCursor(anyLong(), anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class)))
+                given(postRepository.findAllPostOfUserByCursor(anyLong(), anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class)))
                         .willReturn(responseDtos);
 
                 // When
@@ -595,7 +582,7 @@ public class PostCursorPagingTest {
                 verify(postRepository, times(0))
                         .findAllPostOfCategory(any(), any(), any());
                 verify(postRepository, times(1))
-                        .findAllPostOfUserByCursor(anyLong(), anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class));
+                        .findAllPostOfUserByCursor(anyLong(), anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class));
                 verify(postDto, times(postCount))
                         .likeCheck();
                 assertAll("게시글 조회, hasNext = false",
@@ -738,9 +725,7 @@ public class PostCursorPagingTest {
                         .willReturn(Optional.of(post));
                 given(post.getSelectedDate())
                         .willReturn(LocalDate.of(2022, 1, 1));
-                given(post.getCreatedAt())
-                        .willReturn(LocalDateTime.of(2022, 1, 1, 12, 12, 12));
-                given(postRepository.findAllPostOfCategoryByCursor(anyLong(), anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class)))
+                given(postRepository.findAllPostOfCategoryByCursor(anyLong(), anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class)))
                         .willReturn(responseDtos);
 
                 // When
@@ -752,7 +737,7 @@ public class PostCursorPagingTest {
                 verify(postRepository, times(0))
                         .findAllPostOfCategory(any(), any(), any());
                 verify(postRepository, times(1))
-                        .findAllPostOfCategoryByCursor(anyLong(), anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class));
+                        .findAllPostOfCategoryByCursor(anyLong(), anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class));
                 verify(postDto, times(10))
                         .likeCheck();
                 assertAll("게시글 10개 조회, hasNext = true",
@@ -776,9 +761,7 @@ public class PostCursorPagingTest {
                         .willReturn(Optional.of(post));
                 given(post.getSelectedDate())
                         .willReturn(LocalDate.of(2022, 1, 1));
-                given(post.getCreatedAt())
-                        .willReturn(LocalDateTime.of(2022, 1, 1, 12, 12, 12));
-                given(postRepository.findAllPostOfCategoryByCursor(anyLong(), anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class)))
+                given(postRepository.findAllPostOfCategoryByCursor(anyLong(), anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class)))
                         .willReturn(responseDtos);
 
                 // When
@@ -790,7 +773,7 @@ public class PostCursorPagingTest {
                 verify(postRepository, times(0))
                         .findAllPostOfCategory(any(), any(), any());
                 verify(postRepository, times(1))
-                        .findAllPostOfCategoryByCursor(anyLong(), anyLong(), any(LocalDate.class), any(LocalDateTime.class), any(PageRequest.class));
+                        .findAllPostOfCategoryByCursor(anyLong(), anyLong(), anyLong(), any(LocalDate.class), any(PageRequest.class));
                 verify(postDto, times(postCount))
                         .likeCheck();
                 assertAll("게시글 조회, hasNext = false",
