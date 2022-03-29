@@ -1,0 +1,1 @@
+CREATE INDEX posts_selected_date_idx ON posts (selected_date);
