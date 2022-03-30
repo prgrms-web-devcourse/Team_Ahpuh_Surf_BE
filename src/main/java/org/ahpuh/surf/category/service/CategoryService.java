@@ -3,14 +3,13 @@ package org.ahpuh.surf.category.service;
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.domain.CategoryConverter;
-import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.category.domain.repository.CategoryRepository;
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
 import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
-import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
 import org.springframework.stereotype.Service;
@@ -57,20 +56,8 @@ public class CategoryService {
     }
 
     public List<CategoryDetailResponseDto> getCategoryDashboard(final Long userId) {
-        final User user = getUser(userId);
-        final List<Category> categoryList = categoryRepository.findByUser(user);
-
-        return categoryList.stream()
-                .map(category -> categoryConverter.toCategoryDetailResponseDto(category, (int) getAverageScore(category)))
-                .toList();
-    }
-
-    private double getAverageScore(final Category category) {
-        return category.getPosts()
-                .stream()
-                .mapToInt(Post::getScore)
-                .average()
-                .orElse(0);
+        getUser(userId);
+        return categoryRepository.getCategoryDashboard(userId);
     }
 
     private User getUser(final Long userId) {
