@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
-import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -45,8 +44,8 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Post> posts;
 
-    @Formula("(select count(1) from posts p where p.category_id = category_id and p.is_deleted = false)")
-    private int postCount;
+//    @Formula("(select count(1) from posts p where p.category_id = category_id and p.is_deleted = false)")
+//    private int postCount;
 
     @Builder
     public Category(final User user, final String name, final String colorCode) {

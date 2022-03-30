@@ -2,7 +2,7 @@ package org.ahpuh.surf.unit.category.service;
 
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.category.domain.CategoryConverter;
-import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.category.domain.repository.CategoryRepository;
 import org.ahpuh.surf.category.dto.request.CategoryCreateRequestDto;
 import org.ahpuh.surf.category.dto.request.CategoryUpdateRequestDto;
 import org.ahpuh.surf.category.dto.response.AllCategoryByUserResponseDto;
@@ -10,7 +10,6 @@ import org.ahpuh.surf.category.dto.response.CategoryDetailResponseDto;
 import org.ahpuh.surf.category.service.CategoryService;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.common.exception.user.UserNotFoundException;
-import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.domain.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPost;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -275,15 +273,12 @@ public class CategoryServiceTest {
         void getCategoryDashboard_Success() {
             // Given
             final User mockUser = mock(User.class);
-            final Category mockCategory = mock(Category.class);
-            final Post post = createMockPost(mockUser, mockCategory);
+            final CategoryDetailResponseDto responseDto = mock(CategoryDetailResponseDto.class);
             final Long userId = 1L;
             given(userRepository.findById(userId))
                     .willReturn(Optional.of(mockUser));
-            given(categoryRepository.findByUser(mockUser))
-                    .willReturn(List.of(mockCategory, mockCategory));
-            given(categoryConverter.toCategoryDetailResponseDto(any(Category.class), anyInt()))
-                    .willReturn(mock(CategoryDetailResponseDto.class));
+            given(categoryRepository.getCategoryDashboard(userId))
+                    .willReturn(List.of(responseDto, responseDto));
 
             // When
             categoryService.getCategoryDashboard(userId);
@@ -292,9 +287,7 @@ public class CategoryServiceTest {
             verify(userRepository, times(1))
                     .findById(anyLong());
             verify(categoryRepository, times(1))
-                    .findByUser(any(User.class));
-            verify(categoryConverter, times(2))
-                    .toCategoryDetailResponseDto(any(), isA(Integer.class));
+                    .getCategoryDashboard(anyLong());
         }
 
         @DisplayName("해당 유저의 카테고리가 없을 경우 빈 배열을 반환한다.")
@@ -305,7 +298,7 @@ public class CategoryServiceTest {
             final Long userId = 1L;
             given(userRepository.findById(userId))
                     .willReturn(Optional.of(mockUser));
-            given(categoryRepository.findByUser(mockUser))
+            given(categoryRepository.getCategoryDashboard(userId))
                     .willReturn(List.of());
 
             // When
@@ -315,9 +308,7 @@ public class CategoryServiceTest {
             verify(userRepository, times(1))
                     .findById(anyLong());
             verify(categoryRepository, times(1))
-                    .findByUser(any(User.class));
-            verify(categoryConverter, times(0))
-                    .toCategoryDetailResponseDto(any(Category.class), isA(Integer.class));
+                    .getCategoryDashboard(anyLong());
             assertThat(responseDtos).isEqualTo(List.of());
         }
 
@@ -337,55 +328,7 @@ public class CategoryServiceTest {
             verify(userRepository, times(1))
                     .findById(anyLong());
             verify(categoryRepository, times(0))
-                    .findByUser(any());
-            verify(categoryConverter, times(0))
-                    .toCategoryDetailResponseDto(any(), isA(Integer.class));
-        }
-    }
-
-    @DisplayName("getAverageScore 메소드는")
-    @Nested
-    class GetAverageScoreMethod {
-
-        @DisplayName("카테고리의 모든 게시글의 평균점수를 반환한다.")
-        @Test
-        void getAverageScore() {
-            // Given
-            final User user = mock(User.class);
-            final Category category = mock(Category.class);
-            final Post post1 = new Post(user, category, null, null, 95);
-            final Post post2 = new Post(user, category, null, null, 85);
-            given(category.getPosts())
-                    .willReturn(List.of(post1, post2));
-
-            // When
-            final double average = category.getPosts()
-                    .stream()
-                    .mapToInt(Post::getScore)
-                    .average()
-                    .orElse(0);
-
-            // Then
-            assertThat(average).isEqualTo(90D);
-        }
-
-        @DisplayName("카테고리의 게시글이 없는 경우 0을 반환한다.")
-        @Test
-        void getAverageScore_NoPost_ReturnZero() {
-            // Given
-            final Category category = mock(Category.class);
-            given(category.getPosts())
-                    .willReturn(List.of());
-
-            // When
-            final double average = category.getPosts()
-                    .stream()
-                    .mapToInt(Post::getScore)
-                    .average()
-                    .orElse(0);
-
-            // Then
-            assertThat(average).isEqualTo(0);
+                    .getCategoryDashboard(any());
         }
     }
 }

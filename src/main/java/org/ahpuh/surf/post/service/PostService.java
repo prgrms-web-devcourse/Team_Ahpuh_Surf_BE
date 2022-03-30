@@ -2,7 +2,7 @@ package org.ahpuh.surf.post.service;
 
 import lombok.RequiredArgsConstructor;
 import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.category.domain.repository.CategoryRepository;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.cursor.CursorResult;
 import org.ahpuh.surf.common.exception.ApplicationException;

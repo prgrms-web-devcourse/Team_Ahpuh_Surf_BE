@@ -1,7 +1,7 @@
 package org.ahpuh.surf.unit.post.service;
 
 import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.category.domain.repository.CategoryRepository;
 import org.ahpuh.surf.category.dto.CategorySimpleDto;
 import org.ahpuh.surf.common.exception.category.CategoryNotFoundException;
 import org.ahpuh.surf.common.exception.category.NoCategoryFromUserException;

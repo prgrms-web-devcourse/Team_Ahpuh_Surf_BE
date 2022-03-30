@@ -1,7 +1,7 @@
 package org.ahpuh.surf.integration.like.service;
 
 import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.category.domain.repository.CategoryRepository;
 import org.ahpuh.surf.common.exception.like.DuplicatedLikeException;
 import org.ahpuh.surf.common.exception.like.LikeNotFoundException;
 import org.ahpuh.surf.common.exception.post.PostNotFoundException;

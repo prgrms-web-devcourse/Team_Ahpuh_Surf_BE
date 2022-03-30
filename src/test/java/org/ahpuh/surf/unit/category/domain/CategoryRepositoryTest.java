@@ -1,7 +1,7 @@
 package org.ahpuh.surf.unit.category.domain;
 
 import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.category.domain.repository.CategoryRepository;
 import org.ahpuh.surf.config.QuerydslConfig;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.post.domain.repository.PostRepository;
