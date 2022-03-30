@@ -1,7 +1,7 @@
 package org.ahpuh.surf.integration.post.service;
 
 import org.ahpuh.surf.category.domain.Category;
-import org.ahpuh.surf.category.domain.CategoryRepository;
+import org.ahpuh.surf.category.domain.repository.CategoryRepository;
 import org.ahpuh.surf.common.cursor.CursorResult;
 import org.ahpuh.surf.common.exception.post.PostNotFoundException;
 import org.ahpuh.surf.integration.IntegrationTest;

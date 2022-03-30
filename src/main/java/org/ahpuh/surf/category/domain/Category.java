@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.post.domain.Post;
 import org.ahpuh.surf.user.domain.User;
-import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
