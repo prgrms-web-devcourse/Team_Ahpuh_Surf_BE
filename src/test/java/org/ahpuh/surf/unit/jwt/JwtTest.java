@@ -24,6 +24,14 @@ public class JwtTest {
     @BeforeEach
     void setup() {
         JWT = new Jwt("cse0518", "clientSecret", 1000);
+
+        assertAll("Jwt 생성 확인",
+                () -> assertThat(JWT.getIssuer()).isEqualTo("cse0518"),
+                () -> assertThat(JWT.getClientSecret()).isEqualTo("clientSecret"),
+                () -> assertThat(JWT.getExpirySeconds()).isEqualTo(1000),
+                () -> assertThat(JWT.getAlgorithm()).isNotNull(),
+                () -> assertThat(JWT.getJwtVerifier()).isNotNull()
+        );
     }
 
     @DisplayName("Claims를 encode하여 token을 생성할 수 있다.")
@@ -44,7 +52,8 @@ public class JwtTest {
         assertAll("Token 생성 확인",
                 () -> assertThat(decodedJwt.getUserId()).isEqualTo(USERID),
                 () -> assertThat(decodedJwt.getEmail()).isEqualTo(EMAIL),
-                () -> assertThat(decodedJwt.getRoles()).isEqualTo(ROLES)
+                () -> assertThat(decodedJwt.getRoles()).isEqualTo(ROLES),
+                () -> assertThat(decodedJwt.getExp().getTime() - decodedJwt.getIat().getTime()).isEqualTo(1000 * 1_000L)
         );
     }
 

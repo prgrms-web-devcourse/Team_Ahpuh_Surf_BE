@@ -1,9 +1,7 @@
 package org.ahpuh.surf.jwt;
 
 import lombok.Getter;
-import org.ahpuh.surf.common.exception.jwt.UnauthorizedTokenException;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.ahpuh.surf.common.exception.jwt.CannotSetTokenException;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -33,7 +31,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     public void setAuthenticated(final boolean isAuthenticated) throws IllegalArgumentException {
         if (isAuthenticated) {
-            throw new UnauthorizedTokenException();
+            throw new CannotSetTokenException();
         }
         super.setAuthenticated(false);
     }
