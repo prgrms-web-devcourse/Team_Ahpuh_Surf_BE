@@ -43,12 +43,4 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         super.eraseCredentials();
         credentials = null;
     }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("principal", principal)
-                .append("credentials", "[PROTECTED]")
-                .toString();
-    }
 }
