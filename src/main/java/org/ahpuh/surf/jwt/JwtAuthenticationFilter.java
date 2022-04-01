@@ -56,6 +56,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     }
                 } catch (final Exception e) {
                     log.warn("Jwt processing failed: {}", e.getMessage());
+                    throw e;
                 }
             }
         } else {

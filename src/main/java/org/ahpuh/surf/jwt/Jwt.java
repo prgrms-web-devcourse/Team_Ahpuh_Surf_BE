@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.Getter;
+import org.ahpuh.surf.common.exception.jwt.InvalidTokenException;
 
 import java.util.Date;
 
@@ -41,7 +42,11 @@ public class Jwt {
         return builder.sign(algorithm);
     }
 
-    public Claims verify(final String token) throws JWTVerificationException {
-        return new Claims(jwtVerifier.verify(token));
+    public Claims verify(final String token) {
+        try {
+            return new Claims(jwtVerifier.verify(token));
+        } catch (final JWTVerificationException e) {
+            throw new InvalidTokenException();
+        }
     }
 }

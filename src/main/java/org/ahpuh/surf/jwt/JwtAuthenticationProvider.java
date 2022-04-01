@@ -32,8 +32,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         final JwtAuthenticationToken jwtAuthentication = (JwtAuthenticationToken) authentication;
         return processUserAuthentication(
                 String.valueOf(jwtAuthentication.getPrincipal()),
-                jwtAuthentication.getCredentials()
-        );
+                jwtAuthentication.getCredentials());
     }
 
     private Authentication processUserAuthentication(final String principal, final String credentials) {
