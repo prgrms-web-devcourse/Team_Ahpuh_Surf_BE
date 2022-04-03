@@ -163,4 +163,15 @@ jacocoTestCoverageVerification {
             ] + QClass
         }
     }
+    finalizedBy 'copyReports'
+}
+
+jacocoTestReport.doFirst {
+    delete file('src/main/resources/static/reports')
+}
+
+task copyReports(type: Copy) {
+    dependsOn('jacocoTestCoverageVerification')
+    from file("build/reports/jacoco/test/html")
+    into file("src/main/resources/static/reports")
 }
