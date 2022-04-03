@@ -121,13 +121,18 @@ jacocoTestReport {
         csv.enabled false
     }
 
+    def QClass = []
+    for (qPattern in "**/QA".."**/QZ") {
+        QClass.add(qPattern + "*")
+    }
+
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: [
                             "**/SurfApplication*",
                             "**/S3ServiceImpl*"
-                    ])
+                    ] + QClass)
         }))
     }
     finalizedBy 'jacocoTestCoverageVerification'
@@ -148,7 +153,7 @@ jacocoTestCoverageVerification {
             excludes = [
                     '**.SurfApplication*',
                     '**.S3ServiceImpl*'
-            ]
+            ] + QClass
         }
     }
 }
