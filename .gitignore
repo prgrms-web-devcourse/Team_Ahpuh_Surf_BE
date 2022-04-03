@@ -31,3 +31,6 @@ build/
 
 ### RestDocs ###
 src/main/resources/static/docs/**
+
+### Jacoco Reports ###
+src/main/resources/static/reports/**

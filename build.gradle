@@ -121,19 +121,30 @@ jacocoTestReport {
         csv.enabled false
     }
 
+    def QClass = []
+    for (qPattern in "**/QA".."**/QZ") {
+        QClass.add(qPattern + "*")
+    }
+
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: [
                             "**/SurfApplication*",
-                            "**/S3ServiceImpl*"
-                    ])
+                            "**/S3ServiceImpl*",
+                            '**/dto*'
+                    ] + QClass)
         }))
     }
     finalizedBy 'jacocoTestCoverageVerification'
 }
 
 jacocoTestCoverageVerification {
+    def QClass = []
+    for (qPattern in '*.QA'..'*.QZ') {
+        QClass.add(qPattern + '*')
+    }
+
     violationRules {
         rule {
             enabled = true
@@ -142,13 +153,25 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.80
+                minimum = 0.85
             }
 
             excludes = [
                     '**.SurfApplication*',
-                    '**.S3ServiceImpl*'
-            ]
+                    '**.S3ServiceImpl*',
+                    '**.dto*'
+            ] + QClass
         }
     }
+    finalizedBy 'copyReports'
+}
+
+jacocoTestReport.doFirst {
+    delete file('src/main/resources/static/reports')
+}
+
+task copyReports(type: Copy) {
+    dependsOn('jacocoTestCoverageVerification')
+    from file("build/reports/jacoco/test/html")
+    into file("src/main/resources/static/reports")
 }
