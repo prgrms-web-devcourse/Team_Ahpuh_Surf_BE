@@ -131,7 +131,8 @@ jacocoTestReport {
             fileTree(dir: it,
                     exclude: [
                             "**/SurfApplication*",
-                            "**/S3ServiceImpl*"
+                            "**/S3ServiceImpl*",
+                            '**/dto*'
                     ] + QClass)
         }))
     }
@@ -139,6 +140,11 @@ jacocoTestReport {
 }
 
 jacocoTestCoverageVerification {
+    def QClass = []
+    for (qPattern in '*.QA'..'*.QZ') {
+        QClass.add(qPattern + '*')
+    }
+
     violationRules {
         rule {
             enabled = true
@@ -152,7 +158,8 @@ jacocoTestCoverageVerification {
 
             excludes = [
                     '**.SurfApplication*',
-                    '**.S3ServiceImpl*'
+                    '**.S3ServiceImpl*',
+                    '**.dto*'
             ] + QClass
         }
     }
