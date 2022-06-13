@@ -1,6 +1,9 @@
 package org.ahpuh.surf.user.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.common.exception.user.InvalidPasswordException;
@@ -23,7 +26,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @SQLDelete(sql = "UPDATE users SET is_deleted = 1 WHERE user_id = ?")
 @Where(clause = "is_deleted = false")
 @Entity
