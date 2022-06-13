@@ -58,7 +58,7 @@ public class Post extends BaseEntity {
     @Column(name = "favorite", columnDefinition = "boolean default false")
     private Boolean favorite = false;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private final List<Like> likes = new ArrayList<>();
 
     @Builder

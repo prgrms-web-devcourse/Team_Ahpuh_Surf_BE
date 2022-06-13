@@ -60,19 +60,19 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Permission permission = Permission.ROLE_USER;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private final List<Category> categories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private final List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "source", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "source", orphanRemoval = true)
     private final List<Follow> following = new ArrayList<>(); // 내가 팔로잉한
 
-    @OneToMany(mappedBy = "target", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "target", orphanRemoval = true)
     private final List<Follow> followers = new ArrayList<>(); // 나를 팔로우한
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private final List<Like> likes = new ArrayList<>();
 
     @Formula("(select count(1) from follow f where f.user_id = user_id)")

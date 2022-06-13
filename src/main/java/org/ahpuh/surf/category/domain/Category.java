@@ -40,7 +40,7 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
     private final List<Post> posts = new ArrayList<>();
 
     @Builder
