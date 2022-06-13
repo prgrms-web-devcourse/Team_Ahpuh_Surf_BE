@@ -23,12 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class UserTest {
 
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private User mockUser;
 
     @BeforeEach
     void setUp() {
-        mockUser = createSavedUser();
+        mockUser = createMockUser("test1@naver.com",
+                "$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG",
+                "mock");
     }
 
     @DisplayName("checkPassword 메소드는")
@@ -103,65 +105,45 @@ public class UserTest {
         @Test
         void updateUser_WIthPassword_NoProfileImage() {
             // Given
-            final User savedUser = createSavedUserWithProfileImage();
             final UserUpdateRequestDto updateRequest = createUserUpdateRequestDto();
-            final Optional<String> profilePhotoUrl = Optional.empty();
+            Optional<String> profilePhotoUrl = Optional.of("profilePhoto");
 
             // When
-            savedUser.update(passwordEncoder, updateRequest, profilePhotoUrl);
+            mockUser.update(passwordEncoder, updateRequest, profilePhotoUrl);
 
             // Then
             assertAll("수정된 유저 정보 검증_프로필이미지 X",
-                    () -> assertThat(savedUser.getUserName()).isEqualTo("update"),
-                    () -> assertThat(savedUser.getUrl()).isEqualTo("update"),
-                    () -> assertThat(savedUser.getAboutMe()).isEqualTo("update"),
-                    () -> assertThat(savedUser.getAccountPublic()).isFalse(),
-                    () -> assertThat(passwordEncoder.matches("update", savedUser.getPassword())).isTrue(),
-                    () -> assertThat(savedUser.getProfilePhotoUrl()).isEqualTo("profilePhoto")
+                    () -> assertThat(mockUser.getUserName()).isEqualTo("update"),
+                    () -> assertThat(mockUser.getUrl()).isEqualTo("update"),
+                    () -> assertThat(mockUser.getAboutMe()).isEqualTo("update"),
+                    () -> assertThat(mockUser.getAccountPublic()).isFalse(),
+                    () -> assertThat(passwordEncoder.matches("update", mockUser.getPassword())).isTrue(),
+                    () -> assertThat(mockUser.getProfilePhotoUrl()).isEqualTo("profilePhoto")
             );
+
+            profilePhotoUrl = Optional.empty();
+            mockUser.update(passwordEncoder, updateRequest, profilePhotoUrl);
+            assertThat(mockUser.getProfilePhotoUrl()).isEqualTo("profilePhoto");
         }
 
         @DisplayName("비밀번호를 제외하고 프로필이미지를 포함한 유저 정보를 수정할 수 있다.")
         @Test
         void updateUser_WIthProfileImage_NoPassword() {
             // Given
-            final User savedUser = createSavedUserWithProfileImage();
             final UserUpdateRequestDto updateRequest = createUserUpdateRequestDtoWithNoPassword();
             final Optional<String> profilePhotoUrl = Optional.of("update");
 
             // When
-            savedUser.update(passwordEncoder, updateRequest, profilePhotoUrl);
+            mockUser.update(passwordEncoder, updateRequest, profilePhotoUrl);
 
             // Then
             assertAll("수정된 유저 정보 검증_비밀번호 X",
-                    () -> assertThat(savedUser.getUserName()).isEqualTo("update"),
-                    () -> assertThat(savedUser.getUrl()).isEqualTo("update"),
-                    () -> assertThat(savedUser.getAboutMe()).isEqualTo("update"),
-                    () -> assertThat(savedUser.getAccountPublic()).isFalse(),
-                    () -> assertThat(passwordEncoder.matches("testpw", savedUser.getPassword())).isTrue(),
-                    () -> assertThat(savedUser.getProfilePhotoUrl()).isEqualTo("update")
-            );
-        }
-
-        @DisplayName("비밀번호와 프로필이미지는 변경하지 않고 나머지 유저 정보를 수정할 수 있다.")
-        @Test
-        void updateUser_NoPasswordAndProfileImage() {
-            // Given
-            final User savedUser = createSavedUserWithProfileImage();
-            final UserUpdateRequestDto updateRequest = createUserUpdateRequestDtoWithNoPassword();
-            final Optional<String> profilePhotoUrl = Optional.empty();
-
-            // When
-            savedUser.update(passwordEncoder, updateRequest, profilePhotoUrl);
-
-            // Then
-            assertAll("수정된 유저 정보 검증_비밀번호 X",
-                    () -> assertThat(savedUser.getUserName()).isEqualTo("update"),
-                    () -> assertThat(savedUser.getUrl()).isEqualTo("update"),
-                    () -> assertThat(savedUser.getAboutMe()).isEqualTo("update"),
-                    () -> assertThat(savedUser.getAccountPublic()).isFalse(),
-                    () -> assertThat(passwordEncoder.matches("testpw", savedUser.getPassword())).isTrue(),
-                    () -> assertThat(savedUser.getProfilePhotoUrl()).isEqualTo("profilePhoto")
+                    () -> assertThat(mockUser.getUserName()).isEqualTo("update"),
+                    () -> assertThat(mockUser.getUrl()).isEqualTo("update"),
+                    () -> assertThat(mockUser.getAboutMe()).isEqualTo("update"),
+                    () -> assertThat(mockUser.getAccountPublic()).isFalse(),
+                    () -> assertThat(passwordEncoder.matches("testpw", mockUser.getPassword())).isTrue(),
+                    () -> assertThat(mockUser.getProfilePhotoUrl()).isEqualTo("update")
             );
         }
     }

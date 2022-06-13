@@ -153,7 +153,9 @@ public class UserServiceIntegrationTest extends IntegrationTest {
         @Test
         void updateUserWithProfileImageSuccess() {
             // Given
-            final User user = userRepository.save(createSavedUser());
+            final User user = userRepository.save(createMockUser("test1@naver.com",
+                    "$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG",
+                    "mock"));
             assertAll("유저 정보 변경전",
                     () -> assertThat(user.getUserName()).isEqualTo("mock"),
                     () -> assertThat(passwordEncoder.matches("testpw", user.getPassword())).isTrue(),
@@ -184,7 +186,9 @@ public class UserServiceIntegrationTest extends IntegrationTest {
         @Test
         void updateUserWithNoProfileImageSuccess() {
             // Given
-            final User user = userRepository.save(createSavedUser());
+            final User user = userRepository.save(createMockUser("test1@naver.com",
+                    "$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG",
+                    "mock"));
             assertAll("유저 정보 변경전",
                     () -> assertThat(user.getUserName()).isEqualTo("mock"),
                     () -> assertThat(passwordEncoder.matches("testpw", user.getPassword())).isTrue(),

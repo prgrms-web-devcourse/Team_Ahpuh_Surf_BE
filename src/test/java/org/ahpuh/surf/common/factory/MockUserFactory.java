@@ -1,14 +1,11 @@
 package org.ahpuh.surf.common.factory;
 
-import org.ahpuh.surf.user.domain.Permission;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.dto.request.UserJoinRequestDto;
 import org.ahpuh.surf.user.dto.request.UserLoginRequestDto;
 import org.ahpuh.surf.user.dto.request.UserUpdateRequestDto;
 import org.ahpuh.surf.user.dto.response.UserFindInfoResponseDto;
 import org.ahpuh.surf.user.dto.response.UserLoginResponseDto;
-
-import java.util.ArrayList;
 
 public class MockUserFactory {
 
@@ -34,46 +31,6 @@ public class MockUserFactory {
                 .password(password)
                 .userName(userName)
                 .build();
-    }
-
-    public static User createSavedUser() {
-        return new User(1L,
-                "mock",
-                "test1@naver.com",
-                "$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG",
-                null,
-                null,
-                null,
-                true,
-                Permission.ROLE_USER,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                0,
-                0
-        );
-    }
-
-    public static User createSavedUserWithProfileImage() {
-        return new User(1L,
-                "mock",
-                "test1@naver.com",
-                "$2a$10$1dmE40BM1RD2lUg.9ss24eGs.4.iNYq1PwXzqKBfIXNRbKCKliqbG",
-                "profilePhoto",
-                null,
-                null,
-                true,
-                Permission.ROLE_USER,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                0,
-                0
-        );
     }
 
     public static UserJoinRequestDto createUserJoinRequestDto() {

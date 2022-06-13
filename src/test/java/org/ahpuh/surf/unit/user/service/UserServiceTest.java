@@ -138,7 +138,7 @@ public class UserServiceTest {
             given(userConverter.toEntity(joinRequestDto))
                     .willReturn(mockUser);
             given(userRepository.save(mockUser))
-                    .willReturn(createSavedUser());
+                    .willReturn(mockUser);
 
             // When
             userService.join(joinRequestDto);

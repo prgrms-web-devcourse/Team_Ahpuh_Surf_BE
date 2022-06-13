@@ -4,6 +4,7 @@ import org.ahpuh.surf.jwt.Jwt;
 import org.ahpuh.surf.jwt.JwtAuthentication;
 import org.ahpuh.surf.jwt.JwtAuthenticationProvider;
 import org.ahpuh.surf.jwt.JwtAuthenticationToken;
+import org.ahpuh.surf.user.domain.Permission;
 import org.ahpuh.surf.user.domain.User;
 import org.ahpuh.surf.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -14,11 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 
-import static org.ahpuh.surf.common.factory.MockUserFactory.createSavedUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class JwtAuthenticationProviderTest {
@@ -36,11 +37,17 @@ public class JwtAuthenticationProviderTest {
     @Test
     void authenticateTest() {
         // Given
-        final User user = createSavedUser();
+        final User user = mock(User.class);
         given(userService.login("cse0518", "password"))
                 .willReturn(user);
         given(jwt.sign(any()))
                 .willReturn("token");
+        given(user.getPermission())
+                .willReturn(Permission.ROLE_USER);
+        given(user.getUserId())
+                .willReturn(1L);
+        given(user.getEmail())
+                .willReturn("test@naver.com");
 
         // When
         final Authentication authentication
