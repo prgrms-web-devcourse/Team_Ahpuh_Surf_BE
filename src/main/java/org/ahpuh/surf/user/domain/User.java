@@ -113,39 +113,4 @@ public class User extends BaseEntity {
         this.accountPublic = request.getAccountPublic();
         profilePhotoUrl.ifPresent(s -> this.profilePhotoUrl = s);
     }
-
-    public void addCategory(final Category category) {
-        if (Objects.isNull(categories)) {
-            categories = new ArrayList<>();
-        }
-        categories.add(category);
-    }
-
-    public void addPost(final Post post) {
-        if (Objects.isNull(posts)) {
-            posts = new ArrayList<>();
-        }
-        posts.add(post);
-    }
-
-    public void addFollowing(final Follow followingUser) {
-        if (Objects.isNull(following)) {
-            following = new ArrayList<>();
-        }
-        following.add(followingUser);
-    }
-
-    public void addFollowers(final Follow follower) {
-        if (Objects.isNull(followers)) {
-            followers = new ArrayList<>();
-        }
-        followers.add(follower);
-    }
-
-    public void addLike(final Like like) {
-        if (Objects.isNull(likes)) {
-            likes = new ArrayList<>();
-        }
-        likes.add(like);
-    }
 }

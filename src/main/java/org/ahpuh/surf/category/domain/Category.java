@@ -13,7 +13,6 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -56,12 +55,5 @@ public class Category extends BaseEntity {
         this.name = name;
         this.isPublic = isPublic;
         this.colorCode = colorCode;
-    }
-
-    public void addPost(final Post post) {
-        if (Objects.isNull(posts)) {
-            posts = new ArrayList<>();
-        }
-        posts.add(post);
     }
 }

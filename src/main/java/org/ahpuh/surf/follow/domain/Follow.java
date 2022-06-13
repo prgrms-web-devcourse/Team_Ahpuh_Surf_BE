@@ -38,7 +38,7 @@ public class Follow {
     public Follow(final User source, final User target) {
         this.source = source;
         this.target = target;
-        source.addFollowing(this);
-        target.addFollowers(this);
+        source.getFollowing().add(this);
+        target.getFollowers().add(this);
     }
 }
