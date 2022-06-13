@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
-import static org.ahpuh.surf.common.factory.MockUserFactory.createSavedUser;
+import static org.ahpuh.surf.common.factory.MockUserFactory.createMockUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -16,7 +16,7 @@ public class CategoryTest {
     @Test
     void updateCategoryTest() {
         // Given
-        final User user = createSavedUser();
+        final User user = createMockUser();
         final Category category = createMockCategory(user);
 
         // When

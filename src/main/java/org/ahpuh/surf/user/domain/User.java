@@ -1,6 +1,9 @@
 package org.ahpuh.surf.user.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.ahpuh.surf.category.domain.Category;
 import org.ahpuh.surf.common.domain.BaseEntity;
 import org.ahpuh.surf.common.exception.user.InvalidPasswordException;
@@ -23,7 +26,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @SQLDelete(sql = "UPDATE users SET is_deleted = 1 WHERE user_id = ?")
 @Where(clause = "is_deleted = false")
 @Entity
@@ -54,26 +56,26 @@ public class User extends BaseEntity {
     private String aboutMe;
 
     @Column(name = "account_public", columnDefinition = "boolean default true")
-    private Boolean accountPublic;
+    private Boolean accountPublic = true;
 
     @Column(name = "permission")
     @Enumerated(value = EnumType.STRING)
-    private Permission permission;
+    private Permission permission = Permission.ROLE_USER;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Category> categories;
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private final List<Category> categories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Post> posts;
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private final List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "source", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Follow> following; // 내가 팔로잉한
+    @OneToMany(mappedBy = "source", orphanRemoval = true)
+    private final List<Follow> following = new ArrayList<>(); // 내가 팔로잉한
 
-    @OneToMany(mappedBy = "target", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Follow> followers; // 나를 팔로우한
+    @OneToMany(mappedBy = "target", orphanRemoval = true)
+    private final List<Follow> followers = new ArrayList<>(); // 나를 팔로우한
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Like> likes;
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private final List<Like> likes = new ArrayList<>();
 
     @Formula("(select count(1) from follow f where f.user_id = user_id)")
     private int followingCount;
@@ -86,13 +88,6 @@ public class User extends BaseEntity {
         this.email = email;
         this.password = password;
         this.userName = userName;
-        accountPublic = true;
-        permission = Permission.ROLE_USER;
-        categories = new ArrayList<>();
-        posts = new ArrayList<>();
-        following = new ArrayList<>();
-        followers = new ArrayList<>();
-        likes = new ArrayList<>();
     }
 
     public boolean checkPassword(final PasswordEncoder passwordEncoder, final String credentials) {
@@ -119,40 +114,5 @@ public class User extends BaseEntity {
         this.aboutMe = request.getAboutMe();
         this.accountPublic = request.getAccountPublic();
         profilePhotoUrl.ifPresent(s -> this.profilePhotoUrl = s);
-    }
-
-    public void addCategory(final Category category) {
-        if (Objects.isNull(categories)) {
-            categories = new ArrayList<>();
-        }
-        categories.add(category);
-    }
-
-    public void addPost(final Post post) {
-        if (Objects.isNull(posts)) {
-            posts = new ArrayList<>();
-        }
-        posts.add(post);
-    }
-
-    public void addFollowing(final Follow followingUser) {
-        if (Objects.isNull(following)) {
-            following = new ArrayList<>();
-        }
-        following.add(followingUser);
-    }
-
-    public void addFollowers(final Follow follower) {
-        if (Objects.isNull(followers)) {
-            followers = new ArrayList<>();
-        }
-        followers.add(follower);
-    }
-
-    public void addLike(final Like like) {
-        if (Objects.isNull(likes)) {
-            likes = new ArrayList<>();
-        }
-        likes.add(like);
     }
 }

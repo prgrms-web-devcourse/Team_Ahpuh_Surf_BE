@@ -18,7 +18,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -56,11 +55,11 @@ public class Post extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "favorite")
-    private Boolean favorite;
+    @Column(name = "favorite", columnDefinition = "boolean default false")
+    private Boolean favorite = false;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Like> likes;
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private final List<Like> likes = new ArrayList<>();
 
     @Builder
     public Post(final User user, final Category category, final LocalDate selectedDate, final String content, final int score) {
@@ -69,10 +68,8 @@ public class Post extends BaseEntity {
         this.selectedDate = selectedDate;
         this.content = content;
         this.score = score;
-        favorite = false;
-        likes = new ArrayList<>();
-        user.addPost(this);
-        category.addPost(this);
+        user.getPosts().add(this);
+        category.getPosts().add(this);
     }
 
     public void updatePost(final Category category, final LocalDate selectedDate, final String content, final int score) {
@@ -97,12 +94,5 @@ public class Post extends BaseEntity {
             throw new FavoriteInvalidUserException();
         }
         favorite = !favorite;
-    }
-
-    public void addLike(final Like like) {
-        if (Objects.isNull(likes)) {
-            likes = new ArrayList<>();
-        }
-        likes.add(like);
     }
 }

@@ -9,16 +9,17 @@ import org.ahpuh.surf.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.time.LocalDate;
 
 import static org.ahpuh.surf.common.factory.MockCategoryFactory.createMockCategory;
 import static org.ahpuh.surf.common.factory.MockPostFactory.createMockPost;
 import static org.ahpuh.surf.common.factory.MockUserFactory.createMockUser;
-import static org.ahpuh.surf.common.factory.MockUserFactory.createSavedUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.BDDMockito.given;
 
 public class PostTest {
 
@@ -92,13 +93,15 @@ public class PostTest {
         @Test
         void updateFavorite() {
             // Given
-            final User user = createSavedUser();
-            final Category category = createMockCategory(user);
+            final User user = Mockito.mock(User.class);
+            final Category category = Mockito.mock(Category.class);
             final Post post = createMockPost(user, category);
             assertThat(post.getFavorite()).isFalse();
+            given(user.getUserId())
+                    .willReturn(1L);
 
             // When
-            post.updateFavorite(user.getUserId());
+            post.updateFavorite(1L);
 
             // Then
             assertThat(post.getFavorite()).isTrue();
@@ -108,13 +111,15 @@ public class PostTest {
         @Test
         void favoriteUpdateFailException() {
             // Given
-            final User user = createSavedUser();
-            final Category category = createMockCategory(user);
+            final User user = Mockito.mock(User.class);
+            final Category category = Mockito.mock(Category.class);
             final Post post = createMockPost(user, category);
             assertThat(post.getFavorite()).isFalse();
+            given(user.getUserId())
+                    .willReturn(1L);
 
             // When Then
-            assertThatThrownBy(() -> post.updateFavorite(100L))
+            assertThatThrownBy(() -> post.updateFavorite(2L))
                     .isInstanceOf(FavoriteInvalidUserException.class)
                     .hasMessage("즐겨찾기를 등록 또는 취소할 수 없습니다.(내 게시글만 등록 가능)");
         }

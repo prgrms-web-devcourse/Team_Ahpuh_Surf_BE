@@ -39,7 +39,7 @@ public class Like {
     public Like(final User user, final Post post) {
         this.user = user;
         this.post = post;
-        user.addLike(this);
-        post.addLike(this);
+        user.getLikes().add(this);
+        post.getLikes().add(this);
     }
 }

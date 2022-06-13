@@ -13,7 +13,6 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,8 +30,8 @@ public class Category extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "is_public", nullable = false)
-    private Boolean isPublic;
+    @Column(name = "is_public", nullable = false, columnDefinition = "boolean default true")
+    private Boolean isPublic = true;
 
     @Column(name = "color_code")
     private String colorCode;
@@ -41,32 +40,20 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Post> posts;
-
-//    @Formula("(select count(1) from posts p where p.category_id = category_id and p.is_deleted = false)")
-//    private int postCount;
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
+    private final List<Post> posts = new ArrayList<>();
 
     @Builder
     public Category(final User user, final String name, final String colorCode) {
         this.user = user;
         this.name = name;
         this.colorCode = colorCode;
-        isPublic = true;
-        posts = new ArrayList<>();
-        user.addCategory(this);
+        user.getCategories().add(this);
     }
 
     public void update(final String name, final boolean isPublic, final String colorCode) {
         this.name = name;
         this.isPublic = isPublic;
         this.colorCode = colorCode;
-    }
-
-    public void addPost(final Post post) {
-        if (Objects.isNull(posts)) {
-            posts = new ArrayList<>();
-        }
-        posts.add(post);
     }
 }
