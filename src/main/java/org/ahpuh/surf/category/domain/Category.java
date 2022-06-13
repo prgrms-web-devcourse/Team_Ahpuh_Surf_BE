@@ -31,8 +31,8 @@ public class Category extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "is_public", nullable = false)
-    private Boolean isPublic;
+    @Column(name = "is_public", nullable = false, columnDefinition = "boolean default true")
+    private Boolean isPublic = true;
 
     @Column(name = "color_code")
     private String colorCode;
@@ -42,16 +42,14 @@ public class Category extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Post> posts;
+    private final List<Post> posts = new ArrayList<>();
 
     @Builder
     public Category(final User user, final String name, final String colorCode) {
         this.user = user;
         this.name = name;
         this.colorCode = colorCode;
-        isPublic = true;
-        posts = new ArrayList<>();
-        user.addCategory(this);
+        user.getCategories().add(this);
     }
 
     public void update(final String name, final boolean isPublic, final String colorCode) {

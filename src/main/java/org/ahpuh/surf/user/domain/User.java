@@ -54,26 +54,26 @@ public class User extends BaseEntity {
     private String aboutMe;
 
     @Column(name = "account_public", columnDefinition = "boolean default true")
-    private Boolean accountPublic;
+    private Boolean accountPublic = true;
 
     @Column(name = "permission")
     @Enumerated(value = EnumType.STRING)
-    private Permission permission;
+    private Permission permission = Permission.ROLE_USER;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Category> categories;
+    private final List<Category> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Post> posts;
+    private final List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "source", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Follow> following; // 내가 팔로잉한
+    private final List<Follow> following = new ArrayList<>(); // 내가 팔로잉한
 
     @OneToMany(mappedBy = "target", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Follow> followers; // 나를 팔로우한
+    private final List<Follow> followers = new ArrayList<>(); // 나를 팔로우한
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Like> likes;
+    private final List<Like> likes = new ArrayList<>();
 
     @Formula("(select count(1) from follow f where f.user_id = user_id)")
     private int followingCount;
@@ -86,13 +86,6 @@ public class User extends BaseEntity {
         this.email = email;
         this.password = password;
         this.userName = userName;
-        accountPublic = true;
-        permission = Permission.ROLE_USER;
-        categories = new ArrayList<>();
-        posts = new ArrayList<>();
-        following = new ArrayList<>();
-        followers = new ArrayList<>();
-        likes = new ArrayList<>();
     }
 
     public boolean checkPassword(final PasswordEncoder passwordEncoder, final String credentials) {

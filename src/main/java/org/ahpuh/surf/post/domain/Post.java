@@ -56,11 +56,11 @@ public class Post extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "favorite")
-    private Boolean favorite;
+    @Column(name = "favorite", columnDefinition = "boolean default false")
+    private Boolean favorite = false;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Like> likes;
+    private final List<Like> likes = new ArrayList<>();
 
     @Builder
     public Post(final User user, final Category category, final LocalDate selectedDate, final String content, final int score) {
@@ -69,10 +69,8 @@ public class Post extends BaseEntity {
         this.selectedDate = selectedDate;
         this.content = content;
         this.score = score;
-        favorite = false;
-        likes = new ArrayList<>();
-        user.addPost(this);
-        category.addPost(this);
+        user.getPosts().add(this);
+        category.getPosts().add(this);
     }
 
     public void updatePost(final Category category, final LocalDate selectedDate, final String content, final int score) {
